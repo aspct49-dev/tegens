@@ -21,10 +21,14 @@ function Card({ player, rank }) {
         </div>
         <div className="podium-name">{maskName(player.name)}</div>
         <div className="podium-wager-lbl">Wagered</div>
-        <div className="wager-pill">{fmtMoney(player.wagered, 2)}</div>
+        <div className="wager-pill">
+          <span className="cur">$</span>{fmtMoney(player.wagered, 2).slice(1)}
+        </div>
       </div>
       <div className="prize-plaque">
-        <div className="amt">{fmtMoney(player.prize)}</div>
+        <div className="ribbon">
+          <span className="amt">{fmtMoney(player.prize)}</span>
+        </div>
         <span className="trophy">🏆</span>
       </div>
     </div>

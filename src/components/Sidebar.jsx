@@ -2,14 +2,14 @@ import { Link, NavLink } from 'react-router-dom'
 import { config } from '../data/leaderboard'
 import {
   IconHome, IconTrophy, IconGift, IconBolt, IconSword,
-  IconDiscord, IconX, IconKick, IconYoutube, IconInstagram,
+  IconDiscord, IconKick, IconInstagram,
 } from './icons'
 
 const nav = [
   { label: 'Home', icon: <IconHome />, to: '/', end: true },
   { label: 'Leaderboard', icon: <IconTrophy />, to: '/leaderboard', badge: `$${(config.prizePool / 1000)}K` },
   { label: 'Bonuses', icon: <IconGift />, to: '/', hash: '#bonuses' },
-  { label: 'Rewards', icon: <IconBolt />, to: '/', hash: '#bonuses' },
+  { label: 'Rewards', icon: <IconBolt />, to: '/rewards' },
   { label: 'Challenges', icon: <IconSword />, soon: true },
 ]
 
@@ -52,10 +52,8 @@ export default function Sidebar({ open, onClose }) {
 
       <div className="sidebar-socials">
         <a href={s.discord} target="_blank" rel="noreferrer" aria-label="Discord"><IconDiscord /></a>
-        <a href={s.twitter} target="_blank" rel="noreferrer" aria-label="X"><IconX /></a>
-        <a href={s.kick} target="_blank" rel="noreferrer" aria-label="Kick"><IconKick /></a>
-        <a href={s.youtube} target="_blank" rel="noreferrer" aria-label="YouTube"><IconYoutube /></a>
         <a href={s.instagram} target="_blank" rel="noreferrer" aria-label="Instagram"><IconInstagram /></a>
+        <a href={s.kick} target="_blank" rel="noreferrer" aria-label="Kick"><IconKick /></a>
       </div>
     </aside>
   )

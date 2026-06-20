@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
 import Leaderboard from './pages/Leaderboard'
+import Rewards from './pages/Rewards'
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -26,6 +27,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/rewards" element={<Rewards />} />
           </Routes>
 
           <Footer />

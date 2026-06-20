@@ -9,7 +9,7 @@
 export const config = {
   brandName: 'TEGENS',
   casino: 'Rainbet',
-  casinoUrl: 'https://rainbet.com/',
+  casinoUrl: 'https://rainbet.com/?r=tegens',
   referralCode: 'TEGENS',
   prizePool: 6000,           // total $ pool, shown in the hero
   totalGivenAway: 250000,    // running "total given away" counter
@@ -32,11 +32,20 @@ export const config = {
   rankAvatars: ['/magicpiggy.png', '/befy.png', '/pug.png'],
 
   socials: {
-    discord: 'https://discord.gg/',
-    twitter: 'https://x.com/',
-    kick: 'https://kick.com/',
-    youtube: 'https://youtube.com/',
-    instagram: 'https://instagram.com/',
+    discord: 'https://discord.gg/76dAJpPhk',
+    instagram: 'https://www.instagram.com/travellingdegens/',
+    kick: 'https://kick.com/travellingdegens',
+  },
+
+  // Promo banner under the bonus cards on the home page. Just the headline +
+  // copy: the top-3 winner cards are pulled live from the same leaderboard feed
+  // (and the same offline fallback), so they always match the leaderboard page.
+  promo: {
+    amount: 6000,
+    title: 'LEADERBOARD',
+    subtitle: 'Climb to the top of the leaderboard & win crazy prizes!',
+    cta: 'View Leaderboard',
+    to: '/leaderboard',
   },
 }
 
@@ -55,7 +64,7 @@ export const bonuses = [
       'Contact us via Discord to claim',
     ],
     cta: 'CLAIM BONUS',
-    href: 'https://discord.gg/',
+    href: 'https://discord.gg/76dAJpPhk',
   },
   {
     img: '/orb.png',
@@ -84,7 +93,7 @@ export const bonuses = [
       'Exclusive High-Roller Rewards',
     ],
     cta: 'CLAIM BONUS',
-    href: 'https://rainbet.com/',
+    href: 'https://rainbet.com/?r=tegens',
   },
 ]
 
@@ -101,3 +110,25 @@ export const fallbackPlayers = [
   { name: 'degensXdagestan', wagered: 7.94 },
   { name: 'Gambafix',        wagered: 5.07 },
 ]
+
+// ============================================================================
+//  REWARDS / VIP TIERS  (the /rewards page)
+// ----------------------------------------------------------------------------
+//  For every `cashbackPer` wagered under code TEGENS we pay back `cashbackAmount`.
+//  Each tier lists the cumulative wager needed to reach each level (`reach`,
+//  last value = the tier total) and how many of the six PERKS are unlocked.
+//  Perk order: Rakeback · Daily · Weekly · Monthly · Pre-Monthly · Freespins.
+// ============================================================================
+export const rewards = {
+  cashbackPer: 10000,
+  cashbackAmount: 10,
+  tiers: [
+    { key: 'bronze',   name: 'Bronze',   range: 'I - IV', icon: '/ranks/bronze.webp',   perks: 4, reach: [4000, 11000, 22000, 36000] },
+    { key: 'silver',   name: 'Silver',   range: 'I - IV', icon: '/ranks/silver.webp',   perks: 5, reach: [50000, 65000, 80000, 95000] },
+    { key: 'gold',     name: 'Gold',     range: 'I - V',  icon: '/ranks/gold.webp',     perks: 6, reach: [110000, 150000, 225000, 350000, 500000] },
+    { key: 'platinum', name: 'Platinum', range: 'I - V',  icon: '/ranks/platinum.webp', perks: 6, reach: [700000, 1300000, 2500000, 4500000, 7000000] },
+    { key: 'diamond',  name: 'Diamond',  range: 'I - V',  icon: '/ranks/diamond.webp',  perks: 6, reach: [10000000, 25000000, 50000000, 100000000, 250000000] },
+    { key: 'infernal', name: 'Infernal', range: '',       icon: '/ranks/infernal.webp', perks: 6, reach: [500000000] },
+    { key: 'infernal-diamond', name: 'Infernal Diamond', range: '', icon: '/ranks/infernal-diamond.webp', perks: 6, reach: [1000000000] },
+  ],
+}

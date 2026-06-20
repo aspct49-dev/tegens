@@ -1,6 +1,7 @@
 import { config } from '../data/leaderboard'
 import { fmtMoney } from '../utils'
 import BonusCards from '../components/BonusCards'
+import PromoBanner from '../components/PromoBanner'
 import { IconExternal } from '../components/icons'
 
 export default function Home() {
@@ -42,6 +43,9 @@ export default function Home() {
 
       {/* BONUS CARDS */}
       <BonusCards />
+
+      {/* $50K LEADERBOARD PROMO */}
+      <PromoBanner />
     </>
   )
 }
