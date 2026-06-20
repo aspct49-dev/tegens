@@ -105,6 +105,7 @@ img { display: block; max-width: 100%; }
   flex: 1;
   margin-left: var(--sidebar-w);
   min-width: 0;
+  overflow-x: clip;   /* safety net: no stray horizontal scroll on mobile */
 }
 
 .container {
@@ -850,6 +851,7 @@ img { display: block; max-width: 100%; }
   z-index: 2;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 30px;
   padding: 44px 46px;
 }
@@ -906,8 +908,7 @@ img { display: block; max-width: 100%; }
 
 /* right: top-3 winner podium */
 .promo-podium {
-  flex: 1 1 0;
-  min-width: 0;
+  flex: 0 0 auto;          /* keep the 3 cards at their natural size — never clip */
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -1127,6 +1128,16 @@ img { display: block; max-width: 100%; }
 .rw-perk.locked .rw-perk-lbl { color: var(--text-muted); }
 
 /* ---------------------------------------------------------------- responsive */
+/* Stack the promo before the row layout gets too narrow for the 3-card podium. */
+@media (max-width: 1100px) {
+  .promo-inner { flex-direction: column; align-items: stretch; text-align: center; gap: 10px; padding: 36px 26px; }
+  .promo-text { max-width: none; }
+  .promo-sub { max-width: none; margin-left: auto; margin-right: auto; }
+  .promo::after {
+    background: linear-gradient(180deg, rgba(10,8,1,0.82) 0%, rgba(10,8,1,0.5) 60%, rgba(10,8,1,0.7) 100%);
+  }
+  .promo-podium { margin-top: 28px; }
+}
 @media (max-width: 980px) {
   .bonus-grid { grid-template-columns: 1fr; gap: 44px; }
   .bonus-card.featured { transform: none; }
@@ -1143,23 +1154,40 @@ img { display: block; max-width: 100%; }
   .steps { grid-template-columns: 1fr; }
   .scrim { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 95; }
 
-  .promo-inner { flex-direction: column; align-items: stretch; text-align: center; gap: 8px; padding: 34px 22px; }
-  .promo-text { max-width: none; }
-  .promo-sub { max-width: none; margin-left: auto; margin-right: auto; }
-  .promo::after {
-    background: linear-gradient(180deg, rgba(10,8,1,0.82) 0%, rgba(10,8,1,0.5) 60%, rgba(10,8,1,0.7) 100%);
-  }
-  .promo-podium { margin-top: 30px; }
-
   .rw-grid { grid-template-columns: 1fr; }
   .rw-callout { flex-direction: column; text-align: center; gap: 18px; padding: 24px 20px; }
   .rw-callout-text p { margin-left: auto; margin-right: auto; }
 }
 @media (max-width: 560px) {
   .container { padding: 0 16px; }
+  .section { padding: 40px 0; }
+  .hero-inner { padding: 32px 20px; }
+
+  /* leaderboard table: scroll instead of clip if it ever exceeds the viewport */
+  .lb-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .lb-table thead th, .lb-table tbody td { padding: 13px 12px; font-size: 13px; }
+
   .cd-cell { min-width: 68px; padding: 12px 6px; }
   .cd-cell .num { font-size: 30px; }
   .hide-sm { display: none; }
+
   .rw-levels, .rw-perks { grid-template-columns: 1fr; }
+
+  /* promo: shrink the 3 winner cards so the podium fits a phone width */
+  .promo-podium { gap: 8px; }
+  .promo-pcard, .promo-pcard.first { width: auto; flex: 1 1 0; min-width: 0; }
+  .promo-pcard { margin-top: 20px; }
+  .promo-pcard.first { margin-top: 0; }
+  .promo-pcard-top { padding: 30px 6px 12px; }
+  .promo-avatar { width: 46px; height: 46px; top: -23px; font-size: 16px; }
+  .promo-pcard.first .promo-avatar { width: 54px; height: 54px; top: -27px; font-size: 19px; }
+  .promo-pname { font-size: 12px; }
+  .promo-pwager-lbl { font-size: 8px; margin-top: 9px; }
+  .promo-pwager { font-size: 11px; padding: 5px 6px; }
+  .promo-plaque .amt { font-size: 15px; }
+  .promo-pcard.first .promo-plaque .amt { font-size: 17px; }
+
+  /* footer stacks */
+  .footer-grid { flex-direction: column; gap: 26px; }
+  .footer-bottom { flex-direction: column; align-items: center; gap: 14px; text-align: center; }
 }
