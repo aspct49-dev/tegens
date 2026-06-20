@@ -1,0 +1,36 @@
+import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Sidebar from './components/Sidebar'
+import Footer from './components/Footer'
+import Home from './pages/Home'
+import Leaderboard from './pages/Leaderboard'
+
+export default function App() {
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  return (
+    <BrowserRouter>
+      <div className="app" id="top">
+        <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
+        {menuOpen && <div className="scrim" onClick={() => setMenuOpen(false)} />}
+
+        <div className="main">
+          {/* Mobile top bar */}
+          <div className="topbar">
+            <div className="brand">
+              <img src="/TGN.webp" alt="TEGENS" />
+            </div>
+            <button className="hamburger" onClick={() => setMenuOpen(true)} aria-label="Open menu">☰</button>
+          </div>
+
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+          </Routes>
+
+          <Footer />
+        </div>
+      </div>
+    </BrowserRouter>
+  )
+}
