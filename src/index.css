@@ -1150,7 +1150,7 @@ img { display: block; max-width: 100%; }
   .hero-inner { padding: 38px 26px; }
   .stats { grid-template-columns: 1fr; }
   .podium { grid-template-columns: 1fr; }
-  .podium-card.first { order: -1; }
+  .podium-col.first { order: -1; }
   .steps { grid-template-columns: 1fr; }
   .scrim { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 95; }
 
