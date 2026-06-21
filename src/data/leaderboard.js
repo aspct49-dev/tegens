@@ -11,6 +11,9 @@ export const config = {
   casino: 'Rainbet',
   casinoUrl: 'https://rainbet.com/?r=tegens',
   referralCode: 'TEGENS',
+  // Used on the legal pages. TODO: replace with your real support email
+  // (or leave it — the legal pages also point users to your Discord).
+  contactEmail: 'support@tegens.gg',
   prizePool: 6000,           // total $ pool, shown in the hero
   totalGivenAway: 250000,    // running "total given away" counter
 
