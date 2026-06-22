@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tegens.bet/sitemap.xml
