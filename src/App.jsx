@@ -17,16 +17,16 @@ const ROUTE_META = {
     description: 'Wager on Rainbet under code TEGENS and climb the $6,000 leaderboard. Rank up for the best Rainbet rewards — rakeback, daily bonuses & $10 back for every $10,000 wagered.',
   },
   '/leaderboard': {
-    title: '$6,000 Rainbet Wager Leaderboard — Code TEGENS | TEGENS.BET',
+    title: 'TEGENS.BET — $6,000 Rainbet Wager Leaderboard (Code TEGENS)',
     description: 'Live $6,000 Rainbet wager leaderboard for code TEGENS. Climb the ranks and win your share of the prize pool.',
   },
   '/rewards': {
-    title: 'Rank-Up Rewards & Best Rainbet Bonuses | TEGENS.BET',
+    title: 'TEGENS.BET — Rank-Up Rewards & Best Rainbet Bonuses',
     description: 'Rank up from Bronze to Infernal Diamond for the best Rainbet rewards — rakeback, daily/weekly/monthly bonuses, freespins, and $10 back per $10,000 wagered.',
   },
-  '/privacy': { title: 'Privacy Policy | TEGENS.BET', description: 'How TEGENS collects, uses and protects your information.' },
-  '/terms': { title: 'Terms & Conditions | TEGENS.BET', description: 'The terms governing use of the TEGENS website and leaderboard.' },
-  '/responsible-gambling': { title: 'Responsible Gambling | TEGENS.BET', description: 'Gamble responsibly. 18+. Tips, warning signs and where to get help.' },
+  '/privacy': { title: 'TEGENS.BET — Privacy Policy', description: 'How TEGENS collects, uses and protects your information.' },
+  '/terms': { title: 'TEGENS.BET — Terms & Conditions', description: 'The terms governing use of the TEGENS website and leaderboard.' },
+  '/responsible-gambling': { title: 'TEGENS.BET — Responsible Gambling', description: 'Gamble responsibly. 18+. Tips, warning signs and where to get help.' },
 }
 
 function setMeta(selector, attr, value) {
