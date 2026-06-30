@@ -1,13 +1,14 @@
 import { Link, NavLink } from 'react-router-dom'
 import { config } from '../data/leaderboard'
 import {
-  IconHome, IconTrophy, IconGift, IconBolt, IconSword,
+  IconHome, IconTrophy, IconMedal, IconGift, IconBolt, IconSword,
   IconDiscord, IconKick, IconInstagram,
 } from './icons'
 
 const nav = [
   { label: 'Home', icon: <IconHome />, to: '/', end: true },
   { label: 'Leaderboard', icon: <IconTrophy />, to: '/leaderboard', badge: `$${(config.prizePool / 1000)}K` },
+  { label: 'Winners', icon: <IconMedal />, to: '/winners' },
   { label: 'Bonuses', icon: <IconGift />, to: '/', hash: '#bonuses' },
   { label: 'Rewards', icon: <IconBolt />, to: '/rewards' },
   { label: 'Challenges', icon: <IconSword />, soon: true },

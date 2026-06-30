@@ -5,6 +5,7 @@ import Footer from './components/Footer'
 import Home from './pages/Home'
 import Leaderboard from './pages/Leaderboard'
 import Rewards from './pages/Rewards'
+import Winners from './pages/Winners'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import ResponsibleGambling from './pages/ResponsibleGambling'
@@ -23,6 +24,10 @@ const ROUTE_META = {
   '/rewards': {
     title: 'TEGENS.BET — Rank-Up Rewards & Best Rainbet Bonuses',
     description: 'Rank up from Bronze to Infernal Diamond for the best Rainbet rewards — rakeback, daily/weekly/monthly bonuses, freespins, and $10 back per $10,000 wagered.',
+  },
+  '/winners': {
+    title: 'TEGENS.BET — Past Rainbet Leaderboard Winners',
+    description: 'Previous TEGENS Rainbet leaderboard winners and their prizes, archived each period.',
   },
   '/privacy': { title: 'TEGENS.BET — Privacy Policy', description: 'How TEGENS collects, uses and protects your information.' },
   '/terms': { title: 'TEGENS.BET — Terms & Conditions', description: 'The terms governing use of the TEGENS website and leaderboard.' },
@@ -72,6 +77,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/rewards" element={<Rewards />} />
+            <Route path="/winners" element={<Winners />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/responsible-gambling" element={<ResponsibleGambling />} />

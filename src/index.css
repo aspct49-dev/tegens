@@ -704,6 +704,21 @@ img { display: block; max-width: 100%; }
 .legal-body a:hover { color: #fff; }
 .legal-body strong { color: var(--text); }
 
+/* ---------------------------------------------------------------- past winners */
+.winners-list { display: flex; flex-direction: column; gap: 30px; }
+.winners-card-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  flex-wrap: wrap; gap: 8px; margin-bottom: 14px;
+}
+.winners-card-head h3 { font-family: 'Rubik', sans-serif; font-weight: 800; font-size: 22px; color: #fff; }
+.wc-pool {
+  font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 15px;
+  color: var(--blue2);
+  background: rgba(47, 134, 255, 0.12);
+  border: 1px solid rgba(47, 134, 255, 0.32);
+  padding: 4px 14px; border-radius: 999px;
+}
+
 /* ---------------------------------------------------------------- bonus cards */
 .bonus-heading {
   font-family: 'Rubik', sans-serif;
