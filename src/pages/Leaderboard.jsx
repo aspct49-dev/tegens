@@ -6,8 +6,8 @@ import Podium from '../components/Podium'
 import LeaderboardTable from '../components/LeaderboardTable'
 import { IconExternal } from '../components/icons'
 
-// Countdown target = end of the leaderboard's last day, local time.
-const periodEnd = `${config.leaderboard.endAt}T23:59:59`
+// Countdown target = end of the leaderboard's last day, in UTC.
+const periodEnd = `${config.leaderboard.endAt}T23:59:59Z`
 
 export default function Leaderboard() {
   const { loading, error, players, updatedAt } = useLeaderboard()

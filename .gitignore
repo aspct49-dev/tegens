@@ -4,4 +4,4 @@ dist
 .env.local
 .vercel
 *.log
-data/
+/data/

@@ -21,8 +21,8 @@ export const config = {
   // for this window (dates are inclusive, format 'YYYY-MM-DD'). The countdown
   // ticks down to the end of `endAt`. Update these each period.
   leaderboard: {
-    startAt: '2026-06-01',
-    endAt: '2026-06-30',
+    startAt: '2026-07-01',
+    endAt: '2026-07-31',
   },
 
   // Prize for each rank, 1st → last. Players are ranked by wagered amount and
