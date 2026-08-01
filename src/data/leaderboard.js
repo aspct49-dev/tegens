@@ -20,9 +20,14 @@ export const config = {
   // The active leaderboard period. The site queries the Rainbet affiliate API
   // for this window (dates are inclusive, format 'YYYY-MM-DD'). The countdown
   // ticks down to the end of `endAt`. Update these each period.
+  //
+  // IMPORTANT: roll these dates in the SAME change that alters `prizes` below.
+  // snapshot-winners.mjs archives the active period using the current prize
+  // list, so changing prizes while these dates still point at a finished month
+  // would rewrite that month's archived payouts.
   leaderboard: {
-    startAt: '2026-07-01',
-    endAt: '2026-07-31',
+    startAt: '2026-08-01',
+    endAt: '2026-08-31',
   },
 
   // Prize for each rank, 1st → last. Players are ranked by wagered amount and

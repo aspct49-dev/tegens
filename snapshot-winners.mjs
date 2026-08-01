@@ -78,8 +78,15 @@ async function main() {
 
   const idx = store.periods.findIndex((p) => p.id === id)
   if (idx >= 0) {
-    // Don't clobber a populated snapshot with an empty one (e.g. API hiccup).
-    if (winners.length || !store.periods[idx].winners?.length) store.periods[idx] = entry
+    const stored = store.periods[idx]
+    if (stored.final && stored.winners?.length) {
+      // Already archived. Its payouts are history — never rewrite them with the
+      // current prize list, which by now belongs to a later period.
+      console.log(`snapshot: ${id} already final — left untouched`)
+    } else if (winners.length || !stored.winners?.length) {
+      // Don't clobber a populated snapshot with an empty one (e.g. API hiccup).
+      store.periods[idx] = entry
+    }
   } else {
     store.periods.push(entry)
   }
