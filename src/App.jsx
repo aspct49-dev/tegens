@@ -14,12 +14,12 @@ import ResponsibleGambling from './pages/ResponsibleGambling'
 // and browser tabs. (Social scrapers read the static tags in index.html.)
 const ROUTE_META = {
   '/': {
-    title: 'TEGENS.BET — $6,000 Rainbet Leaderboard & Rank-Up Rewards',
-    description: 'Wager on Rainbet under code TEGENS and climb the $6,000 leaderboard. Rank up for the best Rainbet rewards — rakeback, daily bonuses & $10 back for every $10,000 wagered.',
+    title: 'TEGENS.BET — $3,000 Rainbet Leaderboard & Rank-Up Rewards',
+    description: 'Wager on Rainbet under code TEGENS and climb the $3,000 leaderboard. Rank up for the best Rainbet rewards — rakeback, daily bonuses & $10 back for every $10,000 wagered.',
   },
   '/leaderboard': {
-    title: 'TEGENS.BET — $6,000 Rainbet Wager Leaderboard (Code TEGENS)',
-    description: 'Live $6,000 Rainbet wager leaderboard for code TEGENS. Climb the ranks and win your share of the prize pool.',
+    title: 'TEGENS.BET — $3,000 Rainbet Wager Leaderboard (Code TEGENS)',
+    description: 'Live $3,000 Rainbet wager leaderboard for code TEGENS. Climb the ranks and win your share of the prize pool.',
   },
   '/rewards': {
     title: 'TEGENS.BET — Rank-Up Rewards & Best Rainbet Bonuses',

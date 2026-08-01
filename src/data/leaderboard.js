@@ -14,7 +14,7 @@ export const config = {
   // Used on the legal pages. TODO: replace with your real support email
   // (or leave it — the legal pages also point users to your Discord).
   contactEmail: 'support@tegens.gg',
-  prizePool: 6000,           // total $ pool, shown in the hero
+  prizePool: 3000,           // total $ pool, shown in the hero
   totalGivenAway: 250000,    // running "total given away" counter
 
   // The active leaderboard period. The site queries the Rainbet affiliate API
@@ -26,9 +26,10 @@ export const config = {
   },
 
   // Prize for each rank, 1st → last. Players are ranked by wagered amount and
-  // matched to these in order. Anyone past this list shows no prize.
-  // (This list sums to the prizePool above: 6000.)
-  prizes: [2000, 1200, 800, 600, 450, 350, 250, 150, 120, 80],
+  // matched to these in order. The table only shows as many rows as there are
+  // prizes here, so the length of this list = the number of paid places.
+  // (This list sums to the prizePool above: 3000.)
+  prizes: [1000, 600, 400, 300, 250, 200, 150, 100],
 
   // Decorative profile pictures by rank (1st, 2nd, 3rd). Ranks past this list
   // fall back to the player's initial. Files live in /public.
@@ -44,7 +45,7 @@ export const config = {
   // copy: the top-3 winner cards are pulled live from the same leaderboard feed
   // (and the same offline fallback), so they always match the leaderboard page.
   promo: {
-    amount: 6000,
+    amount: 3000,
     title: 'LEADERBOARD',
     subtitle: 'Climb to the top of the leaderboard & win crazy prizes!',
     cta: 'View Leaderboard',
@@ -71,7 +72,7 @@ export const bonuses = [
   },
   {
     img: '/orb.png',
-    title: '$6,000',          // tip: keep in sync with config.prizePool
+    title: '$3,000',          // tip: keep in sync with config.prizePool
     subtitle: 'Monthly Leaderboard',
     accent: 'gold',
     featured: true,

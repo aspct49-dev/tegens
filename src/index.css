@@ -82,10 +82,13 @@ body::after {
   position: fixed;
   inset: 0;
   z-index: -2;
-  background: url('/topography.webp') center / cover no-repeat;
-  filter: invert(1);
+  background: url('/12315.jpg') center / cover no-repeat;
+  /* This texture is already light-on-dark, so it needs no invert (the previous
+     one was dark-on-white). contrast() crushes the grey field toward black so
+     screen only lifts the contour lines, not the whole page. */
+  filter: contrast(1.5);
   mix-blend-mode: screen;
-  opacity: 0.14;
+  opacity: 0.10;
   pointer-events: none;
 }
 
