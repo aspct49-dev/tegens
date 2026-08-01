@@ -6,6 +6,28 @@
 //  list of players below. The site rebuilds the podium + table automatically.
 // ============================================================================
 
+// The leaderboard period rolls over on its own: it is always the current
+// calendar month in UTC. This is computed on every page load (and on every
+// snapshot run), so at 00:00 UTC on the 1st the site starts querying the new
+// month with no edit and no redeploy — nginx keeps serving the same bundle.
+const pad = (n) => String(n).padStart(2, '0')
+
+export function monthWindow(date = new Date()) {
+  const y = date.getUTCFullYear()
+  const m = date.getUTCMonth()
+  const lastDay = new Date(Date.UTC(y, m + 1, 0)).getUTCDate()
+  return {
+    startAt: `${y}-${pad(m + 1)}-01`,
+    endAt: `${y}-${pad(m + 1)}-${pad(lastDay)}`,
+  }
+}
+
+// The month before `date`'s month — the one snapshot-winners.mjs finalizes
+// into the winners archive once the calendar flips.
+export function previousMonthWindow(date = new Date()) {
+  return monthWindow(new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() - 1, 1)))
+}
+
 export const config = {
   brandName: 'TEGENS',
   casino: 'Rainbet',
@@ -17,23 +39,19 @@ export const config = {
   prizePool: 3000,           // total $ pool, shown in the hero
   totalGivenAway: 250000,    // running "total given away" counter
 
-  // The active leaderboard period. The site queries the Rainbet affiliate API
-  // for this window (dates are inclusive, format 'YYYY-MM-DD'). The countdown
-  // ticks down to the end of `endAt`. Update these each period.
-  //
-  // IMPORTANT: roll these dates in the SAME change that alters `prizes` below.
-  // snapshot-winners.mjs archives the active period using the current prize
-  // list, so changing prizes while these dates still point at a finished month
-  // would rewrite that month's archived payouts.
-  leaderboard: {
-    startAt: '2026-08-01',
-    endAt: '2026-08-31',
-  },
+  // The active period — always the current UTC month. Nothing to edit here
+  // each month; see monthWindow() above. The countdown ticks down to the last
+  // day of the month, at which point the site rolls to the next one.
+  leaderboard: monthWindow(),
 
   // Prize for each rank, 1st → last. Players are ranked by wagered amount and
   // matched to these in order. The table only shows as many rows as there are
   // prizes here, so the length of this list = the number of paid places.
   // (This list sums to the prizePool above: 3000.)
+  //
+  // Changing this changes the CURRENT month only. Past months keep the split
+  // they were archived with — snapshot-winners.mjs stores each period's prizes
+  // alongside its winners and never rewrites a finalized one.
   prizes: [1000, 600, 400, 300, 250, 200, 150, 100],
 
   // Decorative profile pictures by rank (1st, 2nd, 3rd). Ranks past this list
