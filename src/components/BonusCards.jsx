@@ -27,9 +27,17 @@ export default function BonusCards() {
               <div className="bonus-title">{card.title}</div>
               <div className="bonus-sub">{card.subtitle}</div>
               <div className="bonus-rows">
-                {card.rows.map((r) => (
-                  <div className="bonus-row" key={r}>{r}</div>
-                ))}
+                {card.rows.map((r) => {
+                  // Rows are plain strings, or { label, detail } when the offer
+                  // needs a line of explanation under it.
+                  const { label, detail } = typeof r === 'string' ? { label: r } : r
+                  return (
+                    <div className={`bonus-row ${detail ? 'has-detail' : ''}`} key={label}>
+                      <span className="bonus-row-label">{label}</span>
+                      {detail && <span className="bonus-row-detail">{detail}</span>}
+                    </div>
+                  )
+                })}
               </div>
               <CardButton card={card} />
             </div>

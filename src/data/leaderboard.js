@@ -115,7 +115,11 @@ export const bonuses = [
     accent: 'gold',
     rows: [
       '3.5% Rakeback',
-      '300% Welcome Bonus',
+      // A row can be an object when it needs explanatory copy under the label.
+      {
+        label: 'First Deposit',
+        detail: 'Up to 100% bonus, claimable as you bet at a rate of Wager Amount x 1% x 20% per bet. Expires after full bonus is claimed.',
+      },
       'Daily Giveaways',
       'Exclusive High-Roller Rewards',
     ],

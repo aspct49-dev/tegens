@@ -855,6 +855,23 @@ img { display: block; max-width: 100%; }
 }
 .bonus-card.featured .bonus-row { background: rgba(10, 22, 42, 0.6); }
 
+/* A row carrying explanatory copy: the label stays prominent, the detail sits
+   under it in smaller muted type. Left-aligned because centring three lines of
+   prose reads ragged next to the short single-line rows. */
+.bonus-row.has-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: left;
+}
+.bonus-row.has-detail .bonus-row-label { font-weight: 700; color: var(--text); }
+.bonus-row-detail {
+  font-size: 12.5px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
 .bonus-claim {
   width: 100%;
   margin-top: auto;
