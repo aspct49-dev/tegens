@@ -10,6 +10,18 @@
 //  `img` and `url` are optional — without `url` the play button falls back to
 //  the referral link in config.casinoUrl.
 //
+//  WHEN REFRESHING, strip operator-exclusive reskins — casinos commission
+//  branded builds of popular games that only exist on their own site. These
+//  four were removed because they're Roobet-only; each one's base game is in
+//  the catalogue already, so nothing is lost:
+//    Roo Bonanza (vs20fruitswroo → Sweet Bonanza vs20fruitsw)
+//    The Roo House (vs20roohouse → The Dog House vs20doghouse)
+//    RIP City Roobet (hacksaw:1955 → RIP City hacksaw:1233)
+//    Roobet Gems of Fortune
+//  The tell is the game code in the image path, not the title — "Rooster
+//  Rumble", "Wombaroo" and "Froot Loot" all match a naive name search and are
+//  perfectly real games.
+//
 //  Provider names must match the `provider` values in that file exactly, or
 //  the chip won't line up with any games.
 // ============================================================================
