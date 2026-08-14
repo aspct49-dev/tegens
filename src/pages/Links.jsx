@@ -41,13 +41,13 @@ function LinkCard({ card }) {
 }
 
 export default function Links() {
-  const { handle, tagline, cards } = config.linksPage
+  const { avatar, handle, tagline, cards } = config.linksPage
 
   return (
     <section className="section" id="links">
       <div className="links-wrap">
         <div className="links-head">
-          <img className="links-avatar" src="/TGN.webp" alt="TEGENS" />
+          <img className="links-avatar" src={avatar} alt="TEGENS" />
           <h1 className="links-brand display">{config.brandName}</h1>
           <p className="links-handle">{handle}</p>
           <p className="links-tagline">{tagline}</p>

@@ -1288,7 +1288,10 @@ img { display: block; max-width: 100%; }
   width: 92px; height: 92px;
   margin: 0 auto 16px;
   border-radius: 50%;
-  object-fit: cover;
+  /* The source is square with the mark centred, so contain + padding keeps it
+     optically centred in the ring instead of cropping it off-centre. */
+  object-fit: contain;
+  padding: 12px;
   background: var(--bg-2);
   border: 2px solid var(--border-strong);
   box-shadow: var(--glow-blue);

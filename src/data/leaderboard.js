@@ -69,6 +69,8 @@ export const config = {
   // gives the highlighted treatment; `icon` names an entry in LINK_ICONS
   // (Links.jsx). Use `to` for an internal route and `href` for an outside link.
   linksPage: {
+    // Square, logo centred in the frame. Swap for a real profile picture any time.
+    avatar: '/avatar.webp',
     handle: '@travellingdegens',
     tagline: 'Everything TEGENS in one place — tap a link below.',
     cards: [
@@ -108,6 +110,13 @@ export const config = {
         title: 'Instagram',
         subtitle: 'Clips, wins & announcements',
         href: 'https://www.instagram.com/travellingdegens/',
+      },
+      {
+        icon: 'x',
+        title: 'X / Twitter',
+        subtitle: 'Drops, codes & daily posts',
+        // TODO: confirm the handle — assumed to match Instagram/Kick.
+        href: 'https://x.com/travellingdegens',
       },
     ],
   },
