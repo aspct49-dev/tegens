@@ -1,7 +1,7 @@
 import { Link, NavLink } from 'react-router-dom'
 import { config } from '../data/leaderboard'
 import {
-  IconHome, IconTrophy, IconMedal, IconGift, IconBolt, IconLink,
+  IconHome, IconTrophy, IconMedal, IconGift, IconBolt, IconLink, IconDice,
   IconDiscord, IconKick, IconInstagram,
 } from './icons'
 
@@ -11,6 +11,7 @@ const nav = [
   { label: 'Winners', icon: <IconMedal />, to: '/winners' },
   { label: 'Bonuses', icon: <IconGift />, to: '/', hash: '#bonuses' },
   { label: 'Rewards', icon: <IconBolt />, to: '/rewards' },
+  { label: 'Slot Picker', icon: <IconDice />, to: '/slots' },
   { label: 'Links', icon: <IconLink />, to: '/links' },
 ]
 
