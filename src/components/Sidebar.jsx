@@ -1,7 +1,7 @@
 import { Link, NavLink } from 'react-router-dom'
 import { config } from '../data/leaderboard'
 import {
-  IconHome, IconTrophy, IconMedal, IconGift, IconBolt, IconSword,
+  IconHome, IconTrophy, IconMedal, IconGift, IconBolt,
   IconDiscord, IconKick, IconInstagram,
 } from './icons'
 
@@ -11,7 +11,6 @@ const nav = [
   { label: 'Winners', icon: <IconMedal />, to: '/winners' },
   { label: 'Bonuses', icon: <IconGift />, to: '/', hash: '#bonuses' },
   { label: 'Rewards', icon: <IconBolt />, to: '/rewards' },
-  { label: 'Challenges', icon: <IconSword />, soon: true },
 ]
 
 export default function Sidebar({ open, onClose }) {
@@ -24,15 +23,6 @@ export default function Sidebar({ open, onClose }) {
 
       <nav className="nav">
         {nav.map((n) => {
-          if (n.soon) {
-            return (
-              <span key={n.label} className="nav-item" style={{ cursor: 'default' }}>
-                <span className="ico">{n.icon}</span>
-                {n.label}
-                <span className="soon">SOON</span>
-              </span>
-            )
-          }
           return (
             <NavLink
               key={n.label}
