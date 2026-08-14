@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import Leaderboard from './pages/Leaderboard'
 import Rewards from './pages/Rewards'
 import Winners from './pages/Winners'
+import Links from './pages/Links'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import ResponsibleGambling from './pages/ResponsibleGambling'
@@ -28,6 +29,10 @@ const ROUTE_META = {
   '/winners': {
     title: 'TEGENS.BET — Past Rainbet Leaderboard Winners',
     description: 'Previous TEGENS Rainbet leaderboard winners and their prizes, archived each period.',
+  },
+  '/links': {
+    title: 'TEGENS.BET — All Links (Code TEGENS)',
+    description: 'Every TEGENS link in one place — play on Rainbet under code TEGENS, the monthly leaderboard, Discord, Kick and Instagram.',
   },
   '/privacy': { title: 'TEGENS.BET — Privacy Policy', description: 'How TEGENS collects, uses and protects your information.' },
   '/terms': { title: 'TEGENS.BET — Terms & Conditions', description: 'The terms governing use of the TEGENS website and leaderboard.' },
@@ -78,6 +83,7 @@ export default function App() {
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/rewards" element={<Rewards />} />
             <Route path="/winners" element={<Winners />} />
+            <Route path="/links" element={<Links />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/responsible-gambling" element={<ResponsibleGambling />} />

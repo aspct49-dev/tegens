@@ -1272,3 +1272,105 @@ img { display: block; max-width: 100%; }
   .legal-card { padding: 26px 20px; }
   .rg-bar { flex-direction: column; text-align: center; gap: 12px; }
 }
+
+/* ------------------------------------------------------------ links page */
+/* A bio-link page: narrow single column, one tap target per row. Ordered so
+   the highest-intent link sits under the thumb first. */
+.links-wrap {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.links-head { text-align: center; margin-bottom: 30px; }
+.links-avatar {
+  width: 92px; height: 92px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bg-2);
+  border: 2px solid var(--border-strong);
+  box-shadow: var(--glow-blue);
+}
+.links-brand {
+  font-size: 34px; font-weight: 900; letter-spacing: 0.06em;
+  color: var(--text);
+}
+.links-handle { color: var(--blue-2); font-weight: 600; font-size: 15px; margin-top: 2px; }
+.links-tagline {
+  color: var(--text-soft); font-size: 15px; line-height: 1.5;
+  margin: 12px auto 18px; max-width: 420px;
+}
+.links-code {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--bg-1);
+  border: 1px dashed var(--gold);
+  padding: 9px 16px; border-radius: 12px;
+}
+.links-code .label { color: var(--text-muted); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; }
+.links-code .code {
+  font-family: 'Chakra Petch', monospace;
+  font-size: 17px; font-weight: 700; letter-spacing: 0.12em;
+  color: var(--gold);
+}
+
+.links-list { display: flex; flex-direction: column; gap: 14px; }
+
+.link-card {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #16233a 0%, #0e1626 100%);
+  border: 1.5px solid var(--border-strong);
+  box-shadow: var(--shadow);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.link-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(47, 134, 255, 0.55);
+  box-shadow: var(--glow-blue), var(--shadow);
+}
+.link-card.gold {
+  border-color: rgba(255, 196, 77, 0.6);
+  box-shadow: 0 0 34px -14px rgba(255, 196, 77, 0.55), var(--shadow);
+}
+.link-card.gold:hover {
+  border-color: var(--gold);
+  box-shadow: 0 0 40px -10px rgba(255, 196, 77, 0.7), var(--shadow);
+}
+
+.link-card-ico {
+  flex: none;
+  display: grid; place-items: center;
+  width: 44px; height: 44px;
+  border-radius: 11px;
+  background: rgba(47, 134, 255, 0.12);
+  color: var(--blue-2);
+}
+.link-card.gold .link-card-ico { background: rgba(255, 196, 77, 0.14); color: var(--gold); }
+
+/* min-width:0 lets a long subtitle wrap instead of forcing the row wider. */
+.link-card-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
+.link-card-title { font-weight: 700; font-size: 16px; color: var(--text); }
+.link-card-sub { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+
+.link-card-chev { flex: none; color: var(--text-muted); transition: transform 0.18s ease, color 0.18s ease; }
+.link-card:hover .link-card-chev { transform: translateX(3px); color: var(--blue-2); }
+.link-card.gold:hover .link-card-chev { color: var(--gold); }
+
+.links-note {
+  text-align: center; margin-top: 26px;
+  font-size: 12.5px; color: var(--text-muted); letter-spacing: 0.04em;
+}
+
+@media (max-width: 560px) {
+  .links-avatar { width: 78px; height: 78px; }
+  .links-brand { font-size: 28px; }
+  .link-card { padding: 15px 16px; gap: 13px; }
+  .link-card-ico { width: 40px; height: 40px; }
+  .link-card-title { font-size: 15px; }
+}
+
+/* A card can carry a logo instead of a glyph (e.g. the Rainbet mark). */
+.link-card-ico img { width: 26px; height: 26px; object-fit: contain; }

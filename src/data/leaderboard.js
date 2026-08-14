@@ -64,6 +64,54 @@ export const config = {
     kick: 'https://kick.com/travellingdegens',
   },
 
+  // The /links page — the one URL to put in a bio. Cards render top to bottom
+  // in this order, so the thing you most want tapped goes first. `accent: gold`
+  // gives the highlighted treatment; `icon` names an entry in LINK_ICONS
+  // (Links.jsx). Use `to` for an internal route and `href` for an outside link.
+  linksPage: {
+    handle: '@travellingdegens',
+    tagline: 'Everything TEGENS in one place — tap a link below.',
+    cards: [
+      {
+        img: '/rainbet_logo.webp',   // `img` wins over `icon` when both are set
+        accent: 'gold',
+        title: 'Play on Rainbet',
+        subtitle: 'Sign up & play under code TEGENS',
+        href: 'https://rainbet.com/?r=tegens',
+      },
+      {
+        icon: 'trophy',
+        title: 'Monthly Leaderboard',
+        subtitle: 'See the live race standings',
+        to: '/leaderboard',
+      },
+      {
+        icon: 'discord',
+        title: 'Join our Discord',
+        subtitle: 'Giveaways, updates & the community',
+        href: 'https://discord.gg/76dAJpPhk',
+      },
+      {
+        icon: 'bolt',
+        title: 'Rank-Up Rewards',
+        subtitle: 'Rakeback, cashback & VIP tiers',
+        to: '/rewards',
+      },
+      {
+        icon: 'kick',
+        title: 'Watch on Kick',
+        subtitle: 'Live streams & slot sessions',
+        href: 'https://kick.com/travellingdegens',
+      },
+      {
+        icon: 'instagram',
+        title: 'Instagram',
+        subtitle: 'Clips, wins & announcements',
+        href: 'https://www.instagram.com/travellingdegens/',
+      },
+    ],
+  },
+
   // Promo banner under the bonus cards on the home page. Just the headline +
   // copy: the top-3 winner cards are pulled live from the same leaderboard feed
   // (and the same offline fallback), so they always match the leaderboard page.
