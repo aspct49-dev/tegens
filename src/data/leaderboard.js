@@ -39,6 +39,13 @@ export const config = {
   prizePool: 3000,           // total $ pool, shown in the hero
   totalGivenAway: 250000,    // running "total given away" counter
 
+  // Takes the live standings offline. The leaderboard page shows a
+  // "be right back" notice and the home-page winner cards are hidden; the API
+  // isn't called at all while this is on. Everything else is unchanged, and
+  // snapshot-winners.mjs keeps archiving on its own schedule.
+  // Set back to false to bring the standings straight back.
+  paused: true,
+
   // The active period — always the current UTC month. Nothing to edit here
   // each month; see monthWindow() above. The countdown ticks down to the last
   // day of the month, at which point the site rolls to the next one.

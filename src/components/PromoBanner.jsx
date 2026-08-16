@@ -42,10 +42,13 @@ export default function PromoBanner() {
 
   // Pull the top 3 from the SAME source the leaderboard renders, so the names,
   // wagers and prizes always line up. Until the live feed resolves, seed from
-  // the same offline fallback the leaderboard uses.
-  const ranked = players.length
-    ? players
-    : [...fallbackPlayers].sort((a, b) => b.wagered - a.wagered)
+  // the same offline fallback the leaderboard uses. While the leaderboard is
+  // paused, show no winners at all — the fallback would read as real standings.
+  const ranked = config.paused
+    ? []
+    : players.length
+      ? players
+      : [...fallbackPlayers].sort((a, b) => b.wagered - a.wagered)
   const [first, second, third] = ranked.slice(0, 3)
 
   return (

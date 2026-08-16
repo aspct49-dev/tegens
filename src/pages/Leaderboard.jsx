@@ -37,7 +37,19 @@ export default function Leaderboard() {
           </div>
         </div>
 
-        {loading ? (
+        {config.paused ? (
+          <div className="lb-paused">
+            <span className="lb-paused-tag">Leaderboard paused</span>
+            <h2 className="lb-paused-title display">BE RIGHT BACK</h2>
+            <p className="lb-paused-sub">
+              The leaderboard is on a short break. Standings will be back up soon —
+              wagers under code {config.referralCode} still count.
+            </p>
+            <a className="btn btn-primary" href={config.socials.discord} target="_blank" rel="noreferrer">
+              Get updates in Discord
+            </a>
+          </div>
+        ) : loading ? (
           <div className="lb-status">Loading live standings…</div>
         ) : (
           <>
@@ -52,11 +64,13 @@ export default function Leaderboard() {
           </>
         )}
 
-        <p className="section-sub" style={{ textAlign: 'center', marginTop: 22, fontSize: 13 }}>
-          Usernames are masked for privacy. Standings update as wagers are processed.
-          {updatedAt && <> · Last updated {updatedAt} UTC</>}
-          {error && <> · <span style={{ color: 'var(--text-muted)' }}>showing sample data (live feed unavailable)</span></>}
-        </p>
+        {!config.paused && (
+          <p className="section-sub" style={{ textAlign: 'center', marginTop: 22, fontSize: 13 }}>
+            Usernames are masked for privacy. Standings update as wagers are processed.
+            {updatedAt && <> · Last updated {updatedAt} UTC</>}
+            {error && <> · <span style={{ color: 'var(--text-muted)' }}>showing sample data (live feed unavailable)</span></>}
+          </p>
+        )}
       </div>
     </section>
   )

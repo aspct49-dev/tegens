@@ -24,6 +24,12 @@ export function useLeaderboard() {
   })
 
   useEffect(() => {
+    if (config.paused) {
+      // Nothing to show, and no reason to call the API while it's off.
+      setState({ loading: false, error: null, players: [], updatedAt: null })
+      return
+    }
+
     let cancelled = false
     const { startAt, endAt } = config.leaderboard
     const url = `/api/affiliates?start_at=${startAt}&end_at=${endAt}`
