@@ -8,6 +8,7 @@ import Rewards from './pages/Rewards'
 import Winners from './pages/Winners'
 import Links from './pages/Links'
 import Slots from './pages/Slots'
+import Raffle from './pages/Raffle'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import ResponsibleGambling from './pages/ResponsibleGambling'
@@ -30,6 +31,10 @@ const ROUTE_META = {
   '/winners': {
     title: 'TEGENS.BET — Past Rainbet Leaderboard Winners',
     description: 'Previous TEGENS Rainbet leaderboard winners and their prizes, archived each period.',
+  },
+  '/raffle': {
+    title: 'TEGENS.BET — $10,000 Rainbet Raffle (Code TEGENS)',
+    description: 'Every $100 wagered on Rainbet under code TEGENS earns one ticket in the $10,000 raffle — $6,000, $2,500 and $1,500 prizes.',
   },
   '/slots': {
     title: 'TEGENS.BET — Random Slot Picker (3,750 Games)',
@@ -90,6 +95,7 @@ export default function App() {
             <Route path="/winners" element={<Winners />} />
             <Route path="/links" element={<Links />} />
             <Route path="/slots" element={<Slots />} />
+            <Route path="/raffle" element={<Raffle />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/responsible-gambling" element={<ResponsibleGambling />} />

@@ -1577,3 +1577,66 @@ img { display: block; max-width: 100%; }
 @media (max-width: 560px) {
   .lb-paused { padding: 34px 20px; }
 }
+
+/* ------------------------------------------------------------ raffle page */
+.raffle-window {
+  margin-top: 16px;
+  font-size: 13px; font-weight: 600; letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.raffle-prizes {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px; max-width: 760px; margin: 0 auto 34px;
+}
+.raffle-prize {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 20px 16px; border-radius: 16px;
+  background: linear-gradient(180deg, #16233a 0%, #0e1626 100%);
+  border: 1.5px solid var(--border-strong);
+  box-shadow: var(--shadow);
+}
+.raffle-prize-place {
+  font-size: 11.5px; font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--text-muted);
+}
+.raffle-prize-amt { font-family: 'Chakra Petch', sans-serif; font-size: 32px; font-weight: 700; line-height: 1; }
+.raffle-prize.p1 { border-color: rgba(255, 206, 79, 0.65); box-shadow: 0 0 40px -14px rgba(255, 206, 79, 0.55), var(--shadow); }
+.raffle-prize.p1 .raffle-prize-amt { color: var(--gold); }
+.raffle-prize.p2 .raffle-prize-amt { color: var(--silver); }
+.raffle-prize.p3 .raffle-prize-amt { color: var(--bronze); }
+
+.raffle-results { text-align: center; margin: 6px 0 10px; }
+.raffle-results-title {
+  font-size: clamp(30px, 5vw, 48px); font-weight: 900; margin-bottom: 18px;
+  background: linear-gradient(135deg, #ffce4f 0%, #f7a317 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.raffle-results-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px; max-width: 760px; margin: 0 auto;
+}
+.raffle-winner {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 22px 16px; border-radius: 16px;
+  background: linear-gradient(180deg, #16233a 0%, #0e1626 100%);
+  border: 1.5px solid var(--border-strong);
+}
+.raffle-winner.p1 { border-color: rgba(255, 206, 79, 0.7); box-shadow: 0 0 40px -14px rgba(255, 206, 79, 0.6); }
+.raffle-winner-name { font-weight: 700; font-size: 17px; color: var(--text); }
+.raffle-winner-prize { font-family: 'Chakra Petch', sans-serif; font-size: 28px; font-weight: 700; color: var(--gold); }
+.raffle-winner-tix { font-size: 12.5px; color: var(--text-muted); }
+
+.raffle-stats { margin: 34px 0 30px; }
+.raffle-table-head {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.raffle-share { color: var(--text-soft); font-weight: 600; }
+
+@media (max-width: 760px) {
+  .raffle-prizes, .raffle-results-grid, .raffle-stats { grid-template-columns: 1fr; }
+  .raffle-prize { flex-direction: row; justify-content: space-between; padding: 16px 20px; }
+  .raffle-prize-amt { font-size: 26px; }
+}

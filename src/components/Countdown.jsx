@@ -13,7 +13,10 @@ function diff(target) {
 
 const pad = (n) => String(n).padStart(2, '0')
 
-export default function Countdown({ endDate }) {
+export default function Countdown({
+  endDate,
+  endedText = '🏁 This leaderboard has ended — winners are being paid out!',
+}) {
   const [t, setT] = useState(() => diff(endDate))
 
   useEffect(() => {
@@ -22,7 +25,7 @@ export default function Countdown({ endDate }) {
   }, [endDate])
 
   if (t.ended) {
-    return <div className="cd-ended">🏁 This leaderboard has ended — winners are being paid out!</div>
+    return <div className="cd-ended">{endedText}</div>
   }
 
   const cells = [

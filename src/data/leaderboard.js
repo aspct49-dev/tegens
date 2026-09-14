@@ -140,6 +140,39 @@ export const config = {
   },
 }
 
+// ============================================================================
+//  RAFFLE  (the /raffle page)
+// ----------------------------------------------------------------------------
+//  Every `ticketCost` wagered under the code in the window earns one ticket
+//  (whole tickets only — $199 is one ticket). Tickets are read live from the
+//  same Rainbet affiliate feed as the leaderboard.
+//
+//  Winners are NOT drawn by the site. When the window closes the page switches
+//  to a "drawing winners" notice and freezes the final ticket counts. Draw the
+//  winners yourself, then publish them by filling in `winners` below — in
+//  prize order, using the username exactly as Rainbet reports it. The page
+//  masks names on display.
+// ============================================================================
+export const raffle = {
+  // Inclusive dates, 'YYYY-MM-DD'. Entries close at 23:59:59 UTC on `endAt`.
+  // Fixed rather than rolling, so the "drawing winners" state holds until
+  // you publish results instead of resetting at midnight on the 1st.
+  startAt: '2026-09-01',
+  endAt: '2026-09-30',
+  ticketCost: 100,
+  prizes: [6000, 2500, 1500],   // 1st, 2nd, 3rd — the pool is their sum
+
+  // Leave empty until drawn. To publish results:
+  //   winners: [
+  //     { name: 'username1' },   // 1st — $6,000
+  //     { name: 'username2' },   // 2nd — $2,500
+  //     { name: 'username3' },   // 3rd — $1,500
+  //   ],
+  winners: [],
+}
+
+export const rafflePool = raffle.prizes.reduce((sum, p) => sum + p, 0)
+
 // The three "Choose your exclusive Bonus" cards on the home page.
 // `featured: true` gives the blue highlighted treatment (middle card).
 export const bonuses = [
