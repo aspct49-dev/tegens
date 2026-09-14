@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { config, fallbackPlayers } from '../data/leaderboard'
-import { useLeaderboard } from '../hooks/useLeaderboard'
+import { config, rafflePool } from '../data/leaderboard'
+import { useRaffle } from '../hooks/useRaffle'
 import { fmtMoney, maskName, initials } from '../utils'
 import { IconTrophy } from './icons'
 
@@ -10,10 +10,9 @@ const RANK_META = {
   3: { cls: 'third', label: '3rd' },
 }
 
-function WinnerCard({ player, rank }) {
+function HolderCard({ player, rank }) {
   const meta = RANK_META[rank]
   const avatar = config.rankAvatars[rank - 1]
-  const prize = config.prizes[rank - 1] || 0
   return (
     <div className={`promo-pcard ${meta.cls}`}>
       <div className="promo-pcard-top">
@@ -28,7 +27,8 @@ function WinnerCard({ player, rank }) {
       </div>
       <div className="promo-plaque">
         <div className="ribbon">
-          <span className="amt">{fmtMoney(prize)}</span>
+          <span className="amt">{player.tickets.toLocaleString('en-US')}</span>
+          <span className="unit">Tickets</span>
         </div>
         <span className="trophy"><IconTrophy /></span>
       </div>
@@ -37,19 +37,11 @@ function WinnerCard({ player, rank }) {
 }
 
 export default function PromoBanner() {
-  const { amount, title, subtitle, cta, to } = config.promo
-  const { players } = useLeaderboard()
-
-  // Pull the top 3 from the SAME source the leaderboard renders, so the names,
-  // wagers and prizes always line up. Until the live feed resolves, seed from
-  // the same offline fallback the leaderboard uses. While the leaderboard is
-  // paused, show no winners at all — the fallback would read as real standings.
-  const ranked = config.paused
-    ? []
-    : players.length
-      ? players
-      : [...fallbackPlayers].sort((a, b) => b.wagered - a.wagered)
-  const [first, second, third] = ranked.slice(0, 3)
+  const { title, subtitle, cta, to } = config.promo
+  // Same live ticket feed the raffle page ranks on, so the two always agree.
+  // No sample fallback: made-up names would read as real ticket holders.
+  const { entrants } = useRaffle()
+  const [first, second, third] = entrants.slice(0, 3)
 
   return (
     <section className="section">
@@ -58,7 +50,7 @@ export default function PromoBanner() {
           <div className="promo-inner">
             <div className="promo-text">
               <h2 className="promo-title">
-                <span className="amt">{fmtMoney(amount)}</span>
+                <span className="amt">{fmtMoney(rafflePool)}</span>
                 <span className="word">{title}</span>
               </h2>
               <p className="promo-sub">{subtitle}</p>
@@ -69,9 +61,9 @@ export default function PromoBanner() {
 
             {/* Render 2nd, 1st, 3rd so 1st sits raised in the center. */}
             <div className="promo-podium">
-              {second && <WinnerCard player={second} rank={2} />}
-              {first && <WinnerCard player={first} rank={1} />}
-              {third && <WinnerCard player={third} rank={3} />}
+              {second && <HolderCard player={second} rank={2} />}
+              {first && <HolderCard player={first} rank={1} />}
+              {third && <HolderCard player={third} rank={3} />}
             </div>
           </div>
         </div>

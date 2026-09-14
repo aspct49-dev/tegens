@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { config } from '../data/leaderboard'
+import { config, rafflePool } from '../data/leaderboard'
+import { fmtMoney } from '../utils'
 import { IconDiscord, IconKick, IconInstagram } from './icons'
 
 export default function Footer() {
@@ -14,15 +15,15 @@ export default function Footer() {
               <span>TEGENS</span>
             </div>
             <p className="f-desc">
-              The official {config.casino} leaderboard for code <strong>{config.referralCode}</strong>.
-              Wager, climb the ranks, and win your share of the prize pool.
+              The official {config.casino} partner for code <strong>{config.referralCode}</strong>.
+              Wager, earn raffle tickets, and win your share of the {fmtMoney(rafflePool)} pool.
             </p>
           </div>
 
           <div className="f-col">
             <h4>Navigate</h4>
             <Link to="/">Home</Link>
-            <Link to="/leaderboard">Leaderboard</Link>
+            <Link to="/leaderboard">Raffle</Link>
             <Link to="/#bonuses">Bonuses</Link>
             <a href={config.casinoUrl} target="_blank" rel="noreferrer">Play on {config.casino}</a>
           </div>

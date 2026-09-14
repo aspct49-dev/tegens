@@ -83,6 +83,13 @@ async function main() {
     process.exit(1)
   }
 
+  // The wager race is off (the leaderboard section runs the raffle). Archiving
+  // now would publish "winners" and payouts for a race that never ran.
+  if (config.paused) {
+    console.log('snapshot: wager race paused — nothing archived')
+    return
+  }
+
   const now = new Date()
   const { startAt, endAt } = config.leaderboard
   const id = `${startAt}_${endAt}`

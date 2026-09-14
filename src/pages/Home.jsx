@@ -1,4 +1,5 @@
-import { config } from '../data/leaderboard'
+import { Link } from 'react-router-dom'
+import { config, raffle, rafflePool } from '../data/leaderboard'
 import { fmtMoney } from '../utils'
 import BonusCards from '../components/BonusCards'
 import PromoBanner from '../components/PromoBanner'
@@ -18,12 +19,12 @@ export default function Home() {
           <div className="hero-inner">
             <span className="hero-tag"><span className="dot" /> {config.casino.toUpperCase()} PARTNER · CODE {config.referralCode}</span>
             <h1>
-              <span className="grad">{fmtMoney(config.prizePool)}</span><br />
-              LEADERBOARD
+              <span className="grad">{fmtMoney(rafflePool)}</span><br />
+              RAFFLE
             </h1>
             <p>
-              Climb to the top of the {config.casino} leaderboard under code{' '}
-              <strong>{config.referralCode}</strong> and win your share of crazy prizes.
+              Every {fmtMoney(raffle.ticketCost)} wagered on {config.casino} under code{' '}
+              <strong>{config.referralCode}</strong> earns a raffle ticket. Three winners share the pool.
             </p>
             <div className="code-row">
               <div className="code-chip">
@@ -35,7 +36,7 @@ export default function Home() {
               <a className="btn btn-primary" href={config.casinoUrl} target="_blank" rel="noreferrer">
                 Play on {config.casino} <IconExternal />
               </a>
-              <a className="btn btn-ghost" href="#bonuses">View Bonuses</a>
+              <Link className="btn btn-ghost" to="/leaderboard">View Raffle</Link>
             </div>
           </div>
         </section>
@@ -44,7 +45,7 @@ export default function Home() {
       {/* BONUS CARDS */}
       <BonusCards />
 
-      {/* $50K LEADERBOARD PROMO */}
+      {/* RAFFLE PROMO */}
       <PromoBanner />
     </>
   )

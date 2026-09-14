@@ -27,7 +27,8 @@ function Card({ player, rank }) {
       </div>
       <div className="prize-plaque">
         <div className="ribbon">
-          <span className="amt">{fmtMoney(player.prize)}</span>
+          <span className="amt">{player.tickets.toLocaleString('en-US')}</span>
+          <span className="unit">Tickets</span>
         </div>
         <span className="trophy">🏆</span>
       </div>

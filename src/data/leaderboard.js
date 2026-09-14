@@ -28,6 +28,42 @@ export function previousMonthWindow(date = new Date()) {
   return monthWindow(new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() - 1, 1)))
 }
 
+// ============================================================================
+//  RAFFLE  (runs in the leaderboard section, /leaderboard)
+// ----------------------------------------------------------------------------
+//  Every `ticketCost` wagered under the code in the window earns one ticket
+//  (whole tickets only — $199 is one ticket). Tickets are read live from the
+//  same Rainbet affiliate feed as the leaderboard.
+//
+//  Winners are NOT drawn by the site. When the window closes the page switches
+//  to a "drawing winners" notice and freezes the final ticket counts. Draw the
+//  winners yourself, then publish them by filling in `winners` below — in
+//  prize order, using the username exactly as Rainbet reports it. The page
+//  masks names on display.
+// ============================================================================
+export const raffle = {
+  // Inclusive dates, 'YYYY-MM-DD'. Entries close at 23:59:59 UTC on `endAt`.
+  // Fixed rather than rolling, so the "drawing winners" state holds until
+  // you publish results instead of resetting at midnight on the 1st.
+  startAt: '2026-09-01',
+  endAt: '2026-09-30',
+  ticketCost: 100,
+  prizes: [6000, 2500, 1500],   // 1st, 2nd, 3rd — the pool is their sum
+
+  // Leave empty until drawn. To publish results:
+  //   winners: [
+  //     { name: 'username1' },   // 1st — $6,000
+  //     { name: 'username2' },   // 2nd — $2,500
+  //     { name: 'username3' },   // 3rd — $1,500
+  //   ],
+  winners: [],
+}
+
+export const rafflePool = raffle.prizes.reduce((sum, p) => sum + p, 0)
+
+// "$10,000" — the pool as display text, for copy that can't call fmtMoney.
+const rafflePoolText = `$${rafflePool.toLocaleString('en-US')}`
+
 export const config = {
   brandName: 'TEGENS',
   casino: 'Rainbet',
@@ -39,11 +75,10 @@ export const config = {
   prizePool: 3000,           // total $ pool, shown in the hero
   totalGivenAway: 250000,    // running "total given away" counter
 
-  // Takes the live standings offline. The leaderboard page shows a
-  // "be right back" notice and the home-page winner cards are hidden; the API
-  // isn't called at all while this is on. Everything else is unchanged, and
-  // snapshot-winners.mjs keeps archiving on its own schedule.
-  // Set back to false to bring the standings straight back.
+  // The monthly WAGER RACE is off: the leaderboard section runs the raffle
+  // instead (see `raffle` below). While this is true snapshot-winners.mjs
+  // archives nothing, so no wager-race "winners" get published for months the
+  // race didn't run.
   paused: true,
 
   // The active period — always the current UTC month. Nothing to edit here
@@ -89,9 +124,9 @@ export const config = {
         href: 'https://rainbet.com/?r=tegens',
       },
       {
-        icon: 'trophy',
-        title: 'Monthly Leaderboard',
-        subtitle: 'See the live race standings',
+        icon: 'ticket',
+        title: `${rafflePoolText} Raffle`,
+        subtitle: `Every $${raffle.ticketCost} wagered = 1 ticket`,
         to: '/leaderboard',
       },
       {
@@ -128,50 +163,16 @@ export const config = {
     ],
   },
 
-  // Promo banner under the bonus cards on the home page. Just the headline +
-  // copy: the top-3 winner cards are pulled live from the same leaderboard feed
-  // (and the same offline fallback), so they always match the leaderboard page.
+  // Promo banner under the bonus cards on the home page. Points at the raffle;
+  // the amount and the three prize cards come from `raffle` above, so the
+  // banner can't drift from the raffle page.
   promo: {
-    amount: 3000,
-    title: 'LEADERBOARD',
-    subtitle: 'Climb to the top of the leaderboard & win crazy prizes!',
-    cta: 'View Leaderboard',
+    title: 'RAFFLE',
+    subtitle: `Every $${raffle.ticketCost} wagered earns a ticket — 3 winners share the pool!`,
+    cta: 'Enter the Raffle',
     to: '/leaderboard',
   },
 }
-
-// ============================================================================
-//  RAFFLE  (the /raffle page)
-// ----------------------------------------------------------------------------
-//  Every `ticketCost` wagered under the code in the window earns one ticket
-//  (whole tickets only — $199 is one ticket). Tickets are read live from the
-//  same Rainbet affiliate feed as the leaderboard.
-//
-//  Winners are NOT drawn by the site. When the window closes the page switches
-//  to a "drawing winners" notice and freezes the final ticket counts. Draw the
-//  winners yourself, then publish them by filling in `winners` below — in
-//  prize order, using the username exactly as Rainbet reports it. The page
-//  masks names on display.
-// ============================================================================
-export const raffle = {
-  // Inclusive dates, 'YYYY-MM-DD'. Entries close at 23:59:59 UTC on `endAt`.
-  // Fixed rather than rolling, so the "drawing winners" state holds until
-  // you publish results instead of resetting at midnight on the 1st.
-  startAt: '2026-09-01',
-  endAt: '2026-09-30',
-  ticketCost: 100,
-  prizes: [6000, 2500, 1500],   // 1st, 2nd, 3rd — the pool is their sum
-
-  // Leave empty until drawn. To publish results:
-  //   winners: [
-  //     { name: 'username1' },   // 1st — $6,000
-  //     { name: 'username2' },   // 2nd — $2,500
-  //     { name: 'username3' },   // 3rd — $1,500
-  //   ],
-  winners: [],
-}
-
-export const rafflePool = raffle.prizes.reduce((sum, p) => sum + p, 0)
 
 // The three "Choose your exclusive Bonus" cards on the home page.
 // `featured: true` gives the blue highlighted treatment (middle card).
@@ -192,17 +193,17 @@ export const bonuses = [
   },
   {
     img: '/orb.png',
-    title: '$3,000',          // tip: keep in sync with config.prizePool
-    subtitle: 'Monthly Leaderboard',
+    title: rafflePoolText,   // follows raffle.prizes
+    subtitle: 'Raffle',
     accent: 'gold',
     featured: true,
     rows: [
       'Must be under code TEGENS',
       'Wager on Rainbet.com',
-      'Climb to secure Top Places',
-      'Win big rewards & enjoy!',
+      `Every $${raffle.ticketCost} wagered = 1 ticket`,
+      `3 winners: ${raffle.prizes.map((p) => `$${p.toLocaleString('en-US')}`).join(' / ')}`,
     ],
-    cta: 'VIEW LEADERBOARD',
+    cta: 'ENTER RAFFLE',
     to: '/leaderboard',
   },
   {
@@ -223,20 +224,6 @@ export const bonuses = [
     cta: 'CLAIM BONUS',
     href: 'https://rainbet.com/?r=tegens',
   },
-]
-
-// Offline fallback only. The live leaderboard pulls real players from the
-// Rainbet affiliate API; this sample data is shown if that request fails so
-// the page never renders empty. Prizes are assigned by rank from config.prizes.
-export const fallbackPlayers = [
-  { name: 'tegenxtraded',    wagered: 232.57 },
-  { name: 'realmaksdis1828', wagered: 212.72 },
-  { name: 'TheRodzz',        wagered: 173.55 },
-  { name: 'xiofo888',        wagered: 17.55 },
-  { name: 'devynAF',         wagered: 13.65 },
-  { name: 'rodzytegens',     wagered: 8.55 },
-  { name: 'degensXdagestan', wagered: 7.94 },
-  { name: 'Gambafix',        wagered: 5.07 },
 ]
 
 // ============================================================================

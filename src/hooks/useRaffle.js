@@ -58,3 +58,30 @@ export function useRaffle() {
 
   return state
 }
+
+// Window edges in UTC: entries open at the start of `startAt` and close at the
+// last second of `endAt`.
+export const opensAt = new Date(`${raffle.startAt}T00:00:00Z`)
+export const closesAt = new Date(`${raffle.endAt}T23:59:59Z`)
+
+function currentPhase() {
+  if (raffle.winners.length) return 'results'
+  const now = Date.now()
+  if (now < opensAt.getTime()) return 'upcoming'
+  if (now > closesAt.getTime()) return 'drawing'
+  return 'open'
+}
+
+/**
+ * 'upcoming' | 'open' | 'drawing' | 'results'. Published winners decide it
+ * outright; otherwise the clock does, re-checked every few seconds so an open
+ * tab flips to "drawing winners" at close without a refresh.
+ */
+export function useRafflePhase() {
+  const [phase, setPhase] = useState(currentPhase)
+  useEffect(() => {
+    const id = setInterval(() => setPhase(currentPhase()), 5000)
+    return () => clearInterval(id)
+  }, [])
+  return phase
+}

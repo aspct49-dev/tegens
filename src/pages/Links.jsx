@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { config } from '../data/leaderboard'
 import {
-  IconTrophy, IconGift, IconBolt, IconChevron, IconExternal,
+  IconTrophy, IconGift, IconBolt, IconChevron, IconExternal, IconTicket,
   IconDiscord, IconKick, IconInstagram, IconYoutube, IconX,
 } from '../components/icons'
 
@@ -10,6 +10,7 @@ import {
 const LINK_ICONS = {
   rainbet: <IconGift />,
   trophy: <IconTrophy />,
+  ticket: <IconTicket />,
   bolt: <IconBolt />,
   discord: <IconDiscord />,
   kick: <IconKick />,

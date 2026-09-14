@@ -12,7 +12,7 @@ export default function LeaderboardTable({ rows, startRank }) {
             <th style={{ width: 80 }}>Rank</th>
             <th>User</th>
             <th className="right">Wagered</th>
-            <th className="right">Reward</th>
+            <th className="right">Tickets</th>
           </tr>
         </thead>
         <tbody>
@@ -25,7 +25,7 @@ export default function LeaderboardTable({ rows, startRank }) {
                   <div className="user-cell">{maskName(p.name)}</div>
                 </td>
                 <td className="right"><span className="wager-val"><span className="cur">$</span>{fmtMoney(p.wagered, 2).slice(1)}</span></td>
-                <td className="right"><span className="reward-val">{fmtMoney(p.prize)}</span></td>
+                <td className="right"><span className="reward-val">{p.tickets.toLocaleString('en-US')}</span></td>
               </tr>
             )
           })}
