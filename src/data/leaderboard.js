@@ -174,6 +174,22 @@ export const config = {
   },
 }
 
+// Raffle rules — shown under the ticket table in the leaderboard section and on
+// the Terms page, so both always say the same thing. Edit freely; the ticket
+// price, dates and code are filled in from the config above.
+const dateText = (d) =>
+  new Date(`${d}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+
+export const raffleRules = [
+  `Every $${raffle.ticketCost} wagered on ${config.casino} under code ${config.referralCode} earns one ticket. Only whole tickets count — $${raffle.ticketCost * 2 - 1} wagered is one ticket.`,
+  `Only wagers placed between ${dateText(raffle.startAt)} and ${dateText(raffle.endAt)} (UTC) count toward the raffle.`,
+  `You must be registered under code ${config.referralCode} on ${config.casino} with affiliate tracking enabled for your tickets to show.`,
+  'No wager abuse. Multi-accounting, low-risk or opposite-side betting to farm tickets, and any other abuse of the raffle will lead to disqualification.',
+  'Winners are drawn after the raffle ends — not before. Results are posted here and in our Discord.',
+  `${config.brandName} and ${config.casino} have the final say on eligibility, disqualification and all raffle results.`,
+  'You must be 18+ (or the legal age in your jurisdiction) to take part.',
+]
+
 // The three "Choose your exclusive Bonus" cards on the home page.
 // `featured: true` gives the blue highlighted treatment (middle card).
 export const bonuses = [

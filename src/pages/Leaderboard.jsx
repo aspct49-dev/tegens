@@ -1,4 +1,4 @@
-import { config, raffle, rafflePool } from '../data/leaderboard'
+import { config, raffle, rafflePool, raffleRules } from '../data/leaderboard'
 import { fmtMoney, maskName } from '../utils'
 import { useRaffle, useRafflePhase, opensAt, closesAt } from '../hooks/useRaffle'
 import Countdown from '../components/Countdown'
@@ -136,6 +136,13 @@ export default function Leaderboard() {
           Every ticket is one entry in the draw. Usernames are masked for privacy.
           {updatedAt && !closed && <> · Last updated {updatedAt} UTC</>}
         </p>
+
+        <div className="raffle-rules">
+          <h3 className="raffle-rules-title display">Raffle Rules</h3>
+          <ol>
+            {raffleRules.map((rule, i) => <li key={i}>{rule}</li>)}
+          </ol>
+        </div>
       </div>
     </section>
   )

@@ -1,4 +1,4 @@
-import { config } from '../data/leaderboard'
+import { config, raffleRules } from '../data/leaderboard'
 import LegalPage from '../components/LegalPage'
 
 export default function Terms() {
@@ -26,13 +26,11 @@ export default function Terms() {
         to you. This does not affect the odds, terms, or experience you receive from {config.casino}.
       </p>
 
-      <h2>3. Leaderboard rules</h2>
+      <h2>3. Raffle rules</h2>
       <ul>
-        <li>To appear and rank on the leaderboard, you must be registered under code {config.referralCode} on {config.casino} and have affiliate tracking enabled.</li>
-        <li>Wager totals are sourced from the {config.casino} affiliate API and are subject to its accuracy and timing. Standings may be delayed or cached.</li>
-        <li>Prizes are awarded for the listed competition period and are subject to verification.</li>
-        <li>We reserve the right to adjust, withhold, or void prizes and to amend, suspend, or cancel any competition — including in cases of suspected fraud, collusion, multi-accounting, bonus abuse, or breach of {config.casino}’s terms.</li>
-        <li>Our decisions on leaderboard results and disputes are final.</li>
+        {raffleRules.map((rule, i) => <li key={i}>{rule}</li>)}
+        <li>Wager totals come from the {config.casino} affiliate API and are subject to its accuracy and timing. Ticket counts may be delayed or cached.</li>
+        <li>Prizes are subject to verification. We may withhold or void a prize, or amend, suspend or cancel the raffle, in cases of fraud, collusion or breach of {config.casino}’s terms.</li>
       </ul>
 
       <h2>4. Rewards &amp; cashback</h2>
