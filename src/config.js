@@ -13,9 +13,11 @@ export const config = {
   prizePool: 10000,
 
   // The period queried from the Rainbet affiliate API (inclusive, 'YYYY-MM-DD').
-  // Leave both null to automatically use the current calendar month (UTC).
-  // The countdown ticks down to the end of `endAt` (23:59:59 UTC).
+  // By default it runs monthly from `resetDay` (00:00 UTC) to the day before
+  // `resetDay` next month (23:59:59 UTC), e.g. 13 Oct → 12 Nov, then rolls
+  // over automatically. Set startAt + endAt to pin an exact period instead.
   leaderboard: {
+    resetDay: 13,
     startAt: null,
     endAt: null,
   },
@@ -33,16 +35,18 @@ export const config = {
   pastLeaderboards: [],
 }
 
-// Resolve the active period, defaulting to the current UTC month.
+// Resolve the active period: pinned dates if set, otherwise the monthly cycle
+// that started on the most recent `resetDay` (UTC).
 export function getPeriod() {
-  const { startAt, endAt } = config.leaderboard
+  const { startAt, endAt, resetDay = 1 } = config.leaderboard
   if (startAt && endAt) return { startAt, endAt }
   const now = new Date()
   const y = now.getUTCFullYear()
-  const m = now.getUTCMonth()
+  // Before this month's reset day we're still in the cycle that began last month.
+  const m = now.getUTCMonth() - (now.getUTCDate() < resetDay ? 1 : 0)
   const iso = (d) => d.toISOString().slice(0, 10)
   return {
-    startAt: iso(new Date(Date.UTC(y, m, 1))),
-    endAt: iso(new Date(Date.UTC(y, m + 1, 0))),
+    startAt: iso(new Date(Date.UTC(y, m, resetDay))),
+    endAt: iso(new Date(Date.UTC(y, m + 1, resetDay - 1))),
   }
 }
