@@ -432,8 +432,9 @@ img { display: block; }
   position: fixed;
   inset: 0;
   z-index: 60;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 16px;
   background: rgba(4, 10, 14, 0.7);
   opacity: 0;
@@ -442,10 +443,13 @@ img { display: block; }
 .modal-scrim.is-open { opacity: 1; }
 .modal {
   position: relative;
-  width: 520px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 520px;
+  /* dvh tracks the visible area on mobile browsers (URL bar shown/hidden). */
   max-height: calc(100vh - 32px);
-  overflow: auto;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 28px;
   border: 1px solid var(--row-border);
   border-radius: 8px;
@@ -455,7 +459,7 @@ img { display: block; }
   transition: transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .is-open .modal { transform: none; }
-.modal h2 { font-size: 22px; font-weight: 700; color: #efefef; margin-bottom: 16px; }
+.modal h2 { font-size: 22px; font-weight: 700; color: #efefef; margin-bottom: 16px; padding-right: 28px; }
 .modal ul { padding-left: 18px; display: grid; gap: 10px; font-size: 15px; font-weight: 400; color: #b9c1d0; line-height: 1.45; }
 .modal b { color: var(--blue); font-weight: 600; }
 .modal-note { margin-top: 18px; font-size: 13px; color: var(--muted); }
@@ -698,4 +702,9 @@ button:focus-visible {
   .lb-row { grid-template-columns: 42px 1fr 1fr auto; padding: 0 12px; column-gap: 8px; font-size: 14px; }
   .lb-place { font-size: 16px; }
   .lb-user img { width: 28px; height: 28px; }
+
+  .modal { padding: 22px 18px; }
+  .modal h2 { font-size: 20px; margin-bottom: 12px; }
+  .modal ul { font-size: 14px; gap: 8px; }
+  .modal-close { right: 8px; top: 6px; padding: 4px 8px; }
 }
