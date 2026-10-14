@@ -4,6 +4,7 @@ import { useLeaderboard } from './hooks/useLeaderboard'
 import { useCountdown } from './hooks/useCountdown'
 import { useToast } from './hooks/useToast'
 import TopBar from './components/TopBar'
+import SideNav from './components/SideNav'
 import Hero from './components/Hero'
 import Podium from './components/Podium'
 import RulesModal from './components/RulesModal'
@@ -13,6 +14,7 @@ import Toast from './components/Toast'
 
 export default function App() {
   const [rulesOpen, setRulesOpen] = useState(false)
+  const [navOpen, setNavOpen] = useState(false)
   const [bgLoaded, setBgLoaded] = useState(false)
   const [toast, showToast] = useToast()
   const period = getPeriod()
@@ -20,10 +22,18 @@ export default function App() {
   const { loading, error, players } = useLeaderboard()
   // Stable across the 1s countdown re-renders so the modal's effects don't churn.
   const closeRules = useCallback(() => setRulesOpen(false), [])
+  const closeNav = useCallback(() => setNavOpen(false), [])
 
   return (
     <div className="app">
-      <TopBar countdown={countdown} />
+      <TopBar onMenu={() => setNavOpen(true)} />
+      <SideNav
+        countdown={countdown}
+        open={navOpen}
+        onClose={closeNav}
+        onOpenRules={() => setRulesOpen(true)}
+      />
+      {navOpen && <div className="nav-scrim" onClick={closeNav} />}
 
       <main className="main" id="leaderboard">
         <img

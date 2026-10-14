@@ -10,7 +10,8 @@
   --row-border: #243b4b;
   --chip: #1c2c37;
   --chip-border: #2a3d4a;
-  --topbar-h: 73px;
+  --topbar-h: 73px;   /* mobile bar only; the nav is a left rail on desktop */
+  --sidenav-w: 248px;
 
   --grad-blue: linear-gradient(to top, #368fca, #4db8ff);
   --grad-silver: linear-gradient(to bottom, #f9f9f9, #aaa);
@@ -56,8 +57,9 @@ img { display: block; }
 .accent { color: var(--blue); }
 .muted { color: #d0cfcb; }
 
-/* ---------------------------------------------------------------- top bar */
+/* ------------------------------------------------- top bar (mobile only) */
 .topbar {
+  display: none;
   position: fixed;
   inset: 0 0 auto 0;
   height: var(--topbar-h);
@@ -65,16 +67,22 @@ img { display: block; }
   z-index: 40;
 }
 .topbar-inner {
-  position: relative;
-  max-width: 1426px;
   height: 100%;
-  margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 16px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 14px;
 }
-
+.topbar-menu {
+  width: 40px; height: 40px;
+  display: grid; align-content: center; gap: 5px;
+  padding: 0 9px;
+  background: none; border: 0; cursor: pointer;
+}
+.topbar-menu span {
+  display: block; height: 2px; border-radius: 2px;
+  background: var(--text);
+}
 .topbar-logo {
   position: relative;
   width: 75px;
@@ -91,14 +99,72 @@ img { display: block; }
   max-width: none;
 }
 
+/* ---------------------------------------------------------------- side nav */
+.sidenav {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--sidenav-w);
+  background: var(--bar);
+  border-right: 1px solid var(--row-border);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 16px 24px;
+  z-index: 45;
+}
+.sidenav-logo {
+  position: relative;
+  width: 75px;
+  height: 46px;
+  margin: 0 auto 26px;
+  overflow: hidden;
+  flex: none;
+}
+.sidenav-logo img {
+  position: absolute;
+  left: -5.33%;
+  top: -9.84%;
+  width: 109.33%;
+  height: 119.68%;
+  max-width: none;
+}
+.sidenav-nav { display: flex; flex-direction: column; gap: 8px; }
+/* Pushes the Visit button to the bottom of the rail. */
+.sidenav-foot { margin-top: auto; display: grid; justify-items: center; }
+
+.sidenav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 11px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: #dadada;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.sidenav-item:hover { background: rgba(77, 184, 255, 0.12); }
+
+.nav-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 44;
+}
+
 /* Centered leaderboard nav item (the design's "$10K LEADERBOARD" banner). */
 .lb-banner {
-  position: absolute;
-  left: 50%;
-  top: 4px;
-  transform: translateX(-50%);
+  position: relative;
   display: block;
-  width: 211px;
+  /* Fills the rail rather than a fixed 211px, which clipped the card at
+     narrower rail widths. */
+  width: 100%;
+  max-width: 211px;
   height: 55px;
 }
 .lb-banner::before {
@@ -133,7 +199,7 @@ img { display: block; }
 }
 .lb-banner-card {
   position: absolute;
-  left: 139px;
+  right: 0;
   top: 0;
   width: 72px;
   height: 55px;
@@ -171,14 +237,14 @@ img { display: block; }
 /* ---------------------------------------------------------------- main */
 .main {
   position: relative;
-  padding-top: var(--topbar-h);
+  margin-left: var(--sidenav-w);
   min-height: 100vh;
   overflow: hidden;
 }
 .main-bg {
   position: absolute;
   left: 50%;
-  top: var(--topbar-h);
+  top: 0;
   width: 1667px;
   height: 889px;
   max-width: none;
@@ -668,11 +734,19 @@ button:focus-visible {
 
 /* ---------------------------------------------------------------- responsive */
 @media (max-width: 1100px) {
-  .topbar-inner { padding: 0 24px; }
+  :root { --sidenav-w: 216px; }
 }
 
-@media (max-width: 420px) {
-  .lb-banner { display: none; }
+@media (max-width: 960px) {
+  .topbar { display: block; }
+  .main { margin-left: 0; padding-top: var(--topbar-h); }
+  .main-bg { top: var(--topbar-h); }
+  .sidenav {
+    width: 248px;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+  .sidenav.is-open { transform: translateX(0); }
 }
 
 @media (max-width: 960px) {
