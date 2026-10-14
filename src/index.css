@@ -8,7 +8,10 @@
   --row-a: #11232f;
   --row-b: #172c3a;
   --row-border: #243b4b;
-  --row-stroke: #38566e;   /* visible outline on leaderboard rows */
+  /* Leaderboard row edge: one 1px border run as a gradient, lit at the top and
+     shadowed at the bottom (sampled from the design). */
+  --row-edge-top: #243b4b;
+  --row-edge-bottom: #0e1921;
   --chip: #1c2c37;
   --chip-border: #2a3d4a;
   --topbar-h: 73px;   /* mobile bar only; the nav is a left rail on desktop */
@@ -576,13 +579,19 @@ img { display: block; }
   grid-template-columns: 145px 327px 1fr auto;
   height: 58px;
   padding: 0 20px;
-  border: 1px solid var(--row-stroke);
+  --fill: var(--row-a);
+  /* Transparent border + two background layers: the fill clipped to the padding
+     box, the edge gradient showing through the 1px border. A plain border-color
+     can't vary from top to bottom. */
+  border: 1px solid transparent;
   border-radius: 6px;
-  background: var(--row-a);
+  background:
+    linear-gradient(var(--fill), var(--fill)) padding-box,
+    linear-gradient(180deg, var(--row-edge-top), var(--row-edge-bottom)) border-box;
   font-size: 16px;
   font-variant-numeric: tabular-nums;
 }
-.lb-row:nth-child(even) { background: var(--row-b); }
+.lb-row:nth-child(even) { --fill: var(--row-b); }
 /* A small lift on hover rather than a brightness glow. */
 .lb-row { transition: transform 0.15s ease; }
 .lb-row:hover { transform: translateY(-2px); }
