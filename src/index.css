@@ -277,9 +277,15 @@ a.sidenav-item:hover {
   display: grid;
   place-items: center;
   flex: none;
+  /* Drawn in CSS, the same as the hero's Visit button. It used to be an SVG
+     whose inner-shadow filter was clipped to the shape's exact bounds, which
+     cut the corners' anti-aliasing and rasterised it, so the corners looked
+     jagged, worse on high-DPI screens. */
+  border-radius: 6px;
+  background: linear-gradient(to top, #368fca, #4db8ff);
+  box-shadow: inset 0 1px 0 #a1daff;
   transition: filter 0.15s;
 }
-.visit-top img { position: absolute; inset: 0; }
 .visit-top span {
   position: relative;
   font-size: 16px;

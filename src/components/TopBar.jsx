@@ -37,7 +37,6 @@ export default function TopBar({ countdown, onMenu }) {
       </a>
 
       <a className="visit-top" href={config.casinoUrl} target="_blank" rel="noopener noreferrer">
-        <img src="/assets/visit-btn.svg" width="135" height="37" alt="" />
         <span>Visit {config.casino}</span>
       </a>
     </header>
