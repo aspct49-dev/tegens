@@ -18,6 +18,8 @@ export default function TopBar({ countdown, onMenu }) {
           <img src="/assets/tgn-logo.png" alt={config.brandName} />
         </a>
       </div>
+      {/* "Line top bar": the design's 48px divider at the sidebar edge. */}
+      <img className="topbar-divider" src="/assets/line-topbar.svg" width="49" height="1" alt="" />
 
       <a className="lb-banner" href="#leaderboard" aria-current="page">
         <div className="lb-banner-text">

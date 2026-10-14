@@ -9,13 +9,13 @@
   --row-b: #172c3a;
   --row-border: #243b4b;
   /* Leaderboard row edge: one 1px border run as a gradient, lit at the top and
-     shadowed at the bottom (sampled from the design). */
-  --row-edge-top: #243b4b;
-  --row-edge-bottom: #0e1921;
+     shadowed at the bottom — sampled from Figma's own render of the rows. */
+  --row-edge-top: #233b4b;
+  --row-edge-bottom: #121f27;
   --chip: #1c2c37;
   --chip-border: #2a3d4a;
   --topbar-h: 73px;   /* mobile bar only; the nav is a left rail on desktop */
-  --sidenav-w: 240px;
+  --sidenav-w: 255px;
 
   --grad-blue: linear-gradient(to top, #368fca, #4db8ff);
   --grad-silver: linear-gradient(to bottom, #f9f9f9, #aaa);
@@ -107,60 +107,85 @@ img { display: block; }
   max-width: none;
 }
 .topbar .visit-top { margin-left: auto; }
+/* A 49x1 line asset turned upright: 48px tall, centred on the sidebar edge. */
+.topbar-divider {
+  position: absolute;
+  left: calc(var(--sidenav-w) - 25px);
+  top: 36px;
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
 
 /* ---------------------------------------------------------------- side nav */
-/* Measured from the design at 2x: 240px wide, body #0d1b24 under the bar,
-   36px items on a 44px pitch, a #182a36 pill for the active item. Idle items
-   and the coming-soon ones share one grey (#576273); only the active item is
-   lit, in #dadada with a --blue icon. */
+/* From the Figma frame (Leaderboard, 1:2). Sidebar: #0e1e28 at 60% with a
+   dashed #1e3d51 border, 255px. Items: 38px tall, 4px apart, inset 16px, label
+   at x=44 from the item edge, Rubik 500 14px. The active pill and the
+   coming-soon panel are faint left-to-right gradients, not solid fills. */
 .sidenav {
   position: fixed;
   top: var(--topbar-h);
   bottom: 0;
   left: 0;
   width: var(--sidenav-w);
-  background: #0d1b24;
-  padding: 24px 6px;
+  background: rgba(14, 30, 40, 0.6);
+  border-left: 1px dashed rgba(30, 61, 81, 0.6);
+  border-right: 1px dashed rgba(30, 61, 81, 0.6);
+  padding: 23px 15px 24px;
   overflow-y: auto;
   z-index: 35;
 }
-.sidenav-nav { display: flex; flex-direction: column; gap: 8px; }
+.sidenav-nav { display: flex; flex-direction: column; gap: 4px; }
 .sidenav-item {
   display: flex;
   align-items: center;
   gap: 14px;
-  height: 36px;
-  padding: 0 14px;
-  border-radius: 6px;
+  height: 38px;
+  padding: 0 0 0 13px;
+  border-radius: 8px;
   color: #576273;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   text-decoration: none;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s;
 }
-.sidenav-item svg { flex: none; }
-a.sidenav-item:hover { background: rgba(24, 42, 54, 0.6); color: #dadada; }
-.sidenav-item.is-active { background: #182a36; color: #dadada; }
-.sidenav-item.is-active svg { color: var(--blue); }
-
-.sidenav-label {
-  margin: 42px 6px 10px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.sidenav-ico {
+  width: 17px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sidenav-ico img { display: block; }
+.sidenav-home { color: #57657b; }
+.sidenav-q {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
   color: #576273;
 }
-/* Coming-soon items: a faint panel, dimmed, and not interactive. */
+.sidenav-item.is-active,
+a.sidenav-item:hover {
+  background: linear-gradient(90deg, rgba(106, 153, 181, 0.12), rgba(80, 118, 141, 0.12));
+}
+.sidenav-item.is-active { color: #dadada; }
+
+.sidenav-label {
+  margin: 39px 0 5px 7px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+  color: #576273;
+}
+/* Coming-soon items: a faint panel, not interactive. */
 .sidenav-soon {
   list-style: none;
   margin: 0;
-  padding: 4px 0;
+  padding: 0;
   border-radius: 8px;
-  background: #10222e;
+  background: linear-gradient(90deg, rgba(79, 155, 206, 0.06), rgba(32, 90, 128, 0.06));
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 .sidenav-item.is-soon { cursor: default; }
 
@@ -174,10 +199,9 @@ a.sidenav-item:hover { background: rgba(24, 42, 54, 0.6); color: #dadada; }
 /* Centered leaderboard nav item (the design's "$10K LEADERBOARD" banner). */
 .lb-banner {
   position: absolute;
-  /* Centre of the main column: past the side nav, then half what's left. */
-  left: calc(var(--sidenav-w) + (100% - var(--sidenav-w)) / 2);
+  /* x=300 in the design: 45px past the sidebar edge, beside the logo. */
+  left: calc(var(--sidenav-w) + 45px);
   top: 4px;
-  transform: translateX(-50%);
   display: block;
   width: 211px;
   height: 55px;
@@ -758,7 +782,6 @@ button:focus-visible {
 
 /* ---------------------------------------------------------------- responsive */
 @media (max-width: 1100px) {
-  :root { --sidenav-w: 216px; }
   .topbar { padding-right: 24px; }
 }
 
@@ -767,7 +790,8 @@ button:focus-visible {
   .topbar { padding-right: 16px; }
   .topbar-brand { width: auto; padding-left: 8px; justify-content: flex-start; }
   .topbar-menu { display: grid; }
-  .lb-banner { left: 50%; }
+  .topbar-divider { display: none; }
+  .lb-banner { left: 50%; transform: translateX(-50%); }
   .sidenav {
     width: var(--sidenav-w);
     transform: translateX(-100%);
