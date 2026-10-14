@@ -1,8 +1,17 @@
+import { useEffect } from 'react'
 import { config } from '../config'
 import { pad } from '../utils'
 
 export default function SideNav({ countdown, open, onClose, onOpenRules }) {
   const { days, hours, mins, secs } = countdown
+
+  // Escape closes the mobile drawer, the same as the rules modal.
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => e.key === 'Escape' && onClose?.()
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open, onClose])
   const poolK = `$${Math.round(config.prizePool / 1000)}K`
 
   return (

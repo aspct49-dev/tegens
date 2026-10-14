@@ -8,6 +8,7 @@
   --row-a: #11232f;
   --row-b: #172c3a;
   --row-border: #243b4b;
+  --row-stroke: #38566e;   /* visible outline on leaderboard rows */
   --chip: #1c2c37;
   --chip-border: #2a3d4a;
   --topbar-h: 73px;   /* mobile bar only; the nav is a left rail on desktop */
@@ -575,15 +576,16 @@ img { display: block; }
   grid-template-columns: 145px 327px 1fr auto;
   height: 58px;
   padding: 0 20px;
-  border: 1px solid var(--row-border);
+  border: 1px solid var(--row-stroke);
   border-radius: 6px;
   background: var(--row-a);
   font-size: 16px;
   font-variant-numeric: tabular-nums;
 }
 .lb-row:nth-child(even) { background: var(--row-b); }
-.lb-row { transition: filter 0.15s ease; }
-.lb-row:hover { filter: brightness(1.15); }
+/* A small lift on hover rather than a brightness glow. */
+.lb-row { transition: transform 0.15s ease; }
+.lb-row:hover { transform: translateY(-2px); }
 .lb-place { font-size: 20px; color: var(--muted); }
 .lb-user {
   display: flex;
@@ -730,6 +732,7 @@ button:focus-visible {
   html { scroll-behavior: auto; }
   .enter, .swap, .hero-deco img, .hero-deco:hover img, .code-btn.is-copied img { animation: none; }
   .main-bg, .podium-lift, .lb-row, .modal-scrim, .modal, .toast { transition: none; }
+  .lb-row:hover { transform: none; }
 }
 
 /* ---------------------------------------------------------------- responsive */
@@ -744,9 +747,16 @@ button:focus-visible {
   .sidenav {
     width: 248px;
     transform: translateX(-100%);
-    transition: transform 0.25s ease;
+    /* visibility (not just the transform) so a closed drawer is out of the tab
+       order and the accessibility tree; delayed so it animates out first. */
+    visibility: hidden;
+    transition: transform 0.25s ease, visibility 0s linear 0.25s;
   }
-  .sidenav.is-open { transform: translateX(0); }
+  .sidenav.is-open {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform 0.25s ease, visibility 0s;
+  }
 }
 
 @media (max-width: 960px) {
@@ -762,10 +772,6 @@ button:focus-visible {
 }
 
 @media (max-width: 640px) {
-  .topbar-inner { padding: 0 16px; }
-  .lb-banner { position: relative; left: auto; transform: none; width: 136px; }
-  .lb-banner-card { display: none; }
-
   .main-inner { padding-top: 40px; }
   .hero-sub { font-size: 24px; line-height: 30px; white-space: normal; }
   .hero-main { font-size: clamp(34px, 11vw, 76px); line-height: 1.15; margin-top: -4px; }
