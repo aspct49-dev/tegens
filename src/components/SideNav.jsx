@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { config } from '../config'
 
 // Icons are the design's own vectors (/assets). Each sits in a 17px slot so the
 // labels line up at the same x whatever the glyph's width.
@@ -22,10 +21,12 @@ export default function SideNav({ open, onClose }) {
   return (
     <aside className={`sidenav${open ? ' is-open' : ''}`} aria-label="Main">
       <nav className="sidenav-nav">
-        <a className="sidenav-item" href={config.homeUrl}>
+        {/* Not built yet, so not a link: the logo already goes home. */}
+        <span className="sidenav-item is-soon" aria-disabled="true">
           <span className="sidenav-ico"><img src="/assets/icon-home.svg" width="17" height="15" alt="" /></span>
           <span className="sidenav-text sidenav-home">Home</span>
-        </a>
+          <span className="sidenav-tag">Coming soon</span>
+        </span>
         <a className="sidenav-item is-active" href="#leaderboard" aria-current="page" onClick={onClose}>
           <span className="sidenav-ico"><img src="/assets/icon-winner.svg" width="14" height="14" alt="" /></span>
           <span className="sidenav-text">Leaderboard</span>

@@ -188,6 +188,21 @@ a.sidenav-item:hover {
   gap: 4px;
 }
 .sidenav-item.is-soon { cursor: default; }
+/* Small muted pill beside an item that isn't live yet. Kept quiet on purpose:
+   it marks something unavailable, so it shouldn't outshine the active item. */
+.sidenav-tag {
+  margin-left: -6px;           /* 8px from the label, against the row's 14px gap */
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(87, 98, 115, 0.2);
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 12px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
 
 .nav-scrim {
   position: fixed;
