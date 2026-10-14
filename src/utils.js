@@ -7,12 +7,11 @@ export const fmtMoney = (n, decimals = 0) =>
     maximumFractionDigits: decimals,
   })
 
-// Mask a username for privacy: "BlazeKing" -> "B*******g"
+// Mask a username for privacy, matching the design: "TegensKing" -> "Tegens***"
 export const maskName = (name) => {
   if (!name) return ''
-  if (name.length <= 2) return name[0] + '*'
-  const stars = '*'.repeat(Math.max(1, name.length - 2))
-  return name[0] + stars + name[name.length - 1]
+  const keep = Math.max(1, Math.min(6, Math.ceil(name.length / 2)))
+  return name.slice(0, keep) + '***'
 }
 
-export const initials = (name) => (name ? name[0].toUpperCase() : '?')
+export const pad = (n) => String(n).padStart(2, '0')

@@ -1,49 +1,42 @@
-import { config } from '../data/leaderboard'
-import { fmtMoney, maskName, initials } from '../utils'
+import { config } from '../config'
+import { fmtMoney, maskName } from '../utils'
 
-const META = {
-  1: { cls: 'first', label: '1st' },
-  2: { cls: 'second', label: '2nd' },
-  3: { cls: 'third', label: '3rd' },
-}
+const PLACES = { 1: 'first', 2: 'second', 3: 'third' }
+// Entrance stagger: 1st lands first, then 2nd and 3rd.
+const DELAY = { 1: 240, 2: 320, 3: 400 }
 
-function Card({ player, rank }) {
-  const m = META[rank]
-  const avatar = config.rankAvatars[rank - 1]
+function Card({ player, rank, loading }) {
+  const empty = !player
+  const name = empty ? (loading ? '…' : '—') : maskName(player.name)
+  const wager = empty ? '$0' : fmtMoney(player.wagered)
   return (
-    <div className={`podium-col ${m.cls}`}>
-      <div className="podium-card">
-        <div className="avatar-wrap">
-          <div className="avatar">
-            {avatar ? <img className="avatar-img" src={avatar} alt="" /> : initials(player.name)}
+    <div className={`podium-card ${PLACES[rank]} enter`} style={{ '--d': `${DELAY[rank]}ms` }}>
+      <div className="podium-lift">
+        <img className="podium-bg" src={`/assets/box-top${rank}.png`} width="281" height="349" alt="" />
+        <div className="podium-content">
+          <img className="podium-avatar" src={config.rankAvatars[rank - 1]} width="113" height="113" alt="" />
+          {/* Keyed so new live values fade in instead of snapping. */}
+          <p className="podium-name swap" key={`n-${name}`}>{name}</p>
+          <div className="podium-wager">
+            <span className="swap" key={`w-${wager}`}>{wager}</span>
           </div>
-          <span className="rank-badge">{m.label}</span>
+          <p className="podium-wager-lbl">WAGERED</p>
+          <p className="podium-reward">{fmtMoney(config.prizes[rank - 1] || 0)}</p>
+          <p className="podium-reward-lbl">REWARD</p>
         </div>
-        <div className="podium-name">{maskName(player.name)}</div>
-        <div className="podium-wager-lbl">Wagered</div>
-        <div className="wager-pill">
-          <span className="cur">$</span>{fmtMoney(player.wagered, 2).slice(1)}
-        </div>
-      </div>
-      <div className="prize-plaque">
-        <div className="ribbon">
-          <span className="amt">{player.tickets.toLocaleString('en-US')}</span>
-          <span className="unit">Tickets</span>
-        </div>
-        <span className="trophy">🏆</span>
       </div>
     </div>
   )
 }
 
-export default function Podium({ top3 }) {
-  // Render 2nd, 1st, 3rd so 1st sits raised in the center.
-  const [first, second, third] = top3
+export default function Podium({ players, loading }) {
+  const [first, second, third] = players
+  // DOM order 1st/2nd/3rd for mobile stacking; CSS places 2nd | 1st | 3rd on desktop.
   return (
-    <div className="podium">
-      {second && <Card player={second} rank={2} />}
-      {first && <Card player={first} rank={1} />}
-      {third && <Card player={third} rank={3} />}
-    </div>
+    <section className="podium" aria-label="Top 3">
+      <Card player={first} rank={1} loading={loading} />
+      <Card player={second} rank={2} loading={loading} />
+      <Card player={third} rank={3} loading={loading} />
+    </section>
   )
 }
