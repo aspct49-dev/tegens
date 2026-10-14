@@ -15,7 +15,7 @@
   --chip: #1c2c37;
   --chip-border: #2a3d4a;
   --topbar-h: 73px;   /* mobile bar only; the nav is a left rail on desktop */
-  --sidenav-w: 248px;
+  --sidenav-w: 240px;
 
   --grad-blue: linear-gradient(to top, #368fca, #4db8ff);
   --grad-silver: linear-gradient(to bottom, #f9f9f9, #aaa);
@@ -61,32 +61,36 @@ img { display: block; }
 .accent { color: var(--blue); }
 .muted { color: #d0cfcb; }
 
-/* ------------------------------------------------- top bar (mobile only) */
+/* ---------------------------------------------------------------- top bar */
+/* Full width. The brand cell is exactly the side nav's width so the logo sits
+   centred over the sidebar column, as in the design. */
 .topbar {
-  display: none;
   position: fixed;
   inset: 0 0 auto 0;
   height: var(--topbar-h);
   background: var(--bar);
-  z-index: 40;
-}
-.topbar-inner {
-  height: 100%;
-  padding: 0 16px;
   display: flex;
   align-items: center;
-  gap: 14px;
+  padding-right: 40px;
+  z-index: 40;
+}
+.topbar-brand {
+  width: var(--sidenav-w);
+  height: 100%;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
 .topbar-menu {
+  display: none;
   width: 40px; height: 40px;
-  display: grid; align-content: center; gap: 5px;
+  align-content: center; gap: 5px;
   padding: 0 9px;
   background: none; border: 0; cursor: pointer;
 }
-.topbar-menu span {
-  display: block; height: 2px; border-radius: 2px;
-  background: var(--text);
-}
+.topbar-menu span { display: block; height: 2px; border-radius: 2px; background: var(--text); }
 .topbar-logo {
   position: relative;
   width: 75px;
@@ -102,73 +106,80 @@ img { display: block; }
   height: 119.68%;
   max-width: none;
 }
+.topbar .visit-top { margin-left: auto; }
 
 /* ---------------------------------------------------------------- side nav */
+/* Measured from the design at 2x: 240px wide, body #0d1b24 under the bar,
+   36px items on a 44px pitch, a #182a36 pill for the active item. Idle items
+   and the coming-soon ones share one grey (#576273); only the active item is
+   lit, in #dadada with a --blue icon. */
 .sidenav {
   position: fixed;
-  inset: 0 auto 0 0;
+  top: var(--topbar-h);
+  bottom: 0;
+  left: 0;
   width: var(--sidenav-w);
-  background: var(--bar);
-  border-right: 1px solid var(--row-border);
-  display: flex;
-  flex-direction: column;
-  padding: 20px 16px 24px;
-  z-index: 45;
-}
-.sidenav-logo {
-  position: relative;
-  width: 75px;
-  height: 46px;
-  margin: 0 auto 26px;
-  overflow: hidden;
-  flex: none;
-}
-.sidenav-logo img {
-  position: absolute;
-  left: -5.33%;
-  top: -9.84%;
-  width: 109.33%;
-  height: 119.68%;
-  max-width: none;
+  background: #0d1b24;
+  padding: 24px 6px;
+  overflow-y: auto;
+  z-index: 35;
 }
 .sidenav-nav { display: flex; flex-direction: column; gap: 8px; }
-/* Pushes the Visit button to the bottom of the rail. */
-.sidenav-foot { margin-top: auto; display: grid; justify-items: center; }
-
 .sidenav-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  width: 100%;
-  padding: 12px 11px;
-  border: 0;
+  gap: 14px;
+  height: 36px;
+  padding: 0 14px;
   border-radius: 6px;
-  background: none;
-  color: #dadada;
-  font-family: inherit;
-  font-size: 13px;
+  color: #576273;
+  font-size: 14px;
   font-weight: 600;
-  text-align: left;
-  cursor: pointer;
-  transition: background 0.15s;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
 }
-.sidenav-item:hover { background: rgba(77, 184, 255, 0.12); }
+.sidenav-item svg { flex: none; }
+a.sidenav-item:hover { background: rgba(24, 42, 54, 0.6); color: #dadada; }
+.sidenav-item.is-active { background: #182a36; color: #dadada; }
+.sidenav-item.is-active svg { color: var(--blue); }
+
+.sidenav-label {
+  margin: 42px 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #576273;
+}
+/* Coming-soon items: a faint panel, dimmed, and not interactive. */
+.sidenav-soon {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  border-radius: 8px;
+  background: #10222e;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sidenav-item.is-soon { cursor: default; }
 
 .nav-scrim {
   position: fixed;
-  inset: 0;
+  inset: var(--topbar-h) 0 0 0;
   background: rgba(0, 0, 0, 0.55);
-  z-index: 44;
+  z-index: 34;
 }
 
 /* Centered leaderboard nav item (the design's "$10K LEADERBOARD" banner). */
 .lb-banner {
-  position: relative;
+  position: absolute;
+  /* Centre of the main column: past the side nav, then half what's left. */
+  left: calc(var(--sidenav-w) + (100% - var(--sidenav-w)) / 2);
+  top: 4px;
+  transform: translateX(-50%);
   display: block;
-  /* Fills the rail rather than a fixed 211px, which clipped the card at
-     narrower rail widths. */
-  width: 100%;
-  max-width: 211px;
+  width: 211px;
   height: 55px;
 }
 .lb-banner::before {
@@ -242,13 +253,14 @@ img { display: block; }
 .main {
   position: relative;
   margin-left: var(--sidenav-w);
+  padding-top: var(--topbar-h);
   min-height: 100vh;
   overflow: hidden;
 }
 .main-bg {
   position: absolute;
   left: 50%;
-  top: 0;
+  top: var(--topbar-h);
   width: 1667px;
   height: 889px;
   max-width: none;
@@ -747,14 +759,17 @@ button:focus-visible {
 /* ---------------------------------------------------------------- responsive */
 @media (max-width: 1100px) {
   :root { --sidenav-w: 216px; }
+  .topbar { padding-right: 24px; }
 }
 
 @media (max-width: 960px) {
-  .topbar { display: block; }
-  .main { margin-left: 0; padding-top: var(--topbar-h); }
-  .main-bg { top: var(--topbar-h); }
+  .main { margin-left: 0; }
+  .topbar { padding-right: 16px; }
+  .topbar-brand { width: auto; padding-left: 8px; justify-content: flex-start; }
+  .topbar-menu { display: grid; }
+  .lb-banner { left: 50%; }
   .sidenav {
-    width: 248px;
+    width: var(--sidenav-w);
     transform: translateX(-100%);
     /* visibility (not just the transform) so a closed drawer is out of the tab
        order and the accessibility tree; delayed so it animates out first. */
@@ -766,6 +781,17 @@ button:focus-visible {
     visibility: visible;
     transition: transform 0.25s ease, visibility 0s;
   }
+}
+
+@media (max-width: 640px) {
+  .lb-banner { position: relative; left: auto; top: auto; transform: none; width: 136px; margin: 0 auto; }
+  .lb-banner-card { display: none; }
+  .topbar .visit-top { margin-left: 0; }
+}
+
+@media (max-width: 420px) {
+  .lb-banner { display: none; }
+  .topbar .visit-top { margin-left: auto; }
 }
 
 @media (max-width: 960px) {

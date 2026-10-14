@@ -26,13 +26,8 @@ export default function App() {
 
   return (
     <div className="app">
-      <TopBar onMenu={() => setNavOpen(true)} />
-      <SideNav
-        countdown={countdown}
-        open={navOpen}
-        onClose={closeNav}
-        onOpenRules={() => setRulesOpen(true)}
-      />
+      <TopBar countdown={countdown} onMenu={() => setNavOpen(true)} />
+      <SideNav open={navOpen} onClose={closeNav} />
       {navOpen && <div className="nav-scrim" onClick={closeNav} />}
 
       <main className="main" id="leaderboard">
