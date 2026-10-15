@@ -229,7 +229,8 @@ a.sidenav-item:hover {
   border-radius: 6px;
   transition: background 0.15s;
 }
-.lb-banner:hover::before { background: rgba(77, 184, 255, 0.28); }
+/* Less blue over the dark bar reads as slightly darker on hover. */
+.lb-banner:hover::before { background: rgba(77, 184, 255, 0.14); }
 .lb-banner-text {
   position: absolute;
   left: 11px;
