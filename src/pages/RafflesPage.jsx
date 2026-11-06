@@ -303,21 +303,8 @@ function RaffleView({ raffle }) {
       setPulling(false)
     }
   }
-  /** The Draw button: a preview draw with a random entry, weighted by tickets like the real
-   *  draw (nothing is recorded; the real winners are drawn on the server) */
-  const pull = () => {
-    if (!machine.current || pulling) return
-    const pool = raffle.entries.filter((e) => e.tickets > 0)
-    if (!pool.length) return play(null)
-    const total = pool.reduce((s, e) => s + e.tickets, 0)
-    let r = Math.random() * total
-    const i = pool.findIndex((e) => (r -= e.tickets) < 0)
-    const e = pool[i < 0 ? pool.length - 1 : i]
-    return play({
-      playerNumber: e.playerNumber ?? raffle.entries.indexOf(e) + 1,
-      name: raffle.server ? e.name : maskName(e.name),
-    })
-  }
+  // No public Draw button: draws are made by an admin (Admin → Raffles) and play out here on
+  // their own; a past draw can be replayed from the list below.
   const onReady = () => {
     setReady(true)
     if (import.meta.env.DEV) window.tgnRaffleMachine = machine.current // console access while developing
@@ -356,10 +343,6 @@ function RaffleView({ raffle }) {
           {raffle.status === 'open' && <span className="rf-chip-dot" aria-hidden="true" />}
           {month(raffle.period.start)} · {statusLabel(raffle)}
         </span>
-        <button className={`rf-pull${pulling ? ' is-busy' : ''}`} onClick={pull} disabled={!ready || pulling} aria-busy={pulling}>
-          {pulling && <span className="rf-pull-spin" aria-hidden="true" />}
-          {pulling ? 'Drawing…' : 'Draw'}
-        </button>
       </section>
 
       <Stats raffle={raffle} />
@@ -384,7 +367,7 @@ function Stats({ raffle }) {
         <span className="rf-stat-label">Prize pool</span>
         <span className="rf-stat-value accent">{fmtMoney(raffle.prizePool)}</span>
         <span className="rf-stat-sub">
-          {raffle.drawsTotal} × {fmtMoney(raffle.prizePerDraw)} · max {raffle.maxWinsPerPerson} wins each
+          {raffle.drawsTotal} × {fmtMoney(raffle.prizePerDraw)} · max {raffle.maxWinsPerPerson} {raffle.maxWinsPerPerson === 1 ? 'win' : 'wins'} each
         </span>
       </li>
       <li className="rf-stat">

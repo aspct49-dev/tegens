@@ -1249,7 +1249,8 @@ button:focus-visible {
   display: grid;
   /* four to a row, filling the 844px column edge to edge, lined up with the search bar
      (the phone layout below goes back to as many 242px cards as fit) */
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, calc((100% - 3 * 12px) / 4));
+  justify-content: center; /* fewer than four (the Wager Store's three) sit in the middle */
   gap: 12px;
 }
 .store-card {
