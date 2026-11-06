@@ -1,0 +1,141 @@
+/* /overlay/hunt (HuntOverlay.jsx), on the kit's plate (overlay.css). */
+
+/* ---------------------------------------------------------------- ledger: start cost → winnings */
+.hov-ledger {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1.25fr);
+  align-items: stretch;
+  border: 1px solid var(--ov-line);
+  border-radius: 8px;
+  background: var(--ov-well);
+  overflow: hidden;
+}
+.hov-ledger-cell { position: relative; display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 9px 12px 10px; }
+.hov-ledger-label { font-size: 12px; font-weight: 500; color: var(--ov-dim); }
+.hov-ledger-value { overflow: hidden; font-size: 22px; font-weight: 700; line-height: 1.15; text-overflow: ellipsis; white-space: nowrap; color: var(--ov-text); }
+.hov-ledger-cell.is-won .hov-ledger-value { color: #fff; }
+.hov-ledger-arrow {
+  align-self: center;
+  justify-self: center;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid var(--ov-card-edge);
+  border-right: 2px solid var(--ov-card-edge);
+  transform: rotate(45deg);
+}
+.hov-pl {
+  position: absolute;
+  right: 10px;
+  top: 9px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.hov-pl.is-up { color: #7ee25a; }
+.hov-pl.is-down { color: #f08b87; }
+
+/* ---------------------------------------------------------------- opening now */
+.hov-now {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px 8px 8px;
+  border-radius: 8px;
+  background: var(--ov-card);
+  box-shadow: inset 0 1px 0 var(--ov-card-edge), inset 2px 0 0 var(--ov-blue);
+  animation: hov-in 0.4s ease-out both;
+}
+/* on a card the empty art block needs the darker colour to show */
+.hov-now .ov-art.is-empty,
+.hov-row.is-now .ov-art.is-empty { background: var(--ov-well); }
+.hov-now-text { display: flex; flex-direction: column; min-width: 0; }
+.hov-now-label { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--ov-blue); }
+.hov-now-game { overflow: hidden; margin-top: 1px; font-size: 17px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; color: #fff; }
+.hov-now-meta { overflow: hidden; font-size: 13px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; color: var(--ov-dim); }
+.hov-now-need { display: flex; flex-direction: column; align-items: flex-end; padding-left: 12px; border-left: 1px solid var(--ov-line); }
+.hov-now-need span { font-size: 12px; font-weight: 500; color: var(--ov-dim); }
+.hov-now-need b { font-size: 18px; font-weight: 700; color: var(--ov-text); }
+
+/* ---------------------------------------------------------------- best / lucky */
+.hov-wins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.hov-win {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px 6px 6px;
+  border-radius: 7px;
+  background: var(--ov-card);
+  box-shadow: inset 0 1px 0 var(--ov-card-edge);
+}
+.hov-win-text { display: flex; flex-direction: column; min-width: 0; }
+.hov-win-label { font-size: 11.5px; font-weight: 500; color: var(--ov-dim); }
+.hov-win-game { overflow: hidden; font-size: 13px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; color: var(--ov-text); }
+.hov-win-figs { display: flex; flex-direction: column; align-items: flex-end; }
+.hov-win-figs b { font-size: 14px; font-weight: 700; color: var(--ov-gold); }
+.hov-win-figs span { font-size: 11.5px; font-weight: 500; color: var(--ov-dim); }
+
+/* ---------------------------------------------------------------- the bonus window */
+.hov-window { padding: 6px 6px 8px; }
+.hov-viewport {
+  position: relative;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 22px), transparent);
+  mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 22px), transparent);
+}
+.hov-window.is-following .hov-viewport,
+.hov-window.is-rolling .hov-viewport {
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 16px, #000 calc(100% - 22px), transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 16px, #000 calc(100% - 22px), transparent);
+}
+.hov-list { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 0; list-style: none; transition: transform 0.9s cubic-bezier(0.25, 0.8, 0.25, 1); }
+.hov-window.is-rolling .hov-list { animation: hov-roll var(--roll-duration) linear infinite; }
+.hov-row {
+  display: grid;
+  grid-template-columns: 20px 22.5px minmax(0, 1fr) 62px 86px;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.4s, box-shadow 0.4s, opacity 0.4s;
+}
+.hov-row.is-head { height: 18px; margin-bottom: 4px; font-size: 11.5px; font-weight: 500; color: var(--ov-dim); }
+.hov-r { text-align: right; }
+.hov-n { font-size: 12px; font-weight: 600; text-align: right; color: var(--ov-dim); }
+.hov-game { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.hov-game-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hov-badge { flex: none; padding: 0 5px; border-radius: 4px; background: var(--ov-card); font-size: 11px; font-weight: 600; color: var(--ov-dim); }
+.hov-bet { text-align: right; color: var(--ov-dim); }
+.hov-result { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.15; }
+.hov-result b { font-weight: 700; color: var(--ov-text); }
+.hov-result b.is-gold { color: var(--ov-gold); }
+.hov-result span { font-size: 11.5px; font-weight: 500; color: var(--ov-dim); }
+.hov-dash { color: var(--ov-dim) !important; font-size: 13px !important; }
+.hov-row.is-waiting { opacity: 0.6; }
+.hov-row.is-now { background: var(--ov-card); box-shadow: inset 2px 0 0 var(--ov-blue); opacity: 1; }
+.hov-row.is-lucky:not(.is-now) { box-shadow: inset 2px 0 0 var(--ov-gold); }
+.hov-now-tag {
+  padding: 1px 7px;
+  border-radius: 5px;
+  background: var(--ov-blue-deep);
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+}
+/* a payout just landed: the row lights briefly, then settles */
+.hov-row.is-flash { animation: hov-flash 2.2s ease-out; }
+.hov-row.is-flash-gold { animation: hov-flash-gold 2.2s ease-out; }
+
+@keyframes hov-in { from { opacity: 0; transform: translateY(4px); } }
+@keyframes hov-roll { from { transform: translateY(0); } to { transform: translateY(var(--roll-distance)); } }
+@keyframes hov-flash { from { background: rgb(77 184 255 / 0.22); } to { background: transparent; } }
+@keyframes hov-flash-gold { from { background: rgb(242 180 44 / 0.22); } to { background: transparent; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hov-now, .hov-row.is-flash, .hov-row.is-flash-gold { animation: none; }
+  .hov-window.is-rolling .hov-list { animation-duration: calc(var(--roll-duration) * 2); }
+  .hov-list { transition: none; }
+}

@@ -1,8 +1,11 @@
 import { config } from '../config'
-import { fmtMoney, maskName } from '../utils'
+import { useNameMask } from '../hooks/useNameMask'
+import { fmtMoney } from '../utils'
+import VipBadge from './VipBadge'
 
 // Ranks 4 → last prize slot. Empty slots still render so the prize ladder is visible.
 export default function LeaderboardTable({ players, loading }) {
+  const mask = useNameMask() // admins see full names
   const rows = config.prizes.slice(3).map((prize, i) => ({ rank: i + 4, prize, player: players[i + 3] }))
 
   return (
@@ -21,14 +24,15 @@ export default function LeaderboardTable({ players, loading }) {
 
       <ol className="lb-rows">
         {rows.map(({ rank, prize, player }, i) => {
-          const name = player ? maskName(player.name) : loading ? '…' : '—'
+          const name = player ? mask(player.name) : loading ? '…' : '—'
           const wager = fmtMoney(player ? player.wagered : 0, 2)
           return (
             <li className={`lb-row enter${player ? '' : ' empty'}`} style={{ '--d': `${560 + i * 50}ms` }} key={rank}>
               <span className="lb-place">#{rank}</span>
               <span className="lb-user">
-                <img src={config.rowAvatar} width="40" height="40" alt="" />
+                <img src={config.rowAvatar} width="40" height="40" alt="" loading="lazy" decoding="async" />
                 <span className="swap" key={`n-${name}`}>{name}</span>
+                {player && <VipBadge name={player.name} via="rainbet" />}
               </span>
               <span className="lb-wager swap" key={`w-${wager}`}>{wager}</span>
               <span className="lb-prize">{fmtMoney(prize, 2)}</span>

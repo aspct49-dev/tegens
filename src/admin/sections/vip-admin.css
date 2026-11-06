@@ -1,0 +1,83 @@
+/* VIPs + Slot Calls admin (Vips.jsx, SlotCalls.jsx). Builds on admin.css. */
+
+.vip-gold { color: #f2b42c; }
+.vip-dim { color: #6a8191; }
+
+/* ---------------------------------------------------------------- VIPs */
+.vip-add { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto; align-items: end; gap: 12px; }
+.vip-add .adm-field { min-width: 0; }
+.vip-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.vip-table-wrap { overflow-x: auto; }
+.vip-table td { white-space: nowrap; }
+.vip-name { font-weight: 700; color: #dadada; }
+.vip-name:hover { color: #4db8ff; }
+.vip-note { max-width: 220px; }
+.vip-note-btn { max-width: 220px; overflow: hidden; text-overflow: ellipsis; color: #b9c6d0; text-align: left; }
+.vip-note-btn:hover { color: #fff; }
+.vip-note-edit { display: flex; gap: 6px; }
+.vip-best b { font-weight: 700; }
+
+/* ---------------------------------------------------------------- slot calls */
+.vc-settings { display: flex; flex-wrap: wrap; gap: 22px; }
+.vc-art { flex: none; border-radius: 5px; object-fit: cover; background: #0c171f; }
+.vc-art.is-empty { display: inline-block; box-shadow: inset 0 0 0 1px #2a3f4d; }
+
+.vc-current { display: flex; gap: 18px; }
+.vc-current-body { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+.vc-current-kicker { font-size: 12px; font-weight: 600; color: #4db8ff; }
+.vc-current-name { overflow: hidden; font-size: 22px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; color: #fff; }
+.vc-current-won { margin-top: 4px; font-size: 14px; color: #b9c6d0; }
+.vc-current-won b { color: #f2b42c; }
+.vc-result-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px; margin-top: 10px; }
+.vc-result-form .adm-field { min-width: 0; width: 130px; }
+
+.vc-list { margin: 0; padding: 0; list-style: none; }
+.vc-row { display: flex; align-items: center; gap: 12px; padding: 8px 4px; border-top: 1px solid #1c2c37; }
+.vc-row:first-child { border-top: 0; }
+.vc-n { width: 18px; font-size: 12px; font-weight: 600; color: #6a8191; text-align: right; }
+.vc-text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.vc-slot { display: flex; align-items: center; gap: 8px; overflow: hidden; font-size: 14px; font-weight: 600; white-space: nowrap; color: #dadada; }
+.vc-by { overflow: hidden; font-size: 12.5px; text-overflow: ellipsis; white-space: nowrap; color: #7e96a7; }
+.vc-btns { display: flex; flex: none; gap: 6px; }
+.vc-result { font-size: 13.5px; white-space: nowrap; }
+
+.vc-add { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr) auto; align-items: end; gap: 12px; }
+.vc-add .adm-field { min-width: 0; }
+.vc-picked { display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 6px; border-radius: 6px; background: #0c171f; box-shadow: inset 0 0 0 1px #2a3f4d; font-size: 14px; font-weight: 600; color: #dadada; }
+.vc-x { margin-left: auto; width: 24px; height: 24px; border-radius: 5px; font-size: 17px; color: #7e96a7; }
+.vc-x:hover { color: #f08b87; }
+
+@media (max-width: 720px) {
+  .vip-add, .vc-add { grid-template-columns: 1fr; }
+  .vip-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vc-row { flex-wrap: wrap; }
+  .vc-current { flex-direction: column; }
+}
+
+/* ---------------------------------------------------------------- one VIP's profile */
+button.vip-name { padding: 0; font: inherit; font-weight: 700; color: #dadada; text-align: left; text-decoration: underline; text-decoration-color: rgb(255 255 255 / 0.2); text-underline-offset: 3px; }
+button.vip-name:hover { color: #4db8ff; text-decoration-color: currentColor; }
+.vipp-back { margin-bottom: 4px; font-size: 13.5px; font-weight: 600; color: #7e96a7; }
+.vipp-back:hover { color: #4db8ff; }
+.vipp-head { display: flex; align-items: center; gap: 14px; }
+.vipp-mark { display: grid; place-items: center; flex: none; width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(to top, #8a6512, #f2b42c); font-size: 22px; font-weight: 800; color: #1a1205; }
+.vipp-who { flex: 1; min-width: 0; }
+.vipp-name { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 700; color: #f2f2f2; }
+.vipp-meta { margin-top: 2px; font-size: 13px; color: #7e96a7; }
+.vipp-stats { margin-top: 16px; }
+.vipp-best { display: flex; align-items: center; gap: 14px; margin-top: 12px; padding: 10px; border-radius: 8px; background: #0c171f; box-shadow: inset 0 0 0 1px rgb(242 180 44 / 0.3); }
+.vipp-best img { border-radius: 5px; object-fit: cover; }
+.vipp-best > div { display: flex; flex-direction: column; gap: 2px; }
+.vipp-best-label { font-size: 12px; font-weight: 600; color: #f2b42c; }
+.vipp-best-slot { font-size: 17px; font-weight: 700; color: #fff; }
+.vipp-best-win { font-size: 15px; font-weight: 700; color: #f2b42c; }
+.vipp-best-win span { font-weight: 500; color: #9fb0bf; }
+.vipp-noart { display: inline-block; width: 60px; height: 80px; border-radius: 5px; background: #1c2c37; }
+.vipp-noart.is-sm { width: 24px; height: 32px; border-radius: 3px; }
+.vipp-cols { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 12px; align-items: start; }
+.vipp-table td { white-space: nowrap; }
+.vipp-slot { display: flex; align-items: center; gap: 8px; }
+.vipp-slot img { border-radius: 3px; object-fit: cover; }
+.vipp-queued { margin-top: 12px; font-size: 13px; color: #9fb0bf; }
+.vipp-act { grid-template-columns: 1fr; gap: 2px; }
+@media (max-width: 900px) { .vipp-cols { grid-template-columns: 1fr; } }

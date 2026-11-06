@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="559" height="333" viewBox="0 0 559 333">
+  <!-- Wager Store USDC prize card art (store "Text + picture" style): navy card, a soft gold light,
+       a USDC coin rising from the bottom edge. The amount and "USDC" are drawn by the page on top. -->
+  <defs>
+    <radialGradient id="warm" cx="279.5" cy="358" r="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#433f37" />
+      <stop offset="1" stop-color="#101f2a" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="gold" cx="279.5" cy="290" r="200" gradientTransform="matrix(1 0 0 .6 0 116)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f2b42c" stop-opacity=".32" />
+      <stop offset="1" stop-color="#f2b42c" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="face" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a8be0" />
+      <stop offset="1" stop-color="#2369bb" />
+    </linearGradient>
+    <clipPath id="card"><rect width="559" height="333" /></clipPath>
+  </defs>
+  <g clip-path="url(#card)">
+    <rect width="559" height="333" fill="#101f2a" />
+    <rect width="559" height="333" fill="url(#warm)" />
+    <rect width="559" height="333" fill="url(#gold)" />
+    <!-- the coin: rim (edge) below, face on top -->
+    <circle cx="279.5" cy="348" r="150" fill="#1a4f8f" />
+    <circle cx="279.5" cy="338" r="150" fill="url(#face)" />
+    <circle cx="279.5" cy="338" r="150" fill="none" stroke="#8cc1f5" stroke-opacity=".55" stroke-width="3" />
+    <!-- the USDC mark: two arcs round a dollar sign -->
+    <path d="M226 268 A86 86 0 0 0 226 408" fill="none" stroke="#fff" stroke-width="13" stroke-linecap="round" />
+    <path d="M333 268 A86 86 0 0 1 333 408" fill="none" stroke="#fff" stroke-width="13" stroke-linecap="round" />
+    <g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M279.5 228 V246" />
+      <path d="M311 262 C305 250 294 246 279 246 C261 246 249 255 249 269 C249 301 312 289 312 322 C312 337 299 346 279 346 C262 346 249 339 244 326" />
+      <path d="M279.5 346 V364" />
+    </g>
+  </g>
+</svg>

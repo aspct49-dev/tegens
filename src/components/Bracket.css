@@ -1,0 +1,364 @@
+/* Tournament bracket (src/components/Bracket.jsx): one geometry, three skins.
+   .is-view    the public page: the site's row panels
+   .is-overlay the OBS overlay: flat cards in the overlay kit's colours (overlay.css)
+   .is-edit    the admin editor
+   Each skin only sets the --br-* tokens and a few extras. */
+
+.br {
+  --br-card: #11232f;
+  --br-row: #142836;
+  --br-edge-top: #2a4557;
+  --br-edge-bottom: #0f1c25;
+  --br-rule: #0c171f;
+  --br-text: #dadada;
+  --br-dim: #7e96a7;
+  --br-faint: #56637a;
+  --br-art: #1c3546;
+  --br-wire: #26394a;
+  --br-lit: #4db8ff;
+  --br-gold: #f2b42c;
+  --br-radius: 6px;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #2a3f4d transparent;
+  font-variant-numeric: tabular-nums;
+}
+.br-canvas { position: relative; flex: none; }
+
+/* ---------------------------------------------------------------- wires */
+.br-wires { position: absolute; inset: 0 auto auto 0; overflow: visible; pointer-events: none; }
+.br-wires path {
+  fill: none;
+  stroke: var(--br-wire);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.4s ease;
+}
+.br-wires path.is-lit {
+  stroke: var(--br-lit);
+  stroke-dasharray: 1;
+  
+  animation: br-draw 0.7s cubic-bezier(0.3, 0.7, 0.2, 1) both;
+}
+.br-wires path.is-gold {
+  stroke: var(--br-gold);
+  stroke-dasharray: 1;
+  
+  animation: br-draw 0.7s cubic-bezier(0.3, 0.7, 0.2, 1) both;
+}
+@keyframes br-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+/* ---------------------------------------------------------------- round labels */
+.br-round {
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: flex-start;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--br-dim);
+}
+.br-round.is-champ { color: var(--br-gold); }
+
+/* ---------------------------------------------------------------- match card */
+.br-card,
+.br-champ {
+  position: absolute;
+  display: flex;
+  overflow: hidden;
+  border-radius: var(--br-radius);
+  background: var(--br-card);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.22);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+.br-card { flex-direction: column; }
+/* the edge sits over the rows (a border would eat into the computed geometry):
+   lit along the top, shadowed along the bottom */
+.br-card::after,
+.br-champ::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 var(--br-edge-top), inset 0 -1px 0 var(--br-edge-bottom), inset 0 0 0 1px rgb(255 255 255 / 0.03);
+  pointer-events: none;
+}
+.br-rule { flex: none; height: 1px; background: var(--br-rule); }
+
+.br-row {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 9px;
+  padding: 0 10px 0 7px;
+  background: var(--br-row);
+  transition: background 0.45s ease, opacity 0.45s ease;
+}
+.br-row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 5px;
+  bottom: 5px;
+  width: 2px;
+  border-radius: 0 2px 2px 0;
+  background: var(--br-lit);
+  opacity: 0;
+  transform: scaleY(0.3);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.br-row.is-won {
+  background: linear-gradient(90deg, rgb(77 184 255 / 0.2), rgb(77 184 255 / 0.04) 70%), var(--br-row);
+}
+.br-row.is-won::before { opacity: 1; transform: none; }
+.br-row.is-lost { opacity: 0.42; }
+
+.br-art {
+  flex: none;
+  width: calc(var(--br-art-h, 32px) * 0.75);
+  height: var(--br-art-h, 32px);
+  border-radius: var(--r-sm);
+  object-fit: cover;
+  background: var(--br-art);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.35);
+}
+.br-art.is-blank {
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--br-dim);
+}
+.br-who { display: flex; flex: 1; flex-direction: column; gap: 2px; min-width: 0; }
+.br-name,
+.br-slot,
+.br-champ-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.br-name { font-size: 14px; font-weight: 600; line-height: 16px; color: var(--br-text); }
+.br-row.is-empty .br-name { font-weight: 500; color: var(--br-faint); }
+.br-slot { font-size: 12px; font-weight: 500; line-height: 14px; color: var(--br-dim); }
+.br-mult { flex: none; font-size: 14px; font-weight: 700; color: var(--br-text); }
+.br-row.is-won .br-mult { color: var(--br-lit); }
+
+/* the next match to play */
+.br-card.is-live {
+  box-shadow: 0 0 0 1px rgb(77 184 255 / 0.7), 0 6px 18px rgb(0 0 0 / 0.22);
+}
+.br-live-tag {
+  position: absolute;
+  z-index: 2;
+  right: 8px;
+  top: 50%;
+  display: inline-flex;
+  align-items: center;
+  height: 16px;
+  padding: 0 6px;
+  border-radius: var(--r-lg);
+  background: #1f6fe0;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #fff;
+  transform: translateY(-50%);
+  box-shadow: none;
+}
+
+/* ---------------------------------------------------------------- champion */
+.br-champ {
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px 0 10px;
+  --br-art-h: 44px;
+}
+.br-champ-label { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--br-dim); }
+.br-champ-name { font-size: 17px; font-weight: 700; line-height: 21px; color: #fff; }
+.br-champ-name.is-tbd { font-size: 14px; font-weight: 600; color: var(--br-faint); }
+.br-champ.is-crowned {
+  background: radial-gradient(ellipse 90% 140% at 0% 50%, rgb(242 180 44 / 0.26), transparent 70%), var(--br-card);
+  box-shadow: 0 0 0 1px rgb(242 180 44 / 0.75);
+}
+.br-champ.is-crowned::before { box-shadow: inset 0 1px 0 rgb(255 228 150 / 0.55); }
+.br-champ.is-crowned .br-champ-label { color: var(--br-gold); }
+.br-champ.is-crowned .br-champ-name {
+  color: var(--ov-gold, var(--gold));
+}
+
+/* ---------------------------------------------------------------- skin: overlay */
+/* flat cards in the site's colours (overlay.css): var(--chip) with a var(--edge) top edge */
+.br.is-overlay {
+  --br-card: #1c2c37;
+  --br-row: #1c2c37;
+  --br-edge-top: #314653;
+  --br-edge-bottom: transparent;
+  --br-rule: #11232f;
+  --br-text: #ebebeb;
+  --br-dim: #7e96a7;
+  --br-faint: #56637a;
+  --br-art: #11232f;
+  --br-wire: #263a48;
+  --br-radius: 6px;
+  overflow: visible;
+}
+.br.is-overlay .br-row { padding: 0 9px 0 6px; gap: 8px; }
+.br.is-overlay .br-row.is-won { background: var(--br-row); }
+.br.is-overlay .br-card,
+.br.is-overlay .br-champ { box-shadow: none; }
+.br.is-overlay .br-card.is-live { box-shadow: 0 0 0 1px var(--br-lit); }
+.br.is-overlay .br-card.is-waiting { opacity: 0.72; }
+.br.is-overlay .br-who { gap: 1px; }
+.br.is-overlay .br-name { font-size: 13px; font-weight: 600; line-height: 15px; }
+.br.is-overlay .br-slot { font-size: 12px; line-height: 12px; }
+.br.is-overlay .br-mult { font-size: 13px; font-weight: 700; }
+.br.is-overlay .br-round { font-size: 12px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.br.is-overlay .br-live-tag { right: 6px; padding: 0 6px; border-radius: var(--r); background: var(--action); font-size: 11px; font-weight: 600; letter-spacing: 0; }
+.br.is-overlay .br-champ { --br-art-h: 40px; }
+.br.is-overlay:not(.has-champion) .br-round.is-champ { color: var(--br-dim); }
+.br.is-overlay .br-champ-label { font-size: 12px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.br.is-overlay .br-champ.is-crowned { background: var(--br-card); box-shadow: 0 0 0 1px var(--br-gold); }
+.br.is-overlay .br-champ.is-crowned::before { box-shadow: none; }
+/* the smallest rows (32 players) */
+.br.is-overlay.is-tiny .br-name { font-size: 12px; }
+
+/* ---------------------------------------------------------------- skin: edit */
+.br.is-edit {
+  --br-card: #0f1b24;
+  --br-row: #13212b;
+  --br-edge-top: #2a3f4d;
+  --br-edge-bottom: #16242e;
+  --br-rule: #0c171f;
+  padding-bottom: 6px;
+}
+.br.is-edit .br-card { box-shadow: none; }
+.br.is-edit .br-card.is-live { box-shadow: 0 0 0 1px rgb(77 184 255 / 0.6); }
+.br.is-edit .br-row { gap: 8px; padding: 0 8px 0 7px; }
+.br.is-edit .br-who { gap: 4px; }
+
+/* first-round names typed into the card */
+.br-name-in {
+  width: 100%;
+  min-width: 0;
+  height: 22px;
+  margin-left: -5px;
+  padding: 0 5px;
+  border: 0;
+  border-radius: 4px;
+  outline: 0;
+  background: transparent;
+  box-shadow: inset 0 -1px 0 #2a3f4d;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--br-text);
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.br-name-in::placeholder { font-weight: 500; color: var(--br-faint); }
+.br-name-in:hover { background: rgb(255 255 255 / 0.03); }
+.br-name-in:focus { background: #0c171f; box-shadow: inset 0 0 0 1px var(--blue); }
+
+/* the player's slot: its name (click to change) with a clear button, or the search */
+.br-slot-set { display: flex; align-items: center; gap: 2px; min-width: 0; height: 24px; }
+.br-slot-btn {
+  overflow: hidden;
+  min-width: 0;
+  max-width: 100%;
+  margin-left: -5px;
+  padding: 0 5px;
+  height: 22px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 22px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--br-dim);
+  transition: background 0.15s, color 0.15s;
+}
+.br-slot-btn:hover { background: rgb(255 255 255 / 0.05); color: var(--br-text); }
+.br-slot-x {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--br-faint);
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+}
+.br-row:hover .br-slot-x,
+.br-slot-x:focus-visible { opacity: 1; }
+.br-slot-x:hover { color: var(--danger); }
+.br-slot-btn:focus-visible,
+.br-slot-x:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
+.br-foot {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: -1px;
+  border-top: 1px solid var(--br-rule);
+  background: #0c171f;
+}
+.br-foot-note { font-size: 12px; font-weight: 600; color: var(--br-faint); }
+.br-foot-btn {
+  height: 22px;
+  padding: 0 12px;
+  border-radius: var(--r);
+  background: var(--action);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14);
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  transition: filter 0.15s ease;
+}
+.br-foot-btn:hover { filter: brightness(0.85); }
+.br-foot-btn.is-undo { background: none; box-shadow: none; color: var(--text-3); }
+.br-foot-btn.is-undo:hover { color: var(--danger); filter: none; }
+.br-foot-btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.br-mult-in {
+  display: flex;
+  flex: none;
+  align-items: center;
+  width: 72px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: var(--r);
+  background: #0c171f;
+  box-shadow: inset 0 0 0 1px #2a3f4d;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+  cursor: text;
+}
+.br-mult-in:focus-within { box-shadow: inset 0 0 0 1px var(--blue), 0 0 0 3px rgb(77 184 255 / 0.15); }
+.br-mult-in input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  font: inherit;
+  text-align: right;
+  color: var(--text-0);
+}
+.br-mult-in input::placeholder { color: #56637a; }
+
+@media (prefers-reduced-motion: reduce) {
+  .br-wires path.is-lit,
+  .br-wires path.is-gold { animation: none; }
+  .br-row, .br-row::before, .br-card, .br-name-in, .br-slot-btn { transition: none; }
+}
+.br.is-tiny .br-live-tag { display: none; }

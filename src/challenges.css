@@ -1,0 +1,253 @@
+/* Challenges page (/challenges). Built from the site's own pieces (index.css):
+   .step-grid/.step-card, the .ms-row card surface, .link-btn. This file adds the bar
+   and the bounty-ticket challenge cards. Width matches Milestones: 844px. */
+.ch {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 844px;
+  max-width: 100%;
+  margin-top: 42px;
+}
+
+.ch-hint { margin: 0; text-align: center; }
+
+/* the bar above the cards: the title and count left, sort right */
+.ch-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  padding: 8px 8px 8px 20px;
+  border-radius: var(--r-xl);
+  background: url('/assets/td/ms-row.png') center / 100% 100%;
+  box-shadow: var(--raise);
+}
+.ch-title { display: flex; align-items: center; gap: 10px; font-size: 18px; line-height: 24px; font-weight: 700; color: var(--text-1); }
+
+.ch-sort { display: flex; align-items: center; gap: 10px; }
+.ch-sort-label { font-size: 13px; font-weight: 600; color: var(--text-3); }
+.ch-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 28px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 12px;
+  background: #1c3546;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+}
+.ch-sort select {
+  height: 34px;
+  padding: 0 32px 0 12px;
+  border: 0;
+  border-radius: var(--r);
+  background: var(--chip) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237e96a7' stroke-width='1.6' fill='none'/%3E%3C/svg%3E") right 12px center no-repeat;
+  box-shadow: var(--raise);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-1);
+  appearance: none;
+  cursor: pointer;
+}
+.ch-sort select option { background: #13212b; }
+
+
+/* ---------------------------------------------------------------- the challenge card
+   A bounty ticket, three to a row (276px, like the Bonuses cards):
+   - banner: the slot's art blurred behind its sharp cover, the bounty large on the right;
+   - a tear line: two notches cut out of the card's edges (a mask, so they show whatever
+     is behind the card) joined by a dashed rule;
+   - the game, two stat tiles (target and min. bet) and the claim button. */
+.ch-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px 8px;
+  margin-top: 12px;
+  padding: 0;
+  list-style: none;
+}
+.ch-card {
+  --tear: 136px; /* the banner's height: where the notches sit */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--r-lg);
+  background: url('/assets/bonuses/card-bg.png') center / 100% 100%;
+  box-shadow: var(--raise);
+  -webkit-mask:
+    radial-gradient(circle at 0 var(--tear), #0000 9px, #000 9.5px) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% var(--tear), #0000 9px, #000 9.5px) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle at 0 var(--tear), #0000 9px, #000 9.5px) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% var(--tear), #0000 9px, #000 9.5px) right / 51% 100% no-repeat;
+  transition: transform 0.2s ease;
+}
+.ch-card:hover { transform: translateY(-3px); }
+
+/* banner */
+.ch-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: var(--tear);
+  padding: 0 14px;
+  overflow: hidden;
+  border-radius: 8px 8px 0 0;
+  background: #0c171f;
+}
+.ch-banner-bg {
+  position: absolute;
+  inset: -24px;
+  width: calc(100% + 48px);
+  height: calc(100% + 48px);
+  object-fit: cover;
+  filter: blur(18px) saturate(1.25) brightness(0.5);
+  pointer-events: none;
+}
+.ch-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 100% 50%, rgb(31 111 224 / 0.28), transparent 60%),
+    linear-gradient(90deg, rgb(12 23 31 / 0.1), rgb(12 23 31 / 0.7));
+  pointer-events: none;
+}
+.ch-art {
+  position: relative;
+  z-index: 1;
+  display: block;
+  flex: none;
+  width: 81px;
+  height: 108px;
+  overflow: hidden;
+  border-radius: var(--r);
+  background: #0c171f;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.45), 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+.ch-art img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.ch-card:hover a.ch-art img { transform: scale(1.06); }
+.ch-art-play {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  padding: 2px 10px;
+  border-radius: var(--r);
+  background: rgb(10 20 27 / 0.85);
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition: opacity 0.15s, transform 0.15s;
+}
+a.ch-art:hover .ch-art-play, a.ch-art:focus-visible .ch-art-play { opacity: 1; transform: translate(-50%, 0); }
+a.ch-art:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.ch-noart { display: grid; place-items: center; width: 100%; height: 100%; font-size: 34px; font-weight: 700; color: var(--edge); }
+
+.ch-bounty { position: relative; z-index: 1; display: flex; flex-direction: column; min-width: 0; }
+.ch-bounty-label { font-size: 11px; line-height: 14px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #9fd8ff; }
+.ch-bounty-value {
+  margin-top: 2px;
+  overflow: hidden;
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #fff;
+  text-shadow: 0 2px 14px rgb(31 111 224 / 0.55);
+}
+.ch-bounty-sub { font-size: 12px; line-height: 15px; font-weight: 500; color: #9db3c3; }
+.ch-stamp {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  right: 10px;
+  padding: 2px 8px;
+  border: 2px solid var(--gold);
+  border-radius: var(--r-sm);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  transform: rotate(-8deg);
+}
+
+/* below the tear line */
+.ch-info { position: relative; display: flex; flex: 1; flex-direction: column; padding: 14px 14px 14px; }
+.ch-info::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 16px;
+  right: 16px;
+  border-top: 2px dashed rgb(77 184 255 / 0.22);
+}
+.ch-game { overflow: hidden; font-size: 16px; line-height: 20px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; color: var(--text-0); }
+.ch-provider { margin-top: 2px; overflow: hidden; font-size: 12px; line-height: 15px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; color: var(--text-3); }
+.ch-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 12px 0 0; }
+.ch-stats > div { padding: 8px 10px; border-radius: var(--r); background: var(--surface); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05); }
+.ch-stats dt { font-size: 11px; line-height: 14px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); }
+.ch-stats dd { margin: 2px 0 0; font-size: 17px; line-height: 21px; font-weight: 700; color: var(--text-1); }
+.ch-accent { color: var(--blue); }
+.ch-claim {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 33px;
+  margin-top: 12px;
+  border-radius: var(--r);
+  background: var(--action);
+  box-shadow: inset 0 1px 0 rgb(82 187 255 / 0.78);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+.ch-claim img { width: 7.39px; height: 5.39px; transform: rotate(90deg); }
+.ch-claim:hover { filter: brightness(0.85); }
+.ch-claim:active { transform: translateY(1px); }
+.ch-claim:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.ch-won {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 33px;
+  margin-top: 12px;
+  overflow: hidden;
+  padding: 0 8px;
+  border-radius: var(--r);
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-3);
+}
+.ch-card.is-won .ch-banner-bg { filter: blur(18px) grayscale(1) brightness(0.4); }
+.ch-card.is-won .ch-art img { filter: grayscale(0.6); opacity: 0.7; }
+.ch-card.is-won .ch-bounty-value { color: #9fb0bf; text-shadow: none; }
+.ch-card.is-won .ch-bounty-value .ch-accent { color: var(--text-3); }
+
+@media (max-width: 900px) {
+  .ch-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .ch-grid { grid-template-columns: minmax(0, 1fr); }
+  .ch-bar { flex-wrap: wrap; padding-left: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ch-card, .ch-art img, .ch-art-play { transition: none; }
+  .ch-card:hover { transform: none; }
+  .ch-card:hover a.ch-art img { transform: none; }
+
+}

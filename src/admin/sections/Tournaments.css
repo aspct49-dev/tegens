@@ -1,0 +1,82 @@
+/* Tournaments admin section (Tournaments.jsx). The form kit is admin.css; the
+   bracket itself is src/components/Bracket.css. */
+
+.tg-code { font-family: ui-monospace, Consolas, monospace; font-size: 12.5px; color: #4db8ff; }
+.tg-note { font-size: 13px; line-height: 1.45; color: #6a8191; }
+.tg-dim { font-weight: 500; color: #6a8191; }
+
+/* new tournament */
+.tg-new .adm-row { align-items: flex-start; }
+.tg-new .adm-field:first-child { flex: 1 1 240px; }
+.tg-new-go { min-width: 0; }
+.tg-seg {
+  display: inline-flex;
+  height: 38px;
+  padding: 3px;
+  border-radius: 6px;
+  background: #0c171f;
+  box-shadow: inset 0 0 0 1px #2a3f4d;
+}
+.tg-seg-btn {
+  min-width: 44px;
+  padding: 0 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #7e96a7;
+  transition: background 0.15s, color 0.15s;
+}
+.tg-seg-btn:hover { color: #dadada; }
+.tg-seg-btn.is-on { background: #2a91d5; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14); color: #fff; }
+.tg-seg-btn:focus-visible { outline: 2px solid #4db8ff; outline-offset: 1px; }
+
+/* tournament list */
+.tg-list { display: flex; flex-direction: column; gap: 4px; padding: 0; list-style: none; }
+.tg-list-item {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: #0f1b24;
+  text-align: left;
+  transition: background 0.15s;
+}
+.tg-list-item:hover { background: #16242e; }
+.tg-list-item.is-active { background: #1c2c37; box-shadow: inset 0 1px 0 #314653, inset 2px 0 0 #4db8ff; }
+.tg-list-name { overflow: hidden; font-size: 14px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; color: #ebebeb; }
+.tg-list-meta { overflow: hidden; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; color: #6a8191; }
+
+/* editor stats */
+.tg-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+.tg-stats .adm-stat-value { overflow: hidden; font-size: 17px; text-overflow: ellipsis; white-space: nowrap; }
+
+/* paste names */
+.tg-paste { display: flex; align-items: flex-end; gap: 10px; margin-bottom: 14px; }
+.tg-paste-box {
+  flex: 1;
+  min-height: 96px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: #0c171f;
+  box-shadow: inset 0 0 0 1px #2a3f4d;
+  font: inherit;
+  font-size: 14px;
+  color: #ebebeb;
+  outline: none;
+  resize: vertical;
+}
+.tg-paste-box:focus { box-shadow: inset 0 0 0 1px #4db8ff, 0 0 0 3px rgb(77 184 255 / 0.15); }
+.tg-bracket-help { margin: 0 0 14px; }
+
+.tg-delete { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
+@media (max-width: 720px) {
+  .tg-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tg-delete { flex-direction: column; align-items: stretch; }
+  .tg-list-item { grid-template-columns: minmax(0, 1fr) auto; }
+  .tg-list-meta { grid-column: 1 / -1; grid-row: 2; }
+}

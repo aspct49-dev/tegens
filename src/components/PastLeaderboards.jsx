@@ -1,8 +1,11 @@
 import { config } from '../config'
+import { useUI } from '../ui'
 import { fmtMoney } from '../utils'
 
-// Static for now (edit config.pastLeaderboards). Hidden when the list is empty.
+// Edit config.pastLeaderboards. Hidden when the list is empty. "View Winners"
+// opens that period's final standings (needs startAt/endAt on the entry).
 export default function PastLeaderboards() {
+  const { openWinners } = useUI()
   const items = config.pastLeaderboards
   if (!items.length) return null
 
@@ -25,7 +28,7 @@ export default function PastLeaderboards() {
               <p className="past-pool">{fmtMoney(lb.prizePool)}</p>
               <p className="past-pool-lbl">PRIZE POOL</p>
             </div>
-            <a className="past-btn" href={lb.href || '#'}>View Winners</a>
+            <button className="past-btn" onClick={() => openWinners(lb)}>View Winners</button>
           </div>
         ))}
       </div>

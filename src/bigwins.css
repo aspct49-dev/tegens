@@ -1,0 +1,228 @@
+/* Biggest Wins page (/biggest-wins). Built from the site's own pieces: .titled-page, the
+   .mc-* rows and .claim-form dialog from claims.css. The bar, count chip, spinner and empty
+   box copy Challenges' look (challenges.css isn't loaded on this page), scoped under .bw.
+   Width matches Challenges: 844px. */
+.bw {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 844px;
+  max-width: 100%;
+  margin-top: 42px;
+}
+
+/* the bar: title + count left, the two toggles and Submit right */
+.bw .ch-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  min-height: 52px;
+  padding: 8px 8px 8px 20px;
+  border-radius: var(--r-xl);
+  background: url('/assets/td/ms-row.png') center / 100% 100%;
+  box-shadow: var(--raise);
+}
+.bw .ch-title { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 18px; line-height: 24px; font-weight: 700; color: var(--text-1); }
+
+.bw .ch-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 28px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 12px;
+  background: #1c3546;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.bw-hint { margin: 18px 0 0; text-align: center; }
+
+
+
+.bw-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.bw-seg { display: flex; padding: 3px; border-radius: var(--r-lg); background: var(--bar); box-shadow: var(--raise); }
+.bw-seg button {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: var(--r);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-3);
+  transition: color 0.15s, background 0.15s;
+}
+.bw-seg button:hover { color: var(--text-1); }
+/* the same active state as the raffle, store and slot-picker tabs */
+.bw-seg button.is-on { background: var(--action); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14); color: #fff; }
+.bw-submit { height: 36px; padding: 0 18px; font-size: 14px; font-weight: 600; }
+
+.bw-x { margin-left: 1px; color: var(--blue); }
+
+/* ---------------------------------------------------------------- places 1–3
+   The leaderboard's podium (index.css .podium / .podium-card, the same box-top1–3 art and
+   2nd | 1st | 3rd order). The rows inside are re-spaced so the big figure lands on the
+   card's coloured lower panel exactly where the leaderboard's REWARD sits (top 263px), and nothing
+   above it reaches the panel's peak (233px from the card top; 256px at the text column's edges). */
+.bw-podium {
+  align-self: center;           /* 875px: a little wider than the 844px column, centred on it */
+  justify-content: center;
+  gap: 16px;
+  margin-top: 40px;
+}
+a.bw-pcard { display: block; color: inherit; text-decoration: none; }
+a.bw-pcard:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; border-radius: var(--r-xl); }
+.bw-pcard .podium-content { top: 16px; }
+.bw-p-art {
+  flex: none;
+  width: 74px;
+  height: 98px;
+  padding: 2px;
+  border-radius: var(--r-xl);
+  background: var(--medal);
+  box-shadow: 0 10px 22px rgb(0 0 0 / 0.45);
+}
+.bw-pcard.first { --medal: linear-gradient(to top, #cd9e52, #ffd58f); }
+.bw-pcard.second { --medal: linear-gradient(to bottom, #c3e7ff, #79acce); }
+.bw-pcard.third { --medal: linear-gradient(to top, #c98065, #ffbda4); }
+.bw-p-img { display: block; width: 100%; height: 100%; border-radius: var(--r-lg); object-fit: cover; background: var(--field); }
+.bw-p-slot { max-width: 100%; margin-top: 6px; overflow: hidden; font-size: 13px; line-height: 16px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; color: var(--text-2); }
+.bw-pcard .podium-name { margin-top: 2px; font-size: 22px; }
+.bw-pcard .podium-wager { margin-top: 6px; }
+.bw-pcard .podium-wager-lbl { font-size: 14px; letter-spacing: 0.02em; }
+.bw-pcard .podium-reward { margin-top: 38px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* long figures step down so they stay inside the 204px panel; the line height holds the spot */
+.bw-pcard .podium-reward.is-long { font-size: 33px; }
+.bw-pcard .podium-reward.is-longer { font-size: 27px; }
+.bw-pcard .podium-reward.is-longest { font-size: 21px; }
+.bw-noart { display: grid; place-items: center; font-size: 28px; font-weight: 700; color: var(--edge); background: var(--field); }
+
+/* ---------------------------------------------------------------- places 4+ */
+.bw-table { margin-top: 32px; }
+.bw-head,
+.bw-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 2.2fr) minmax(0, 1.2fr) 90px 100px 110px;
+  align-items: center;
+  gap: 12px;
+}
+.bw-head { padding: 0 14px 8px; font-size: 12px; font-weight: 600; color: var(--text-3); }
+.bw-head .is-num,
+.bw-row .is-num { text-align: right; }
+.bw-rows { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.bw-row {
+  min-height: 56px;
+  padding: 8px 14px;
+  border-radius: var(--r);
+  background: var(--surface);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
+  font-size: 14px;
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+}
+.bw-row-rank { font-weight: 700; color: var(--text-3); }
+.bw-row-slot { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.bw-row-art { flex: none; width: 30px; height: 40px; border-radius: var(--r-sm); object-fit: cover; font-size: 14px; }
+.bw-row-name { display: flex; flex-direction: column; min-width: 0; }
+.bw-row-name > span { overflow: hidden; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; color: var(--text-0); }
+.bw-row-name small { overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; color: var(--text-3); }
+.bw-row-player { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bw-row .is-key { font-weight: 700; color: #fff; }
+.bw-row-payout a { color: inherit; text-decoration: underline; text-decoration-color: rgb(77 184 255 / 0.5); text-underline-offset: 3px; }
+.bw-row-payout a:hover { color: var(--blue); }
+
+/* ---------------------------------------------------------------- your submissions */
+.bw-mine .mc-list { margin-top: 12px; }
+.bw-mine-row { grid-template-columns: 30px minmax(0, 1fr) auto auto; }
+.bw-mine-art { width: 30px; height: 40px; border-radius: var(--r-sm); object-fit: cover; font-size: 14px; }
+
+/* ---------------------------------------------------------------- the submit dialog */
+.bw-modal { max-width: 480px; }
+.bw-field { display: grid; gap: 7px; font-size: 14px; color: var(--text-2); }
+.bw-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.bw-payout { display: flex; justify-content: space-between; margin: -4px 0 0; padding: 10px 14px; border-radius: var(--r); background: var(--field); font-size: 14px; color: var(--text-3); }
+.bw-payout b { color: #fff; font-variant-numeric: tabular-nums; }
+.bw-slot { position: relative; }
+.bw-slot-list {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 290px;
+  margin: 0;
+  padding: 4px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: var(--field);
+  list-style: none;
+  box-shadow: 0 12px 30px rgb(0 0 0 / 0.5);
+}
+.bw-slot-list button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 5px 8px;
+  border-radius: var(--r-sm);
+  text-align: left;
+  font-size: 14px;
+  color: var(--text-1);
+}
+.bw-slot-list button.is-active,
+.bw-slot-list button:hover { background: #1c3546; }
+.bw-slot-art { flex: none; width: 24px; height: 32px; border-radius: var(--r-sm); object-fit: cover; font-size: 12px; }
+.bw-slot-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bw-slot-prov { flex: none; font-size: 12px; color: var(--text-3); }
+.bw-slot-list .bw-slot-custom { color: #9fb0bf; font-style: italic; }
+.bw-picked { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--r); background: var(--field); }
+.bw-picked-art { flex: none; width: 30px; height: 40px; border-radius: var(--r-sm); object-fit: cover; font-size: 14px; }
+.bw-picked-name { display: flex; flex: 1; flex-direction: column; min-width: 0; font-size: 15px; font-weight: 600; color: var(--text-0); }
+.bw-picked-name small { font-size: 12px; font-weight: 400; color: var(--text-3); }
+
+@media (max-width: 1180px) and (min-width: 961px) {
+  .bw-podium { zoom: 0.86; }
+}
+@media (max-width: 1060px) and (min-width: 961px) {
+  .bw-podium { zoom: 0.76; }
+}
+@media (max-width: 700px) {
+  .bw .ch-bar { padding: 10px 12px; }
+  .bw-tools { width: 100%; }
+  .bw-submit { flex: 1; }
+  .bw-head { display: none; }
+  .bw-row { grid-template-columns: 26px minmax(0, 1fr) auto; grid-template-areas: 'rank slot multi' 'rank player payout'; row-gap: 2px; }
+  .bw-row-rank { grid-area: rank; }
+  .bw-row-slot { grid-area: slot; }
+  .bw-row-player { grid-area: player; padding-left: 40px; font-size: 13px; color: var(--text-3); }
+  .bw-row-bet { display: none; }
+  .bw-row-multi { grid-area: multi; }
+  .bw-row-payout { grid-area: payout; font-size: 13px; }
+}
+@media (max-width: 480px) {
+  .bw-pair { grid-template-columns: 1fr; }
+  .bw-mine-row { grid-template-columns: 30px minmax(0, 1fr) auto; }
+}
+
+/* stacked on phones and tablets, an empty place is just a tall blank card: leave it out */
+@media (max-width: 960px) {
+  .bw-pcard.is-empty { display: none; }
+}
+
+/* ---------------------------------------------------------------- the monthly competition */
+.bw-comp { margin: 14px 0 0; padding: 0 4px; font-size: 14px; line-height: 1.5; color: var(--text-3); }
+.bw-comp b { color: var(--gold); font-weight: 700; }
+.bw-pcard .podium-wager-lbl { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bw-table.has-prize .bw-head,
+.bw-table.has-prize .bw-row { grid-template-columns: 34px minmax(0, 2fr) minmax(0, 1.1fr) 80px 92px 104px 84px; }
+.bw-row-prize { font-weight: 700; color: var(--gold); }
+.bw-row.is-empty { color: var(--text-3); }
+.bw-row.is-empty .bw-row-name > span { color: var(--text-3); font-weight: 600; }
+@media (max-width: 700px) {
+  .bw-table.has-prize .bw-row { grid-template-columns: 26px minmax(0, 1fr) auto; grid-template-areas: 'rank slot multi' 'rank player prize'; }
+  .bw-table.has-prize .bw-row-payout { display: none; }
+  .bw-row-prize { grid-area: prize; font-size: 13px; }
+}

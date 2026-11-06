@@ -1,0 +1,128 @@
+/* OBS overlays (src/overlays/kit.jsx): a transparent page with simple dark panels
+   in the site's own colours (the --bar / #1c2c37 cards, #314653 top edge, Rubik,
+   TGN blue for live things, gold only for winners). No textures, glows or loops. */
+
+html.is-overlay,
+html.is-overlay body { background: transparent !important; overflow: hidden; }
+html.is-overlay #root { padding: 8px; }
+
+.ov-root {
+  /* the site's palette (index.css) */
+  --ov-panel: rgb(17 35 47 / 0.94);
+  --ov-card: #1c2c37;
+  --ov-card-edge: #314653;
+  --ov-well: #0c171f;
+  --ov-line: rgb(255 255 255 / 0.06);
+  --ov-blue: #4db8ff;
+  --ov-blue-deep: #2a91d5;
+  --ov-gold: #f2b42c;
+  --ov-text: #ebebeb;
+  --ov-dim: #7e96a7;
+  /* older names the overlay files still use, mapped onto the flat palette */
+  --ov-plate-hi: #1c2c37;
+  --ov-plate: #16262f;
+  --ov-plate-lo: #11232f;
+  --ov-steel-hi: #ebebeb;
+  --ov-steel: #9fb0bf;
+  --ov-steel-lo: #56637a;
+  display: inline-block;
+  zoom: var(--ov-scale, 1);
+  font-family: 'Rubik', system-ui, sans-serif;
+  color: var(--ov-text);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+.ov-missing { padding: 16px; border-radius: 8px; background: #11232f; font: 600 14px system-ui, sans-serif; color: #ebebeb; }
+
+/* ---------------------------------------------------------------- panel */
+.ov-plate {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--ov-line);
+  border-radius: 10px;
+  background: var(--ov-panel);
+  box-shadow: inset 0 1px 0 var(--ov-card-edge), 0 10px 30px rgb(0 0 0 / 0.3);
+}
+.ov-plate > * { margin-top: 0 !important; }
+
+/* ---------------------------------------------------------------- head */
+.ov-head { display: flex; align-items: center; gap: 10px; }
+.ov-mark { width: 34px; height: auto; flex: none; }
+.ov-head-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+.ov-kicker { font-size: 12px; font-weight: 500; color: var(--ov-dim); }
+.ov-title { overflow: hidden; font-size: 18px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; color: #fff; }
+.ov-head-right { flex: none; }
+
+/* ---------------------------------------------------------------- pills */
+.ov-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: var(--ov-card);
+  box-shadow: inset 0 1px 0 var(--ov-card-edge);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ov-dim);
+}
+.ov-pill.is-live { color: var(--ov-blue); }
+.ov-pill.is-gold { color: var(--ov-gold); }
+.ov-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ov-blue); }
+
+/* ---------------------------------------------------------------- figures + wells */
+.ov-figs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.ov-fig {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  background: var(--ov-card);
+  box-shadow: inset 0 1px 0 var(--ov-card-edge);
+}
+.ov-fig-label { font-size: 11.5px; font-weight: 500; color: var(--ov-dim); }
+.ov-fig-value { overflow: hidden; font-size: 15px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; color: var(--ov-text); }
+.ov-fig.is-blue .ov-fig-value { color: var(--ov-blue); }
+.ov-fig.is-gold .ov-fig-value { color: var(--ov-gold); }
+.ov-fig.is-good .ov-fig-value { color: #7ee25a; }
+.ov-fig.is-bad .ov-fig-value { color: #f08b87; }
+/* an inset area for lists and big values: the site's page colour */
+.ov-well {
+  position: relative;
+  padding: 6px;
+  border-radius: 8px;
+  background: var(--ov-well);
+  border: 1px solid var(--ov-line);
+  overflow: hidden;
+}
+.ov-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12px; font-weight: 500; color: var(--ov-dim); }
+.ov-foot b { font-weight: 700; color: var(--ov-text); }
+
+/* ---------------------------------------------------------------- rows (lists inside wells) */
+.ov-row {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.ov-row + .ov-row { margin-top: 2px; }
+.ov-row.is-current { background: var(--ov-card); box-shadow: inset 2px 0 0 var(--ov-blue); }
+.ov-row-n { min-width: 20px; font-size: 12px; font-weight: 600; color: var(--ov-dim); text-align: right; }
+.ov-row-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ov-row-value { font-weight: 700; }
+.ov-art { flex: none; border-radius: 4px; object-fit: cover; }
+.ov-art.is-empty { display: inline-block; background: var(--ov-card); }
+
+/* big number (guess result, balances) */
+.ov-hero { font-size: 38px; font-weight: 800; line-height: 1.05; text-align: center; color: #fff; }
+.ov-hero.is-gold { color: var(--ov-gold); }

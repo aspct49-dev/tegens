@@ -1,0 +1,108 @@
+/* Bonuses page (/bonuses, BonusesPage.jsx): the shared titled page without the
+   Rainbet wordmark, then 276x354 reward cards, 8px apart in rows 12px apart
+   (three on top, two centred below). */
+
+.titled-page.bonus-page { padding-top: 43px; }
+
+.bn-grid {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 8px;
+  width: 844px;
+  max-width: 100%;
+  margin: 64px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.bn-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 276px;
+  height: 354px;
+  padding: 214px 0 18px;
+  border-radius: var(--r);
+  background: url('/assets/bonuses/card-bg.png') center / 100% 100%;
+  box-shadow: var(--raise);
+  text-align: center;
+}
+
+/* top 202px panel with the ringed icon */
+.bn-top {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 202px;
+  border-radius: 6px 6px 0 0;
+  background: #213542;
+  box-shadow: var(--raise);
+}
+.bn-ring {
+  position: absolute;
+  left: 55.5px;
+  top: 18px;
+  width: 165px;
+  height: 165px;
+  display: grid;
+  place-items: center;
+}
+/* inner disc under the icon, outer hairline ring over it */
+.bn-ring::before,
+.bn-ring::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+.bn-ring::before { left: 8px; top: 8px; width: 147px; height: 149px; background: url('/assets/bonuses/ring-inner.svg') 0 0 / 100% 100%; }
+.bn-ring::after { inset: 0; background: url('/assets/bonuses/ring-outer.svg') 0 0 / 100% 100%; }
+.bn-icon { position: relative; display: block; }
+
+.bn-pct { font-size: 52px; line-height: 62px; font-weight: 700; }
+
+.bn-vip { width: 92px; height: 92px; }
+.bn-vip-gem { position: absolute; left: 0.58px; top: 11.5px; width: 90.88px; height: 71.92px; }
+.bn-vip-spark { position: absolute; left: 67.5px; top: 6.6px; width: 12.59px; height: 13.33px; transform: rotate(15deg); }
+.bn-vip-tgn {
+  position: absolute;
+  left: 27px;
+  top: 30px;
+  width: 36px;
+  height: 22px;
+  background: #16252f;
+  -webkit-mask: url('/assets/bonuses/vip-tgn-mask.png') 1px 0 / 35px 22px no-repeat;
+  mask: url('/assets/bonuses/vip-tgn-mask.png') 1px 0 / 35px 22px no-repeat;
+}
+
+.bn-title { position: relative; font-size: 28px; line-height: 33px; font-weight: 600; color: var(--text-1); white-space: nowrap; }
+.bn-text { position: relative; margin-top: 6px; font-size: 14px; line-height: 17px; font-weight: 500; color: var(--text-3); }
+
+.bn-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 212px;
+  height: 33px;
+  margin-top: auto;
+  border-radius: var(--r);
+  background: var(--action);
+  box-shadow: inset 0 1px 0 rgb(82 187 255 / 0.78);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-1);
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+.bn-arrow { width: 7.39px; height: 5.39px; transform: rotate(90deg); }
+.bn-btn:hover { filter: brightness(0.85); }
+.bn-btn:active { transform: translateY(1px); }
+.bn-btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+@media (max-width: 640px) {
+  .titled-page.bonus-page { padding-top: 24px; }
+  .bn-grid { margin-top: 40px; }
+}

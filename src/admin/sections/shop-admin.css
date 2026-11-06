@@ -1,0 +1,59 @@
+/* Admin: Item Store (Shop.jsx). Builds on admin.css and site.css (pl-*, lk-*). */
+
+.sh-tabs { margin-bottom: 16px; }
+
+/* orders */
+.sh-table td { vertical-align: middle; }
+.sh-item { display: inline-flex; align-items: center; gap: 10px; }
+.sh-thumb { display: grid; place-items: center; width: 34px; height: 34px; flex: none; overflow: hidden; border-radius: 5px; background: #0c171f; }
+.sh-thumb img { width: 100%; height: 100%; object-fit: contain; }
+.sh-item-what { display: inline-flex; flex-direction: column; gap: 1px; }
+.sh-note { max-width: 220px; white-space: normal !important; font-size: 13px; color: #b9c6d0; overflow-wrap: anywhere; }
+.sh-reject { display: inline-flex; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 260px; }
+.sh-reject .adm-input { width: 100%; }
+
+/* items */
+.sh-warn { margin-bottom: 14px; padding: 12px 14px; border-radius: 7px; background: rgb(242 180 44 / 0.1); box-shadow: inset 0 0 0 1px rgb(242 180 44 / 0.35); font-size: 13.5px; color: #f2d48a; }
+.sh-warn code { font-family: ui-monospace, Consolas, monospace; color: #fff; }
+.sh-items { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.sh-row { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 16px; padding: 14px; border-radius: 7px; background: #0f1b24; box-shadow: inset 0 0 0 1px #1f303c; }
+.sh-row.is-hidden { opacity: 0.7; }
+.sh-row-art { display: grid; place-items: center; width: 72px; height: 72px; overflow: hidden; border-radius: 6px; background: #12212b; }
+.sh-row-art img { width: 100%; height: 100%; object-fit: contain; }
+.sh-row-body { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.sh-row-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.sh-row-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.sh-form { display: grid; grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr)); gap: 10px; }
+.sh-form .adm-field { min-width: 0; }
+.sh-add { display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; padding: 14px; border-radius: 7px; background: #0f1b24; box-shadow: inset 0 0 0 1px #2a91d5; }
+
+/* points */
+.sh-viewer { display: flex; flex-direction: column; gap: 14px; margin-top: 14px; }
+.sh-viewer-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.sh-adjust .adm-field:nth-child(2) { flex: 1 1 220px; }
+.sh-quick { align-self: flex-start; max-width: 100%; flex-wrap: wrap; }
+.sh-quick + .sh-adjust { margin-top: -4px; }
+.sh-delta { font-weight: 700; white-space: nowrap; }
+.sh-delta.is-up { color: #7ee25a; }
+.sh-delta.is-down { color: #f2b42c; }
+.sh-kind { display: inline-block; margin-right: 4px; padding: 1px 6px; border-radius: 4px; background: #1c2c37; font-size: 11px; font-weight: 700; color: #9db3c3; }
+.sh-failed { color: #f08b87; }
+
+@media (max-width: 760px) {
+  .sh-form { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .sh-row { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* two stores: the store filter over the items list and the points desks */
+.sh-store-seg { margin-bottom: 14px; }
+.pl-badge.is-quiet { background: rgb(0 0 0 / 0.25); color: inherit; }
+.sh-text { margin: 0 0 12px; font-size: 13.5px; line-height: 1.5; color: #8fa3b5; }
+.sh-viewer .sh-text { margin: 12px 0 0; }
+.sh-kind.is-wager { background: rgb(242 180 44 / 0.14); color: #f2b42c; }
+
+/* a store's Settings tab */
+.sh-settings { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.sh-settings .adm-field { min-width: 0; }
+.sh-season { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-top: 14px; }
+form > .adm-card + .adm-card { margin-top: 16px; }
+.sh-settings-save { display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-top: 14px; }

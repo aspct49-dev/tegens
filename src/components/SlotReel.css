@@ -1,0 +1,49 @@
+/* The slot picker reel (SlotReel.jsx): slot art in a recessed strip, the middle card
+   framed blue while it spins and gold once it lands. Sizes match CARD / STEP in the JSX.
+   Site palette, so it sits on admin cards and the overlay plate alike. */
+
+.sreel {
+  position: relative;
+  padding: 10px 0;
+  border-radius: var(--r-lg);
+  background: #0c171f;
+  border: 1px solid rgb(255 255 255 / 0.06);
+  overflow: hidden;
+}
+.sreel-window {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+}
+.sreel-track { display: flex; gap: 10px; width: max-content; will-change: transform, filter; }
+.sreel-card {
+  display: block;
+  flex: none;
+  width: 96px;
+  height: 128px;
+  overflow: hidden;
+  border-radius: var(--r);
+  background: var(--chip);
+  box-shadow: var(--raise);
+  transition: opacity 0.4s;
+}
+.sreel-card img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.sreel-noart { display: flex; align-items: center; justify-content: center; height: 100%; padding: 8px; font-size: 13px; font-weight: 700; text-align: center; color: var(--text-0); }
+.sreel.is-landed .sreel-card:not(.is-pick) { opacity: 0.4; }
+.sreel.is-landed .sreel-card.is-pick { animation: sreel-land 0.4s ease-out; }
+@keyframes sreel-land { 40% { transform: scale(1.05); } }
+
+/* the landing frame over the middle card */
+.sreel-frame {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 104px;
+  height: 136px;
+  margin-left: -52px;
+  border: 2px solid var(--blue);
+  border-radius: 9px;
+  pointer-events: none;
+  transition: border-color 0.3s;
+}
+.sreel.is-landed .sreel-frame { border-color: var(--gold); }

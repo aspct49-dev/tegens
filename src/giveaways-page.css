@@ -1,0 +1,370 @@
+/* Giveaways page (/giveaways, GiveawaysPage.jsx): the wins the admin posts by hand.
+   - latest win: its own winner card (winner on top, the prize in a solid gold band),
+     and beside it a plain sentence, two facts and the totals as slim rows;
+   - earlier wins: rows in the leaderboard table's style (same fills, same 1px edge).
+   Flat surfaces only: no glows, rays, confetti or shimmer. Gold is kept for prizes. */
+
+.gv-latest, .gv-earlier, .gv-empty { position: relative; width: 811px; max-width: 100%; }
+
+
+
+/* the leaderboard's 1px top-lit edge, shared by the rows and tiles here */
+.gv-row,
+.gv-totals li {
+  --fill: var(--row-a);
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--fill), var(--fill)) padding-box,
+    linear-gradient(180deg, var(--row-edge-top), var(--row-edge-bottom)) border-box;
+}
+
+/* ---------------------------------------------------------------- total given away */
+.gv-given {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  align-items: center;
+  gap: 28px;
+  width: 811px;
+  max-width: 100%;
+  margin-top: 40px;
+}
+.gv-given-title { display: flex; flex-direction: column; font-size: 52px; line-height: 56px; font-weight: 700; letter-spacing: -0.01em; }
+.gv-given-sub { margin-top: 12px; max-width: 360px; font-size: 15px; line-height: 21px; color: #9aa9b5; }
+.gv-given-sub b { font-weight: 700; color: var(--blue); }
+.gv-given-cta {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  margin-top: 18px;
+  padding: 0 22px;
+  border-radius: var(--r);
+  background: var(--action);
+  box-shadow: inset 0 1px 0 rgb(82 187 255 / 0.78);
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  transition: filter 0.2s ease;
+}
+.gv-given-cta:hover { filter: brightness(0.88); }
+.gv-given-cta:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.gv-given-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 190px;
+  padding: 26px 24px;
+  border: 1px solid #2c4859;
+  border-radius: 14px;
+  background: #142733;
+  text-align: center;
+}
+.gv-given-amount {
+  font-size: 58px;
+  line-height: 64px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--blue);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.gv-given-caption { max-width: 260px; margin-top: 8px; font-size: 14px; line-height: 19px; font-weight: 500; color: #a9b8c3; }
+.gv-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (max-width: 860px) {
+  .gv-given { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .gv-given-copy { text-align: center; }
+  .gv-given-sub { margin-left: auto; margin-right: auto; }
+}
+@media (max-width: 480px) {
+  .gv-given-title { font-size: 40px; line-height: 44px; }
+  .gv-given-amount { font-size: 46px; line-height: 52px; }
+}
+
+/* ---------------------------------------------------------------- latest win */
+.gv-latest {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  margin-top: 48px;
+}
+
+/* the winner card: made for this page. Solid surfaces and crisp lines only.
+   Top-right: the blue corner flag from the TGN logo, holding where it was won.
+   The winner sits in a flat gold ring; the prize in a solid section under a gold rule. */
+.gv-wcard {
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-self: stretch;
+  width: 236px;
+  min-height: 300px;
+  overflow: hidden;
+  border: 1px solid #2c4859;
+  border-radius: 14px;
+  background: #13232e;
+}
+.gv-wcard-flag {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 58px;
+  height: 58px;
+  background: var(--action);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  color: #fff;
+}
+.gv-wcard-flag svg { position: absolute; top: 9px; right: 9px; width: 15px; height: 15px; }
+
+.gv-wcard-top {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 18px 20px;
+  text-align: center;
+}
+.gv-wcard-when { align-self: flex-start; font-size: 13px; font-weight: 500; color: #7c93a3; }
+.gv-wcard-when time { color: #c4d0d9; font-weight: 600; }
+
+/* the initial in a gold ring: two hard rings, no blur */
+.gv-initial {
+  display: grid;
+  place-items: center;
+  width: 78px;
+  height: 78px;
+  margin-top: 18px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px #13232e, 0 0 0 6px var(--gold);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+}
+.gv-initial.tone-0 { background: #1c4566; color: #bfe3ff; }
+.gv-initial.tone-1 { background: #4a3a12; color: #ffe2a3; }
+.gv-initial.tone-2 { background: #1d4439; color: #b5f0dc; }
+.gv-initial.tone-3 { background: #3b2c52; color: #ddd0ff; }
+.gv-initial.tone-4 { background: #4a2a2a; color: #ffcfc4; }
+
+.gv-wcard-name {
+  max-width: 100%;
+  margin-top: 16px;
+  overflow: hidden;
+  font-size: 23px;
+  line-height: 28px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #eef2f5;
+}
+.gv-wcard-src { margin-top: 2px; font-size: 13px; font-weight: 500; color: #7c93a3; }
+
+.gv-wcard-prize {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 18px 18px;
+  border-top: 1px solid #22394a;
+  background: #0f1c25;
+  text-align: center;
+}
+.gv-wcard-label { font-size: 13px; font-weight: 500; color: #7c93a3; }
+.gv-wcard-prize strong {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 46px;
+  line-height: 52px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+.gv-wcard-prize strong.is-long {
+  display: -webkit-box;
+  margin: 4px 0 2px;
+  font-size: 23px;
+  line-height: 28px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.gv-wcard-note {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #a9b8c3;
+}
+
+/* beside the card */
+.gv-side { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+.gv-lead {
+  margin-top: 10px;
+  font-size: 22px;
+  line-height: 30px;
+  font-weight: 500;
+  color: #9aa9b5;
+  overflow-wrap: anywhere;
+}
+.gv-lead b { font-weight: 700; color: #f3f3f3; }
+.gv-lead b.is-prize { color: var(--gold); }
+
+.gv-facts {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px 22px;
+  margin: 18px 0 0;
+}
+.gv-facts > div { display: contents; }
+.gv-facts dt { font-size: 14px; line-height: 20px; color: var(--muted); }
+.gv-facts dd {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: #dfdfdf;
+}
+
+.gv-totals { display: flex; flex-direction: column; gap: 6px; margin: 22px 0 0; padding: 0; list-style: none; }
+.gv-totals li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: var(--r);
+  font-size: 15px;
+}
+.gv-totals li:nth-child(even) { --fill: var(--row-b); }
+.gv-totals span { color: #b3bec7; }
+.gv-totals b { font-size: 17px; font-weight: 700; color: #f3f3f3; font-variant-numeric: tabular-nums; }
+.gv-totals b.is-gold { color: var(--gold); }
+
+/* where it was won: the brand's own glyph colour, no badge behind it */
+.gv-src { display: inline-grid; flex: none; place-items: center; width: 15px; height: 15px; color: var(--blue); }
+.gv-src svg { width: 15px; height: 15px; }
+.gv-src.is-kick { color: #53fc18; }
+.gv-src.is-discord { color: #8f99ff; }
+
+/* ---------------------------------------------------------------- earlier wins */
+.gv-earlier { margin-top: 64px; }
+.gv-head,
+.gv-row {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1.1fr) minmax(0, 1fr) minmax(90px, 190px);
+  align-items: center;
+  column-gap: 16px;
+}
+.gv-head {
+  margin-top: 22px;
+  padding: 0 21px 10px;
+  border-bottom: 1px solid #1d3140;
+  font-size: 14px;
+  color: var(--muted);
+}
+.gv-head > :last-child { text-align: right; }
+.gv-rows { display: flex; flex-direction: column; gap: 8px; margin: 10px 0 0; padding: 0; list-style: none; }
+.gv-row {
+  height: 58px;
+  padding: 0 20px;
+  border-radius: var(--r);
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  transition: transform 0.15s ease;
+}
+.gv-row:nth-child(even) { --fill: var(--row-b); }
+.gv-row:hover { transform: translateY(-2px); }
+.gv-row-date { font-size: 14px; color: var(--muted); }
+.gv-row-user,
+.gv-row-where { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.gv-row-user img { flex: none; border-radius: 50%; }
+.gv-row-user > span:not(.vip-badge),
+.gv-row-where > span:last-child { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.gv-row-user > span:not(.vip-badge) { font-weight: 600; color: var(--text); }
+.gv-row-user > .vip-badge { margin-left: -2px; }
+.gv-row-where { font-size: 14px; color: #b3bec7; }
+.gv-row-prize { overflow: hidden; font-weight: 700; white-space: nowrap; text-overflow: ellipsis; text-align: right; color: var(--gold); }
+
+.gv-more-btn {
+  display: block;
+  height: 36px;
+  margin: 18px auto 0;
+  padding: 0 18px;
+  border-radius: var(--r);
+  background: var(--chip);
+  box-shadow: var(--raise);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-1);
+  transition: filter 0.2s ease;
+}
+.gv-more-btn:hover { filter: brightness(1.15); }
+.gv-more-btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+/* ---------------------------------------------------------------- nothing yet */
+.gv-empty { margin-top: 48px; }
+
+
+
+
+.gv-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 18px;
+  border-radius: var(--r);
+  background: var(--action);
+  box-shadow: inset 0 1px 0 rgb(82 187 255 / 0.78);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  transition: filter 0.2s ease;
+}
+.gv-cta svg { width: 15px; height: 15px; }
+.gv-cta.is-ghost { background: var(--chip); box-shadow: var(--raise); color: var(--text-1); }
+.gv-cta:hover { filter: brightness(0.85); }
+.gv-cta:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+/* ---------------------------------------------------------------- smaller screens */
+@media (max-width: 860px) {
+  .gv-latest { flex-direction: column; align-items: stretch; gap: 28px; }
+  .gv-wcard { align-self: center; }
+}
+@media (max-width: 640px) {
+  .gv-lead { font-size: 18px; line-height: 25px; }
+}
+@media (max-width: 720px) {
+  /* rows: winner and prize on top, giveaway and date under them */
+  .gv-head { display: none; }
+  .gv-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: 'user prize' 'where date';
+    row-gap: 4px;
+    height: auto;
+    padding: 12px 14px;
+  }
+  .gv-row-user { grid-area: user; }
+  .gv-row-prize { grid-area: prize; }
+  .gv-row-where { grid-area: where; padding-left: 39px; }
+  .gv-row-date { grid-area: date; text-align: right; font-size: 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gv-row, .gv-more-btn, .gv-cta { transition: none; }
+  .gv-row:hover { transform: none; }
+
+}

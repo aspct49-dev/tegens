@@ -1,0 +1,95 @@
+/* Slot Picker page (/slot-picker). Built from the site's own pieces (index.css):
+   .titled-page, the ms-row card texture, the blue claim button. The reel itself is
+   SlotReel.css. 844px wide, like the other pages. */
+
+.spk {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 844px;
+  max-width: 100%;
+  margin-top: 36px;
+  padding: 18px;
+  border-radius: var(--r);
+  background: url('/assets/td/ms-row.png') center / 100% 100%;
+  box-shadow: var(--raise);
+}
+
+
+
+/* ---------------------------------------------------------------- providers */
+.spk-label { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-3); }
+.spk-count { font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--text-3); }
+.spk-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.spk-chip {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: var(--r);
+  background: var(--chip);
+  box-shadow: var(--raise);
+  font-size: 13px;
+  font-weight: 600;
+  color: #b9c6d0;
+  transition: background 0.15s, color 0.15s;
+}
+.spk-chip:hover { color: #fff; }
+.spk-chip.is-on { background: var(--action); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14); color: #fff; }
+
+/* ---------------------------------------------------------------- result + spin */
+.spk-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; min-height: 64px; }
+.spk-hint { margin: 0; font-size: 15px; font-weight: 500; color: var(--text-3); }
+.spk-pick { display: flex; flex-direction: column; gap: 2px; min-width: 0; animation: spk-in 0.35s ease-out; }
+.spk-pick-kicker { font-size: 12px; font-weight: 600; color: var(--gold); }
+.spk-pick-name { overflow: hidden; font-size: 24px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; color: #fff; }
+.spk-pick-prov { font-size: 14px; color: var(--text-3); }
+@keyframes spk-in { from { opacity: 0; transform: translateY(4px); } }
+
+.spk-actions { display: flex; align-items: center; gap: 16px; }
+.spk-check { display: inline-flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 600; color: #b9c6d0; cursor: pointer; }
+.spk-check input { width: 16px; height: 16px; accent-color: var(--action); }
+.spk-spin {
+  min-width: 150px;
+  height: 44px;
+  padding: 0 22px;
+  border-radius: var(--r);
+  background: var(--action);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14);
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  transition: filter 0.15s, transform 0.15s;
+}
+.spk-spin:hover:not(:disabled) { filter: brightness(0.85); }
+.spk-spin:active:not(:disabled) { transform: translateY(1px); }
+.spk-spin:disabled { opacity: 0.6; cursor: default; }
+
+/* ---------------------------------------------------------------- picked on stream */
+.spk-stream { position: relative; width: 844px; max-width: 100%; margin-top: 28px; }
+/* the site's section-title size (Past giveaways, Bonuses, Top 10) */
+.spk-stream-title { margin: 0 0 12px; }
+.spk-stream-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  border-radius: var(--r);
+  background: url('/assets/td/ms-row.png') center / 100% 100%;
+  box-shadow: var(--raise);
+}
+.spk-latest { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.spk-latest img, .spk-earlier img { display: block; border-radius: var(--r); object-fit: cover; }
+.spk-latest-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.spk-latest-name { overflow: hidden; font-size: 18px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; color: #fff; }
+.spk-earlier { display: flex; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.spk-noart { display: block; width: 60px; height: 80px; border-radius: var(--r); background: var(--chip); }
+.spk-noart.is-sm { width: 45px; height: 60px; overflow: hidden; padding: 4px; font-size: 9px; color: var(--text-3); }
+
+@media (max-width: 640px) {
+  .spk { padding: 14px; }
+  .spk-foot { flex-direction: column; align-items: stretch; }
+  .spk-actions { justify-content: space-between; }
+  .spk-earlier li:nth-child(n + 4) { display: none; }
+}

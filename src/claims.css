@@ -1,0 +1,92 @@
+/* Claims on the site (server/features/claims.js): the profile list (src/components/MyClaims.jsx),
+   the claim state on /milestones rows and /challenges cards, and the bet-proof dialog. */
+
+/* ---------------------------------------------------------------- profile: your claims */
+.mc-count { margin-left: auto; padding: 1px 8px; border-radius: var(--r); background: rgb(242 180 44 / 0.14); font-size: 12px; font-weight: 700; color: var(--gold); }
+.mc-list { display: flex; flex-direction: column; gap: 6px; margin: 4px 0 0; padding: 0; list-style: none; }
+.mc-row {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--r);
+  background: var(--surface);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
+}
+.mc-kind { display: grid; place-items: center; width: 30px; height: 30px; border-radius: var(--r); font-size: 13px; font-weight: 800; }
+.mc-kind.is-milestone { background: rgb(77 184 255 / 0.12); color: var(--blue); }
+.mc-kind.is-challenge { background: rgb(242 180 44 / 0.12); color: var(--gold); }
+.mc-what { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mc-title { overflow: hidden; font-size: 14px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; color: var(--text-0); }
+.mc-sub { font-size: 12px; color: var(--text-3); }
+.mc-note { font-size: 13px; color: #9fb0bf; }
+.mc-note.is-no { color: var(--danger); }
+.mc-reward { font-size: 15px; font-weight: 700; color: var(--text-1); font-variant-numeric: tabular-nums; }
+.mc-end { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; min-width: 76px; }
+.mc-cancel { font-size: 12px; }
+.mc-error { font-size: 13px; color: var(--danger); }
+
+/* a claim's state, everywhere it shows */
+.mc-pill { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: var(--r-xl); font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+.mc-pill.is-wait { background: rgb(242 180 44 / 0.14); color: var(--gold); }
+.mc-pill.is-ok { background: rgb(126 226 90 / 0.13); color: var(--success); }
+.mc-pill.is-no { background: rgb(240 139 135 / 0.13); color: var(--danger); }
+.mc-pill.is-off { background: var(--chip); color: var(--text-3); }
+
+@media (max-width: 560px) {
+  .mc-row { grid-template-columns: 30px minmax(0, 1fr) auto; }
+  .mc-end { grid-column: 2 / -1; flex-direction: row; align-items: center; justify-content: space-between; }
+}
+
+/* ---------------------------------------------------------------- /milestones */
+/* waiting for an admin / turned down: the same button slot as Claim and Claimed */
+.ms-btn.is-pending { background: rgb(242 180 44 / 0.13); box-shadow: inset 0 0 0 1px rgb(242 180 44 / 0.4); color: var(--gold); cursor: default; }
+.ms-btn.is-pending:hover { filter: none; }
+.ms-btn:disabled { cursor: default; }
+.ms-btn.is-busy { opacity: 0.7; }
+.ms-note { margin-top: 5px; padding-left: 5px; font-size: 13px; line-height: 15px; color: var(--text-3); }
+.ms-note.is-no { color: var(--danger); }
+.ms-note a { color: var(--blue); font-weight: 600; }
+
+/* ---------------------------------------------------------------- /challenges */
+.ch-claimed {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 33px;
+  margin-top: 12px;
+  padding: 0 10px;
+  border-radius: var(--r);
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 600;
+  color: #9fb0bf;
+}
+.ch-claim-note { margin-top: 6px; font-size: 12px; line-height: 15px; color: var(--danger); }
+
+/* the claim dialog */
+.claim-modal { max-width: 460px; }
+.claim-sum { display: grid; gap: 8px; font-size: 15px; line-height: 1.5; color: var(--text-2); }
+.claim-form { display: grid; gap: 14px; margin-top: 18px; }
+.claim-form label { display: grid; gap: 7px; font-size: 14px; color: var(--text-2); }
+.claim-form label small { font-size: 13px; color: var(--muted); }
+.claim-form input,
+.claim-form textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: var(--field);
+  font: inherit;
+  font-size: 15px;
+  color: var(--text-0);
+  outline: none;
+  resize: vertical;
+}
+.claim-form input:focus,
+.claim-form textarea:focus { border-color: var(--blue); }
+.claim-form .btn-blue { width: 100%; }
+.claim-error { min-height: 18px; font-size: 13px; color: var(--danger); }

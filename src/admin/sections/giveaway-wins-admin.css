@@ -1,0 +1,43 @@
+/* Giveaway wins admin (GiveawayWins.jsx): the form and the list. Builds on admin.css. */
+
+.gwa-form { display: flex; flex-direction: column; gap: 14px; }
+.gwa-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 12px; }
+.gwa-grid .adm-field { min-width: 0; }
+.gwa-grid input[type='datetime-local'] { color-scheme: dark; }
+.gwa-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+/* Total given away */
+.gwa-total { display: grid; grid-template-columns: minmax(180px, 240px) minmax(0, 1fr); align-items: center; gap: 16px; margin-bottom: 14px; }
+.gwa-total-sum { margin: 0; font-size: 13px; line-height: 19px; color: #9db3c3; }
+.gwa-total-form { align-items: flex-end; }
+.gwa-total-form .adm-input { max-width: 200px; }
+
+.gwa-list { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.gwa-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 9px 12px;
+  border-radius: 6px;
+  background: #0f1b24;
+  box-shadow: inset 0 0 0 1px #1f303c;
+}
+.gwa-row.is-editing { box-shadow: inset 0 0 0 1px #2a91d5; }
+.gwa-info { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.gwa-main { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 7px; min-width: 0; font-size: 14.5px; }
+.gwa-winner { overflow: hidden; max-width: 100%; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; color: #ebebeb; }
+.gwa-won { font-size: 13px; color: #6a8191; }
+.gwa-prize { font-weight: 700; color: #f2b42c; }
+.gwa-amount { font-size: 12.5px; font-weight: 600; color: #7e96a7; font-variant-numeric: tabular-nums; }
+.gwa-sub { font-size: 12.5px; color: #6a8191; }
+.gwa-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 6px; }
+.gwa-actions .adm-b { height: 32px; padding: 0 11px; }
+
+@media (max-width: 860px) {
+  .gwa-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .gwa-grid, .gwa-stats { grid-template-columns: minmax(0, 1fr); }
+  .gwa-row { grid-template-columns: minmax(0, 1fr); }
+  .gwa-actions { justify-content: flex-start; }
+}

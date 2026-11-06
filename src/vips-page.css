@@ -1,0 +1,61 @@
+/* VIP page (/vips). Built from the site's own pieces (index.css): .titled-page,
+   the ms-row card texture. One row per VIP, ranked by what their calls paid;
+   gold for money and for the top VIP's edge. 844px wide. */
+
+.vp, .vp-totals { position: relative; width: 844px; max-width: 100%; }
+.vp-totals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 36px; }
+.vp-total { display: flex; flex-direction: column; align-items: center; padding: 14px 10px; border-radius: var(--r); background: url('/assets/td/ms-row.png') center / 100% 100%; box-shadow: var(--raise); }
+.vp-total-value { font-size: 26px; font-weight: 700; color: var(--blue); font-variant-numeric: tabular-nums; }
+.vp-total-value.is-gold { color: var(--gold); }
+.vp-total-label { font-size: 13px; font-weight: 500; color: var(--text-3); }
+
+.vp { margin-top: 12px; }
+
+
+
+
+.vp-list { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.vp-card {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto minmax(0, 1.25fr);
+  grid-template-areas: 'rank who figs best' '. recent recent recent';
+  align-items: center;
+  column-gap: 18px;
+  padding: 14px 18px 14px 14px;
+  border-radius: var(--r-lg);
+  background: url('/assets/td/ms-row.png') center / 100% 100%;
+  box-shadow: var(--raise);
+}
+.vp-card.is-top { box-shadow: inset 0 1px 0 var(--edge), inset 0 0 0 1px rgb(242 180 44 / 0.45); }
+.vp-rank { grid-area: rank; display: grid; place-items: center; width: 30px; height: 30px; border-radius: var(--r); background: #0c171f; font-size: 14px; font-weight: 700; color: #9fb0bf; font-variant-numeric: tabular-nums; }
+.vp-card.is-top .vp-rank { background: var(--gold); color: #1a1205; }
+.vp-who { grid-area: who; display: flex; flex-direction: column; min-width: 0; }
+.vp-name { overflow: hidden; font-size: 17px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; color: #f2f2f2; }
+.vp-name:hover { color: var(--blue); }
+.vp-since { font-size: 13px; color: var(--text-3); }
+
+.vp-figs { grid-area: figs; display: flex; gap: 22px; }
+.vp-figs > div { display: flex; flex-direction: column; align-items: flex-end; }
+.vp-fig-value { font-size: 18px; font-weight: 700; color: var(--text-0); font-variant-numeric: tabular-nums; }
+.vp-fig-value.is-gold { color: var(--gold); }
+.vp-fig-label { font-size: 12px; color: var(--text-3); }
+
+.vp-best { grid-area: best; display: flex; align-items: center; gap: 10px; min-width: 0; padding: 6px 8px; border-radius: var(--r); background: rgb(12 23 31 / 0.7); }
+.vp-best img, .vp-recent img { display: block; border-radius: var(--r-sm); object-fit: cover; }
+.vp-best-text { display: flex; flex-direction: column; min-width: 0; }
+.vp-best-label { font-size: 12px; font-weight: 600; color: var(--text-3); }
+.vp-best-slot { overflow: hidden; font-size: 14px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; color: var(--text-1); }
+.vp-best-win { font-size: 14px; font-weight: 700; color: var(--gold); }
+.vp-best-win span { font-weight: 500; color: #9fb0bf; }
+.vp-best-none { padding: 6px 4px; font-size: 13px; color: var(--text-3); }
+.vp-noart { display: block; width: 42px; height: 56px; border-radius: var(--r-sm); background: var(--chip); }
+.vp-noart.is-sm { width: 27px; height: 36px; }
+
+.vp-recent { grid-area: recent; display: flex; gap: 10px; margin: 10px 0 0; padding: 10px 0 0; border-top: 1px solid rgb(255 255 255 / 0.05); list-style: none; }
+.vp-recent li { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: var(--text-2); font-variant-numeric: tabular-nums; }
+
+@media (max-width: 720px) {
+  .vp-card { grid-template-columns: 34px minmax(0, 1fr) auto; grid-template-areas: 'rank who figs' 'best best best' 'recent recent recent'; row-gap: 10px; }
+  .vp-figs { gap: 14px; }
+  .vp-recent { margin-top: 0; }
+}

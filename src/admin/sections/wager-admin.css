@@ -1,0 +1,109 @@
+/* Admin: Wager stats (WagerStats.jsx) and Milestone claims (MilestoneClaims.jsx) */
+
+/* time-frame filters: one row above the charts */
+.ws-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 14px; }
+.ws-chip {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 6px;
+  background: #0f1b24;
+  box-shadow: inset 0 0 0 1px #1f303c;
+  font-size: 13px;
+  font-weight: 600;
+  color: #9db3c3;
+  transition: background 0.15s, color 0.15s, filter 0.2s;
+}
+.ws-chip:hover { filter: brightness(0.85); }
+.ws-chip.is-on { background: #1c3a52; box-shadow: inset 0 0 0 1px #2a91d5; color: #ebebeb; }
+.ws-dates { display: inline-flex; align-items: center; gap: 6px; margin-left: 6px; color: #6a8191; }
+.ws-dates input {
+  height: 32px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 6px;
+  background: #0f1b24;
+  box-shadow: inset 0 0 0 1px #1f303c;
+  font: inherit;
+  font-size: 13px;
+  color: #dadada;
+  color-scheme: dark;
+}
+
+.ws-body { display: flex; flex-direction: column; gap: 14px; transition: opacity 0.2s; }
+.ws-body.is-loading { opacity: 0.55; pointer-events: none; }
+.ws-stats { display: grid; grid-template-columns: 1.6fr repeat(4, 1fr); gap: 8px; }
+.ws-hero .adm-stat-value { font-size: 26px; }
+.ws-change { font-size: 12px; font-weight: 600; color: #9db3c3; }
+.ws-change.is-up { color: #7ee25a; }
+.ws-change.is-down { color: #f08b87; }
+
+/* the bar chart */
+.ws-chart { position: relative; }
+.ws-chart svg { display: block; width: 100%; height: auto; }
+.ws-grid { stroke: #1c2c37; stroke-width: 1; }
+.ws-base { stroke: #314653; stroke-width: 1; }
+.ws-axis { fill: #6a8191; font-size: 11px; font-family: inherit; font-variant-numeric: tabular-nums; }
+.ws-tip {
+  position: absolute;
+  top: 4px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 120px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #0b141b;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.45), inset 0 0 0 1px #24384a;
+  transform: translateX(-50%);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.ws-tip-date { font-size: 11.5px; font-weight: 600; color: #9db3c3; }
+.ws-tip-value { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 700; color: #ebebeb; font-variant-numeric: tabular-nums; }
+.ws-tip-value i { width: 8px; height: 8px; border-radius: 2px; }
+.ws-tip-extra { font-size: 11.5px; color: #6a8191; }
+
+/* players */
+.ws-table .ws-rank { width: 44px; color: #6a8191; }
+.ws-name { padding: 0; font: inherit; font-weight: 600; color: #dadada; text-align: left; }
+.ws-name:hover { color: #4db8ff; text-decoration: underline; }
+.ws-table tr.is-picked td { background: rgb(185 127 16 / 0.12); }
+.ws-spark-cell { width: 100px; }
+.ws-spark { display: block; width: 90px; height: 22px; }
+
+@media (max-width: 760px) {
+  .ws-stats { grid-template-columns: 1fr 1fr; }
+  .ws-hero { grid-column: 1 / -1; }
+  .ws-spark-cell { display: none; }
+}
+
+/* ---------------------------------------------------------------- milestone claims */
+.mc-search { display: flex; gap: 8px; align-items: flex-end; margin-bottom: 14px; }
+.mc-search .adm-input { flex: 1; max-width: 360px; }
+.mc-player { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin-bottom: 12px; }
+.mc-player-name { font-size: 20px; font-weight: 700; color: #ebebeb; }
+.mc-player-wager { font-size: 14px; color: #9db3c3; }
+.mc-player-wager b { color: #4db8ff; }
+.mc-tiers { display: flex; flex-direction: column; gap: 6px; padding: 0; list-style: none; }
+.mc-tier {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: #0f1b24;
+  box-shadow: inset 0 0 0 1px #1f303c;
+}
+.mc-tier.is-locked { opacity: 0.6; }
+.mc-tier.is-claimed { box-shadow: inset 0 0 0 1px rgb(126 226 90 / 0.35); }
+.mc-tier img { width: 30px; height: 30px; }
+.mc-tier-name { font-weight: 700; color: #ebebeb; }
+.mc-tier-meta { display: block; font-size: 12px; color: #6a8191; }
+.mc-tier-note { width: 180px; }
+.mc-log td small { color: #6a8191; }
+@media (max-width: 640px) {
+  .mc-tier { grid-template-columns: 30px minmax(0, 1fr); }
+  .mc-tier > :nth-child(n + 3) { grid-column: 2; justify-self: start; }
+}

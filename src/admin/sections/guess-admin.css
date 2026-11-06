@@ -1,0 +1,58 @@
+/* Guess the Balance admin (src/admin/sections/Guess.jsx). Builds on admin.css. */
+.gs-code { padding: 1px 6px; border-radius: 4px; background: #0c171f; box-shadow: inset 0 0 0 1px #2a3f4d; font-family: ui-monospace, Consolas, monospace; font-size: 12.5px; color: #4db8ff; }
+.gs-note { margin-top: 10px; font-size: 12.5px; color: #6a8191; }
+.gs-link { font-weight: 600; color: #4db8ff; }
+.gs-link:hover { color: #7fcbff; }
+.gs-title { display: inline-flex; align-items: center; gap: 10px; }
+
+.gs-controls { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(140px, 0.7fr) minmax(280px, 1.3fr); gap: 12px; align-items: start; }
+.gs-draw { display: flex; align-items: flex-start; gap: 8px; }
+.gs-draw .adm-field { flex: 1; }
+.gs-draw .adm-b { margin-top: 20px; height: 38px; }
+
+.gs-stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+.gs-stats .adm-stat-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.gs-winner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 12px;
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgb(242 180 44 / 0.16), rgb(242 180 44 / 0.03));
+  box-shadow: inset 3px 0 0 #f2b42c, inset 0 0 0 1px rgb(242 180 44 / 0.25);
+}
+.gs-winner-label { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #f2b42c; }
+.gs-winner-name { font-size: 18px; font-weight: 700; color: #fff; }
+.gs-winner-figs { font-size: 13.5px; color: #c9b27a; }
+
+.gs-list-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 18px 0 8px; }
+.gs-list-title { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #6a8191; }
+.gs-search { width: 220px; height: 32px; }
+.gs-table-wrap { max-height: 560px; overflow: auto; border-radius: 6px; }
+.gs-table thead th { position: sticky; top: 0; z-index: 1; background: #13212b; }
+.gs-table td { padding-top: 6px; padding-bottom: 6px; }
+.gs-table .adm-b { height: 28px; padding: 0 10px; font-size: 12px; }
+.gs-place { width: 54px; color: #6a8191; }
+.gs-user { font-weight: 600; }
+.gs-value { font-weight: 700; color: #ebebeb; }
+.gs-time { font-size: 12.5px; color: #6a8191; }
+.gs-via { display: inline-block; padding: 1px 7px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.gs-via.is-chat { background: rgb(83 252 24 / 0.1); color: #7ee25a; }
+.gs-via.is-site { background: rgb(77 184 255 / 0.12); color: #4db8ff; }
+.gs-first td { background: rgb(242 180 44 / 0.08); }
+.gs-first .gs-place, .gs-first .gs-user { color: #f2b42c; }
+.adm-table tr.gs-picked td { background: #16242e; }
+
+@media (max-width: 1000px) {
+  .gs-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gs-draw { grid-column: 1 / -1; }
+  .gs-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .gs-controls { grid-template-columns: minmax(0, 1fr); }
+  .gs-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gs-time { display: none; }
+}

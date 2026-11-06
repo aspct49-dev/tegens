@@ -1,0 +1,68 @@
+/* Contact page (/contact, src/pages/ContactPage.jsx). Form card on the ms-row surface,
+   a short aside beside it; stacks under 860px. */
+.ct {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 16px;
+  align-items: start;
+  width: 844px;
+  max-width: 100%;
+  margin-top: 36px;
+}
+.ct-card {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border-radius: var(--r-xl);
+  background: url('/assets/td/ms-row.png') center / 100% 100%;
+  box-shadow: var(--raise);
+}
+.ct-card:focus { outline: none; }
+.ct-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ct-field { display: grid; gap: 7px; font-size: 14px; font-weight: 500; color: var(--text-2); }
+.ct-field small { font-size: 13px; font-weight: 400; color: var(--muted); }
+.ct-field input,
+.ct-field select,
+.ct-field textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: var(--field);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text-0);
+  outline: none;
+}
+.ct-field select { appearance: none; background: var(--field) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237e96a7' stroke-width='1.6' fill='none'/%3E%3C/svg%3E") right 14px center no-repeat; }
+.ct-field select option { background: #13212b; }
+.ct-field textarea { resize: vertical; min-height: 140px; }
+.ct-field input:focus,
+.ct-field select:focus,
+.ct-field textarea:focus { border-color: var(--blue); }
+.ct-field [aria-invalid='true'] { border-color: var(--danger); }
+.ct-field .ct-err { color: var(--danger); }
+.ct-count { justify-self: end; margin-top: -4px; }
+.ct-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.ct-failure { margin: 0; padding: 10px 14px; border-radius: var(--r); background: rgb(240 139 135 / 0.1); font-size: 14px; color: var(--danger); }
+.ct-submit { justify-self: start; min-width: 180px; }
+.ct-submit:disabled { cursor: wait; }
+.ct-done h2 { margin: 0; font-size: 22px; color: #fff; }
+.ct-done p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--text-2); }
+.ct-done .link-btn { justify-self: start; }
+.ct-aside { display: grid; gap: 10px; padding: 6px 4px; font-size: 14px; line-height: 1.55; color: var(--muted); }
+.ct-aside h2 { margin: 0; font-size: 16px; color: var(--text-1); }
+.ct-aside p { margin: 0; }
+.ct-aside a { color: var(--blue); font-weight: 600; }
+
+@media (max-width: 860px) {
+  .ct { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .ct-row { grid-template-columns: 1fr; }
+  .ct-card { padding: 16px; }
+  .ct-submit { justify-self: stretch; }
+}

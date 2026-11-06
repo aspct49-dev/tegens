@@ -1,13 +1,16 @@
 import { config } from '../config'
-import { fmtMoney, maskName } from '../utils'
+import { useNameMask } from '../hooks/useNameMask'
+import { fmtMoney } from '../utils'
+import VipBadge from './VipBadge'
 
 const PLACES = { 1: 'first', 2: 'second', 3: 'third' }
 // Entrance stagger: 1st lands first, then 2nd and 3rd.
 const DELAY = { 1: 240, 2: 320, 3: 400 }
 
 function Card({ player, rank, loading }) {
+  const mask = useNameMask() // admins see full names
   const empty = !player
-  const name = empty ? (loading ? '…' : '—') : maskName(player.name)
+  const name = empty ? (loading ? '…' : '—') : mask(player.name)
   const wager = empty ? '$0' : fmtMoney(player.wagered)
   return (
     <div className={`podium-card ${PLACES[rank]} enter`} style={{ '--d': `${DELAY[rank]}ms` }}>
@@ -16,7 +19,11 @@ function Card({ player, rank, loading }) {
         <div className="podium-content">
           <img className="podium-avatar" src={config.rankAvatars[rank - 1]} width="113" height="113" alt="" />
           {/* Keyed so new live values fade in instead of snapping. */}
-          <p className="podium-name swap" key={`n-${name}`}>{name}</p>
+          {/* the name truncates on its own; the VIP tag sits beside it and is never clipped */}
+          <p className="podium-name is-row swap" key={`n-${name}`}>
+            <span className="podium-name-text">{name}</span>
+            {!empty && <VipBadge name={player.name} via="rainbet" size="md" />}
+          </p>
           <div className="podium-wager">
             <span className="swap" key={`w-${wager}`}>{wager}</span>
           </div>

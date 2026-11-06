@@ -1,0 +1,35 @@
+/* Admin → Claims (Claims.jsx). Builds on site.css (pl-*, lk-*). */
+
+.cl-tools { justify-content: space-between; }
+.cl-table td { vertical-align: middle; }
+.cl-who,
+.cl-what { display: inline-flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cl-who .lk-name { font-weight: 700; }
+.cl-kind { align-self: flex-start; padding: 1px 6px; border-radius: 4px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+.cl-kind.is-milestone { background: rgb(77 184 255 / 0.13); color: #4db8ff; }
+.cl-kind.is-challenge { background: rgb(242 180 44 / 0.14); color: #f2b42c; }
+.cl-title { font-weight: 700; color: #ebebeb; }
+.cl-note { max-width: 260px; white-space: normal; }
+.cl-reward { font-weight: 700; color: #f2b42c; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cl-proof { display: inline-block; max-width: 220px; overflow: hidden; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; color: #4db8ff; }
+.cl-proof:hover { text-decoration: underline; }
+.cl-proof.is-id { color: #dadada; user-select: all; }
+.lk-btn.cl-pay { width: auto; padding: 0 11px; font-size: 13.5px; white-space: nowrap; }
+.cl-reject { display: flex; align-items: center; gap: 6px; max-width: 360px; margin: 8px 0 0 auto; }
+.cl-reject .adm-input { flex: 1; min-width: 0; }
+
+/* Biggest Wins (BigWins.jsx): the slot's art beside the win, and the edit row */
+.bwa-win { display: flex; align-items: center; gap: 10px; }
+.bwa-win img,
+.bwa-noart { flex: none; width: 27px; height: 36px; border-radius: 3px; object-fit: cover; background: #13222c; }
+.bwa-edit .adm-input { max-width: 110px; }
+
+/* Biggest Wins: the monthly prizes card and results (BigWins.jsx) */
+.bwa-help { margin: 0 0 14px; max-width: 70ch; font-size: 13px; line-height: 1.5; color: #8fa3b3; }
+.bwa-rules { align-items: center; margin-bottom: 14px; }
+.bwa-prizes { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin: 0 0 14px; padding: 0; list-style: none; }
+.bwa-prizes li { display: flex; align-items: center; gap: 8px; }
+.bwa-prizes .adm-input { flex: 1; min-width: 0; }
+.bwa-place { flex: none; width: 36px; font-size: 13px; font-weight: 700; color: #f2b42c; }
+.bwa-actions { align-items: center; }
+.bwa-note { font-size: 13px; color: #7ee25a; }

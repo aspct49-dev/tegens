@@ -1,0 +1,386 @@
+/* Socials & Media (/socials, SocialsPage.jsx), from the Figma "Socials & Media"
+   frame: a 1056px column with the Kick stream and the YouTube row, a full-width
+   Discord band, then the Twitter / Instagram cards. */
+
+.socials-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 0 120px;
+}
+.so-col {
+  position: relative;
+  width: 1056px;
+  max-width: calc(100% - 32px);
+}
+
+/* ------------------------------------------------ section heads */
+.so-section + .so-section { margin-top: 58px; }
+.so-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 37px;
+  margin-bottom: 25px;
+}
+.so-head-id {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--r);
+}
+.so-head-ico { flex: none; width: auto; height: 29px; }
+.so-head-ico[height='37'] { height: 37px; margin-right: 6px; }
+.so-head-id > span:last-child,
+.so-follow-text { display: flex; flex-direction: column; min-width: 0; }
+.so-head-title { font-size: 16px; font-weight: 700; line-height: 19px; }
+.so-head-handle { font-size: 14px; font-weight: 500; line-height: 17px; color: var(--text-3); }
+.so-head-id:hover .so-head-handle { color: #8fa6b6; }
+
+.so-grad-kick,
+.so-grad-yt,
+.so-grad-dc,
+.so-grad-x,
+.so-grad-ig {
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.so-grad-kick { background-image: linear-gradient(to top, #4be017, #53fc18); }
+.so-grad-yt { background-image: linear-gradient(to bottom, #ff2f32, #d01316); }
+.so-grad-dc { background-image: linear-gradient(to top, #6d8dff, #617ad3); }
+.so-grad-x { background-image: linear-gradient(to top, #9c9c9c, #dedede); }
+.so-grad-ig { background-image: linear-gradient(to bottom, #e33e89, #e38d46); }
+
+/* shared button look (inset top highlight, as in the design) */
+.so-follow,
+.so-watch,
+.so-follow-btn,
+.so-accept,
+.so-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  font-weight: 500;
+  text-decoration: none;
+  transition: filter 0.15s, background-color 0.15s;
+}
+.so-follow:hover,
+.so-watch:hover,
+.so-follow-card:hover .so-follow-btn,
+.so-accept:hover,
+.so-page-btn:not(:disabled):hover { filter: brightness(1.12); }
+
+.so-follow {
+  flex: none;
+  width: 117px;
+  height: 34px;
+  background: #53fc18;
+  color: #0c171f;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ------------------------------------------------ Kick stream */
+.so-stream {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border: 4px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: #0b1820;
+}
+.so-stream iframe,
+.so-offline,
+.so-offline img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.so-offline img { object-fit: cover; }
+
+/* ------------------------------------------------ YouTube row */
+.so-pager { display: flex; gap: 6px; }
+.so-page-btn {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  background: #3b505e;
+  color: #f4f4f4;
+  cursor: pointer;
+}
+.so-page-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.so-page-btn:disabled { opacity: 0.4; cursor: default; }
+
+.so-videos {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.so-videos::-webkit-scrollbar { display: none; }
+.so-videos.fade-end { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 160px), rgba(0, 0, 0, 0.35)); mask-image: linear-gradient(to right, #000 calc(100% - 160px), rgba(0, 0, 0, 0.35)); }
+.so-videos.fade-start { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 160px), rgba(0, 0, 0, 0.35)); mask-image: linear-gradient(to left, #000 calc(100% - 160px), rgba(0, 0, 0, 0.35)); }
+.so-videos.fade-start.fade-end {
+  -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 0.35), #000 160px, #000 calc(100% - 160px), rgba(0, 0, 0, 0.35));
+  mask-image: linear-gradient(to right, rgba(0, 0, 0, 0.35), #000 160px, #000 calc(100% - 160px), rgba(0, 0, 0, 0.35));
+}
+
+.so-video {
+  position: relative;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  width: 280px;
+  height: 230px;
+  padding: 4px 4px 0;
+  border-radius: var(--r);
+  background: url('/assets/social/card-bg.png') center / 100% 100%;
+  box-shadow: var(--raise);
+  scroll-snap-align: start;
+}
+.so-video-thumb {
+  display: block;
+  height: 152px;
+  border: 2px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: #0b1820;
+}
+.so-video-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+.so-video:hover .so-video-thumb img { transform: scale(1.04); }
+.so-video-title {
+  margin: 6px 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 17px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #d4d4d4;
+}
+.so-video-title a { color: inherit; text-decoration: none; }
+.so-video-title a:hover { color: #fff; }
+.so-video-foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 46px;
+  margin: auto -4px 0;
+  padding: 0 18px 0 10px;
+  border-radius: 0 0 6px 6px;
+  background: url('/assets/social/card-foot.png') center / 100% 100%;
+  box-shadow: var(--raise);
+}
+.so-video-ava { flex: none; width: 24px; height: 24px; border-radius: 50%; }
+.so-video-meta { display: flex; flex-direction: column; min-width: 0; margin-right: auto; }
+.so-video-by {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+  background: linear-gradient(to bottom, #f9f9f9, #aaa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.so-video-when { font-size: 10px; font-weight: 500; line-height: 12px; color: var(--text-3); white-space: nowrap; }
+.so-watch {
+  flex: none;
+  gap: 6px;
+  width: 80px;
+  height: 26px;
+  background: #3b505e;
+  color: #f4f4f4;
+  font-size: 12px;
+}
+.so-watch img { transform: rotate(90deg); }
+
+.so-video.is-skeleton { animation: so-pulse 1.4s ease-in-out infinite; }
+@keyframes so-pulse { 50% { opacity: 0.55; } }
+
+.so-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  border-radius: var(--r);
+  background: #1d2f3b;
+  box-shadow: var(--raise);
+  color: #c8d3db;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+}
+.so-empty:hover { color: #fff; }
+
+/* ------------------------------------------------ Discord band */
+.so-discord {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  justify-content: center;
+  margin-top: 84px;
+  padding: 26px 0;
+  background: linear-gradient(to right, #0c171f, #101f28 50%, #0c171f);
+  overflow: hidden;
+}
+.so-band-tex {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: overlay;
+  opacity: 0.43;
+  pointer-events: none;
+}
+.so-discord-in {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  width: 1056px;
+  max-width: calc(100% - 32px);
+}
+.so-discord-main { flex: 1; min-width: 0; padding-top: 5px; }
+.so-discord-main .so-head { margin-bottom: 43px; }
+.so-perks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.so-perk {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 43px;
+  padding: 0 16px 0 22px;
+  border-radius: 11px;
+  background: #1d2f3b;
+  box-shadow: var(--raise);
+  color: #dedede;
+  font-size: 16px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.so-perk-dot { flex: none; width: 9px; height: 9px; border-radius: 50%; background: #839fff; }
+
+.so-invite {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 255px;
+  padding: 19px 16px 18px;
+  border-radius: 11px;
+  background: #1d2f3b;
+  box-shadow: var(--raise);
+  text-align: center;
+}
+.so-invite p { margin: 0; }
+.so-invite-ava { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+.so-invite-lead { margin-top: 19px !important; font-size: 14px; font-weight: 500; color: #8a9bab; }
+.so-invite-name { margin-top: 3px !important; font-size: 24px; font-weight: 500; line-height: 28px; color: #dedede; }
+.so-invite-counts {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 12px !important;
+  font-size: 12px;
+  font-weight: 500;
+  color: #8a9bab;
+}
+.so-invite-counts > span { display: inline-flex; align-items: center; gap: 7px; }
+.so-dot { width: 9px; height: 9px; border-radius: 50%; background: #6a8191; }
+.so-dot.is-on { background: #3ad06b; }
+.so-accept {
+  width: 100%;
+  max-width: 202px;
+  height: 28px;
+  margin-top: 13px;
+  background: linear-gradient(to bottom, #6d8dff, #617ad3);
+  color: var(--text-0);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ------------------------------------------------ Twitter / Instagram */
+.so-follows {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 58px;
+}
+.so-follow-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 81px;
+  padding: 0 27px;
+  border-radius: 11px;
+  background: #1d2f3b;
+  box-shadow: var(--raise);
+  color: inherit;
+  text-decoration: none;
+}
+.so-follow-ico { flex: none; }
+.so-follow-text { margin-right: auto; }
+.so-follow-text .so-head-handle { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.so-follow-btn {
+  flex: none;
+  width: 136px;
+  height: 39px;
+  background: #3b505e;
+  color: #f4f4f4;
+  font-size: 14px;
+}
+
+/* keyboard focus */
+.socials-page a:focus-visible,
+.socials-page button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+/* ------------------------------------------------ smaller screens */
+@media (max-width: 900px) {
+  .so-discord-in { flex-direction: column; align-items: stretch; }
+  .so-invite { width: 100%; }
+}
+@media (max-width: 760px) {
+  .socials-page { padding-top: 28px; }
+  .so-follows { grid-template-columns: minmax(0, 1fr); }
+  .so-section + .so-section,
+  .so-follows { margin-top: 44px; }
+  .so-discord { margin-top: 56px; }
+}
+@media (max-width: 560px) {
+  .so-perks { grid-template-columns: 1fr; }
+  .so-follow-card { gap: 16px; padding: 0 16px; }
+  .so-follow-btn { width: 96px; }
+  .so-follow { width: 96px; }
+  .so-pager { display: none; }
+}
+@media (max-width: 420px) {
+  .so-follow-card { gap: 12px; padding: 0 12px; }
+  .so-follow-btn, .so-follow { width: 84px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .so-video.is-skeleton { animation: none; }
+  .so-video-thumb img { transition: none; }
+}

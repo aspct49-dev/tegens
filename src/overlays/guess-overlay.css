@@ -1,0 +1,122 @@
+/* /overlay/guess (GuessOverlay.jsx), on the kit's plate (overlay.css). */
+
+/* ---------------------------------------------------------------- live counter */
+.gov-counter { display: flex; flex-direction: column; align-items: center; padding: 14px 10px 12px; }
+.gov-count { font-size: 52px; font-weight: 800; line-height: 1; color: #fff; }
+.gov-count-label { margin-top: 4px; font-size: 13px; font-weight: 500; color: var(--ov-dim); }
+
+/* ---------------------------------------------------------------- how to guess */
+.gov-cta {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--ov-card);
+  box-shadow: inset 0 1px 0 var(--ov-card-edge);
+}
+.gov-cta-text { font-size: 14px; font-weight: 500; color: var(--ov-dim); }
+.gov-cmd { display: inline-flex; align-items: center; gap: 6px; }
+/* the command as the site's blue button, the amount as an empty field */
+.gov-key,
+.gov-arg {
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  font-size: 15px;
+  font-weight: 700;
+}
+.gov-key { background: var(--ov-blue-deep); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2); color: #fff; }
+.gov-arg { border: 1px solid var(--ov-line); background: var(--ov-well); font-weight: 500; color: var(--ov-dim); }
+.gov-cta-eg { grid-column: 1 / -1; font-size: 13px; font-weight: 500; text-align: center; color: var(--ov-dim); }
+
+.gov-locked {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 11px 12px;
+  border-radius: 8px;
+  background: var(--ov-card);
+  box-shadow: inset 0 1px 0 var(--ov-card-edge);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ov-dim);
+}
+/* a small padlock drawn in CSS */
+.gov-lock { position: relative; width: 12px; height: 10px; margin-top: 5px; border-radius: 2px; background: var(--ov-dim); }
+.gov-lock::before { content: ''; position: absolute; left: 2px; top: -7px; width: 8px; height: 8px; border: 2px solid var(--ov-dim); border-bottom: 0; border-radius: 5px 5px 0 0; box-sizing: border-box; }
+
+/* ---------------------------------------------------------------- prize + hunt */
+.gov-info { display: flex; flex-direction: column; gap: 6px; }
+.gov-prize {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 7px;
+  background: var(--ov-card);
+  box-shadow: inset 0 1px 0 var(--ov-card-edge);
+}
+.gov-prize span { font-size: 12px; font-weight: 500; color: var(--ov-dim); }
+.gov-prize b { font-size: 17px; font-weight: 700; color: var(--ov-gold); }
+
+/* ---------------------------------------------------------------- result */
+.gov-final { display: flex; flex-direction: column; align-items: center; padding: 12px 10px; }
+.gov-final-label { font-size: 12px; font-weight: 500; color: var(--ov-dim); }
+.gov-final-value { margin-top: 2px; }
+
+.gov-winner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 14px 14px 13px;
+  border: 1px solid var(--ov-gold);
+  border-radius: 8px;
+  background: var(--ov-card);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.gov-winner.is-in { opacity: 1; transform: none; }
+.gov-winner-label { font-size: 12px; font-weight: 500; color: var(--ov-gold); }
+.gov-winner-name {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ov-gold);
+}
+.gov-winner-figs { font-size: 13px; font-weight: 500; color: var(--ov-dim); }
+.gov-winner-figs b { font-weight: 700; color: var(--ov-text); }
+.gov-winner-prize { margin-top: 4px; font-size: 14px; font-weight: 500; color: var(--ov-dim); }
+.gov-winner-prize b { font-weight: 700; color: var(--ov-gold); }
+
+.gov-runners { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 0; list-style: none; opacity: 0; transition: opacity 0.5s ease 0.4s; }
+.gov-runners.is-in { opacity: 1; }
+.gov-runner {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 7px;
+  background: var(--ov-card);
+  box-shadow: inset 0 1px 0 var(--ov-card-edge);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.gov-runner-place { font-size: 12px; font-weight: 600; text-align: center; color: var(--ov-dim); }
+.gov-runner-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gov-runner-value { font-weight: 700; color: var(--ov-text); }
+
+@media (prefers-reduced-motion: reduce) {
+  .gov-winner { transform: none; transition: opacity 0.4s ease; }
+}

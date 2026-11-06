@@ -1,0 +1,291 @@
+/* Raffles page (/raffles). Built from the site's own pieces (index.css):
+   .step-grid/.step-card, .ms-row, .lb-head/.lb-row, .ms-btn, .link-btn. This file
+   only adds what those don't cover. Width matches Milestones: 844px. */
+.rf {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 844px;
+  max-width: 100%;
+  margin-top: 42px;
+}
+
+
+/* the raffle switcher: Wager / Watch-time, plus a month picker when a kind has past raffles */
+.rf-switch { position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin-top: 26px; }
+.rf-kinds {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--r-lg);
+  background: var(--bar);
+  box-shadow: inset 0 1px 0 #243b4b, 0 0 0 1px #121f27;
+}
+.rf-kind {
+  height: 34px;
+  padding: 0 18px;
+  border-radius: var(--r);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-3);
+  transition: background-color 0.15s, color 0.15s;
+}
+.rf-kind:hover { color: var(--text-1); }
+.rf-kind.is-active { background: var(--action); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14); color: #fff; }
+.rf-kind:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
+.rf-month-pick select {
+  height: 42px;
+  padding: 0 34px 0 14px;
+  border-radius: var(--r-lg);
+  border: 0;
+  background: var(--bar);
+  box-shadow: inset 0 1px 0 #243b4b, 0 0 0 1px #121f27;
+  font: 700 14px/1 Rubik, system-ui, sans-serif;
+  color: var(--text-1);
+  appearance: none;
+  cursor: pointer;
+}
+.rf-month-pick { position: relative; }
+.rf-month-pick::after {
+  content: '';
+  position: absolute;
+  right: 15px;
+  top: 17px;
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid #6a8191;
+  border-bottom: 1.5px solid #6a8191;
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+.rf-month-pick select option { background: var(--bar); }
+.rf-month-pick select:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+
+
+/* a player number (the drums' number) next to a name */
+.rf-pnum {
+  flex: none;
+  padding: 2px 7px;
+  border-radius: var(--r-sm);
+  background: #0c171f;
+  box-shadow: inset 0 0 0 1px #243b4b;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+.rf-entry .lb-place { font-variant-numeric: tabular-nums; }
+
+/* your tickets: a milestone row */
+.rf-you-icon {
+  display: grid;
+  place-items: center;
+  width: 51px;
+  height: 51px;
+  border-radius: var(--r);
+  background: #1c3546;
+  box-shadow: inset 0 1px 0 #2f4b5d;
+}
+.rf-you .ms-wager { overflow: hidden; text-overflow: ellipsis; }
+
+/* the machine stage */
+.rf-stage {
+  position: relative;
+  height: 480px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: var(--r);
+  box-shadow: inset 0 1px 0 var(--edge), 0 24px 60px rgb(0 0 0 / 0.35);
+}
+.rf-stage .raffle-machine { position: absolute; inset: 0; }
+.rf-chip {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: var(--r);
+  background: rgb(12 23 31 / 0.74);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-1);
+  backdrop-filter: blur(6px);
+}
+.rf-chip.is-locked { color: var(--gold); }
+.rf-chip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 0 0 rgb(77 184 255 / 0.6);
+  animation: rf-pulse 1.6s ease-out infinite;
+}
+@keyframes rf-pulse { to { box-shadow: 0 0 0 7px rgb(77 184 255 / 0); } }
+/* PULL HANDLE: the site's primary blue button, bottom-right under the lever */
+.rf-pull {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 150px;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: var(--r);
+  background: var(--action);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14), 0 8px 24px rgb(0 0 0 / 0.35);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  transition: filter 0.15s, transform 0.15s, background-color 0.2s;
+}
+.rf-pull:hover:not(:disabled) { filter: brightness(0.85); }
+.rf-pull:active:not(:disabled) { transform: translateY(1px); }
+.rf-pull:disabled { cursor: default; }
+.rf-pull.is-busy { background: #24506f; color: #b9d6ea; }
+.rf-pull:disabled:not(.is-busy) { opacity: 0.55; }
+.rf-pull-spin {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgb(255 255 255 / 0.25);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: rf-spin 0.7s linear infinite;
+}
+
+/* three stat cards */
+.rf-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.rf-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  padding: 14px 18px;
+  border-radius: var(--r);
+  background: url('/assets/td/ms-row.png') center / 100% 100%;
+  box-shadow: var(--raise);
+}
+.rf-stat-label { font-size: 14px; font-weight: 500; color: var(--text-3); }
+.rf-stat-value { font-size: 22px; line-height: 27px; font-weight: 700; color: var(--text-1); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rf-stat-sub { font-size: 13px; font-weight: 500; color: var(--text-3); }
+
+/* section titles (the leaderboard's "Past Leaderboards" size) */
+.rf-title { margin-top: var(--gap-section); }
+.rf-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.rf-count { font-size: 14px; font-weight: 500; color: var(--text-3); }
+
+
+/* draws: leaderboard rows */
+.rf-draws { margin-top: 16px; }
+.rf-draw { grid-template-columns: 70px minmax(0, 1fr) auto 110px; column-gap: 12px; }
+.rf-draw .lb-user { gap: 12px; }
+.rf-draw-note { font-size: 13px; font-weight: 600; white-space: nowrap; }
+.rf-draw.is-rerolled .lb-user span:last-child { color: #56637a; text-decoration: line-through; }
+.rf-draw.is-rerolled .rf-draw-note { color: var(--danger); }
+.rf-draw.empty .lb-prize { color: #3f6f93; }
+/* a slot coin: dim blue until its draw is won, then gold */
+.rf-avatar { flex: none; border-radius: 50%; }
+.rf-avatar.is-empty { opacity: 0.35; filter: grayscale(1); }
+
+/* entries: the leaderboard table with tickets + odds */
+.rf-entries { display: flex; flex-direction: column; }
+.rf-head,
+.rf-entry { grid-template-columns: 96px minmax(0, 1fr) 150px 96px 72px; column-gap: 8px; }
+.rf-head { margin-top: 16px; padding: 0 21px 0 11px; }
+.rf-entries .lb-line { width: 100%; max-width: 100%; margin: 10px 0 0; }
+.rf-entry.is-you { --fill: #17324a; }
+.rf-h-tickets, .rf-h-odds { justify-content: flex-end; }
+.rf-tickets { display: inline-flex; align-items: center; justify-content: flex-end; gap: 6px; font-weight: 700; color: var(--text-1); }
+.rf-odds { font-weight: 600; text-align: right; color: var(--blue); }
+.rf-you-tag { flex: none; padding: 2px 6px; border-radius: var(--r-sm); background: rgb(77 184 255 / 0.15); font-size: 11px; font-weight: 700; color: var(--blue); }
+.rf-more { align-self: center; width: auto; padding: 0 18px; margin-top: 14px; }
+
+/* fairness */
+.rf-fair { display: flex; flex-direction: column; }
+.rf-fair-text { margin-top: 12px; font-size: 14px; line-height: 1.55; font-weight: 500; color: var(--text-3); }
+.rf-seed {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0 0;
+  padding: 16px 18px;
+  border-radius: var(--r);
+  background: url('/assets/td/ms-row.png') center / 100% 100%;
+  box-shadow: var(--raise);
+}
+.rf-seed dt { font-size: 13px; font-weight: 600; color: var(--text-3); }
+.rf-seed dd {
+  margin: 5px 0 0;
+  padding: 8px 10px;
+  border-radius: var(--r);
+  background: #0c171f;
+  overflow-wrap: anywhere;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  color: #aab6c6;
+}
+.rf-verify { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 12px; }
+.rf-verify-ok { font-size: 13px; font-weight: 600; color: var(--success); }
+.rf-verify-bad { font-size: 13px; font-weight: 600; color: var(--danger); }
+
+/* ---------------------------------------------------------------- the 3D raffle machine */
+.raffle-machine { position: relative; width: 100%; height: 100%; overflow: hidden; background: #0c171f; }
+.raffle-machine__stage { position: absolute; inset: 0; }
+.raffle-machine__stage canvas { display: block; width: 100%; height: 100%; }
+.raffle-machine__loading {
+  position: absolute;
+  inset: 0;
+  width: 34px;
+  height: 34px;
+  margin: auto;
+  border: 3px solid rgb(255 255 255 / 0.12);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: rf-spin 0.8s linear infinite;
+}
+.raffle-machine__fallback { position: absolute; inset: 0; display: grid; place-items: center; font-size: 13px; font-weight: 600; color: var(--muted); }
+
+/* ---------------------------------------------------------------- narrow (matches the leaderboard's 900px step) */
+@media (max-width: 900px) {
+  .rf-stage { height: 440px; }
+  .rf-stat-value { font-size: 19px; }
+  .rf-head { grid-template-columns: 42px minmax(0, 1fr) 100px 64px 56px; padding: 0 13px 0 10px; font-size: 14px; }
+  .rf-entry { grid-template-columns: 42px minmax(0, 1fr) 100px 64px 56px; padding: 0 12px; font-size: 14px; }
+  .rf-draw { grid-template-columns: 42px minmax(0, 1fr) auto 84px; padding: 0 12px; column-gap: 8px; font-size: 14px; }
+}
+@media (max-width: 640px) {
+  .rf-stage { height: auto; aspect-ratio: 4 / 5; }
+  .rf-stats { grid-template-columns: minmax(0, 1fr); }
+  .rf-you .ms-line { flex-wrap: wrap; white-space: normal; row-gap: 4px; }
+  .rf-you .ms-wager { margin-left: 0; }
+  .rf-you .ms-prize { margin-left: 0; }
+  .rf-you .ms-btn { grid-column: 1 / -1; width: 100%; }
+  .rf-you-icon { width: 40px; height: 40px; }
+  .rf-draw { grid-template-columns: 34px minmax(0, 1fr) auto 70px; }
+  .rf-head,
+  .rf-entry { grid-template-columns: 34px minmax(0, 1fr) 56px 50px; }
+  .rf-head .lb-h-wager, .rf-entry .lb-wager { display: none; }
+  .rf-pull { left: 14px; right: 14px; bottom: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .raffle-machine__loading, .rf-pull-spin { animation-duration: 2s; }
+  .rf-chip-dot { animation: none; }
+}

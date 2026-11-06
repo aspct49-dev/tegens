@@ -1,0 +1,113 @@
+/* /overlay/giveaway (GiveawayOverlay.jsx), on the kit's plate (overlay.css).
+   Idle: the keyword as the site's blue button. Draw: a reel with the landing row
+   outlined. Winner: a gold-edged card. All three are the same height. */
+
+/* ---------------------------------------------------------------- idle */
+.ov-well.ovg-join { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; height: 152px; padding: 14px; }
+.ovg-join-line { font-size: 20px; font-weight: 600; color: var(--ov-text); }
+.ovg-join-line.is-closed { font-size: 15px; font-weight: 500; color: var(--ov-dim); }
+.ovg-soon { color: var(--ov-blue); }
+.ovg-kw {
+  display: inline-block;
+  margin: 0 6px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  background: var(--ov-blue-deep);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2);
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+.ovg-kw-sm { font-family: ui-monospace, Consolas, monospace; color: var(--ov-blue) !important; }
+.ovg-recent { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; max-width: 100%; }
+.ovg-recent-name {
+  overflow: hidden;
+  max-width: 130px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--ov-card);
+  box-shadow: inset 0 1px 0 var(--ov-card-edge);
+  font-size: 13px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ov-text);
+  animation: ovg-in 0.3s ease-out;
+}
+.ovg-recent-tail { font-size: 13px; font-weight: 500; color: var(--ov-dim); }
+.ovg-count b { font-size: 14px; }
+
+/* ---------------------------------------------------------------- the reel */
+.ov-well.ovg-reel { padding: 0; }
+.ovg-reel-window {
+  position: relative;
+  height: 150px; /* 3 rows of 50px (ROW in the JSX) */
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+}
+.ovg-reel-track { will-change: transform, filter; }
+.ovg-reel-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  overflow: hidden;
+  padding: 0 24px;
+  font-size: 24px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ov-text);
+}
+.ovg-reel.is-landed .ovg-reel-name.is-winner { color: var(--ov-gold); animation: ovg-land 0.4s ease-out; }
+@keyframes ovg-land { 40% { transform: scale(1.06); } }
+/* the landing row, outlined: blue while spinning, gold once landed */
+.ovg-payline {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 50px;
+  height: 50px;
+  border: 1px solid var(--ov-blue);
+  border-radius: 6px;
+  pointer-events: none;
+  transition: border-color 0.3s;
+}
+.ovg-reel.is-landed .ovg-payline { border-color: var(--ov-gold); }
+
+/* ---------------------------------------------------------------- winner card */
+.ovg-win {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 152px;
+  padding: 14px 16px;
+  border: 1px solid var(--ov-gold);
+  border-radius: 8px;
+  background: var(--ov-card);
+  text-align: center;
+  animation: ovg-in 0.4s ease-out;
+}
+.ovg-win-kicker { font-size: 12px; font-weight: 500; color: var(--ov-gold); }
+.ovg-win-name {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ov-gold);
+}
+.ovg-win-prize { font-size: 14px; font-weight: 500; color: var(--ov-dim); }
+.ovg-win-prize b { font-weight: 700; color: var(--ov-text); }
+
+@keyframes ovg-in { from { opacity: 0; transform: translateY(4px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ovg-win, .ovg-recent-name, .ovg-reel-name.is-winner { animation: none !important; }
+}

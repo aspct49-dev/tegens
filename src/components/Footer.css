@@ -1,0 +1,91 @@
+/* The footer (Footer.jsx), laid out like King Kulbik's: its own band across the
+   content area, slightly darker than the page with a top border, and the content
+   in a card that rises from the bottom (big rounded top corners, flat bottom).
+   TEGENS colours: navy band, blue headings, the site's greys. */
+
+.footer {
+  position: relative;
+  padding: 20px 24px 0;
+  border-top: 1px solid #1a2a35;
+  background: #0b151c;
+}
+.footer-card {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 28px 24px;
+  border: 1px solid #1f3240;
+  border-bottom: 0;
+  border-radius: 32px 32px 0 0;
+  background: #0e1a23;
+}
+.footer-top { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; gap: 32px 56px; align-items: start; }
+
+.footer-logo { display: inline-block; }
+.footer-logo img { display: block; width: 74px; height: auto; }
+.footer-marks { display: flex; align-items: center; gap: 10px; margin-top: 14px; }
+.footer-marks a { display: flex; align-items: center; min-height: 32px; }
+.footer-aware { display: block; width: auto; height: 20px; opacity: 0.7; transition: opacity 0.15s; }
+.footer-marks a:hover .footer-aware { opacity: 1; }
+.footer-age {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid #2f4554;
+  font-size: 10px;
+  font-weight: 700;
+  color: #9fb0bf;
+}
+.footer-note { max-width: 420px; margin-top: 10px; font-size: 13px; line-height: 1.8; color: #8ea2b2; }
+.footer-note strong { font-weight: 600; color: var(--blue); }
+
+.footer-icons { display: flex; gap: 14px; margin-top: 12px; }
+.footer-icons a { display: flex; color: var(--text-3); transition: color 0.15s; }
+.footer-icons a:hover { color: var(--brand, var(--blue)); }
+.footer-icons svg { width: 15px; height: 15px; }
+
+.footer-col { display: flex; flex-direction: column; gap: 8px; padding-top: 18px; }
+.footer .footer-col-title { margin: 0 0 4px; font-size: 13px; line-height: normal; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--blue); }
+.footer-col a { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; white-space: nowrap; color: #e3e8ee; transition: color 0.15s; }
+.footer-col a:hover { color: var(--blue); }
+.footer-col svg { width: 14px; height: 14px; color: #e3e8ee; transition: color 0.15s; }
+.footer-col a:hover svg { color: var(--brand, var(--blue)); }
+
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--chip);
+}
+.footer-copyright { font-size: 14px; font-weight: 700; color: #cfd8e0; }
+.footer-responsible { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #728999; }
+.footer-policies { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.footer-policies a { font-size: 13px; font-weight: 500; color: #9fb0bf; transition: color 0.15s; }
+.footer-policies a:hover { color: var(--blue); }
+
+/* keyboard focus: the site's blue ring */
+.footer a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: var(--r-sm); }
+
+@media (max-width: 1100px) {
+  .footer-top { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .footer-brand { grid-column: 1 / -1; }
+  .footer-col { padding-top: 0; }
+}
+@media (max-width: 600px) {
+  .footer { padding: 16px 16px 0; }
+  .footer-card { padding: 22px 18px 18px; border-radius: 22px 22px 0 0; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  /* touch: every link at least 32px tall (they were 20–25px) */
+  .footer-col { gap: 2px; }
+  .footer-col a { min-height: 32px; }
+  .footer-icons { gap: 6px; }
+  .footer-icons a { padding: 8px; margin: -8px -2px; }
+  .footer-policies a { display: inline-flex; align-items: center; min-height: 32px; }
+  .footer-legal { flex-direction: column; align-items: flex-start; gap: 6px; }
+}

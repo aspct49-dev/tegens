@@ -1,0 +1,176 @@
+/* Raffles admin section (src/admin/sections/Raffles.jsx), on top of admin.css */
+.adm-rf { display: flex; flex-direction: column; gap: 16px; }
+.adm-rf code { padding: 1px 5px; border-radius: 4px; background: #0f1b24; font-size: 12.5px; color: #aab6c6; }
+
+/* the chosen raffle: title, period and the four figures */
+.adm-rf-head { padding: 18px; border-radius: 8px; background: #13212b; box-shadow: inset 0 1px 0 #2a3f4d, 0 0 0 1px #1c2c37; }
+.adm-rf-head-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.adm-rf-head-text { min-width: 0; }
+.adm-rf-title { font-size: 18px; font-weight: 700; color: #ebebeb; }
+.adm-rf-head .adm-rf-meta { margin-top: 4px; }
+.adm-rf-head .adm-rf-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+
+/* run the draw: steps, what to do next, the buttons */
+.adm-rf-run { display: flex; flex-direction: column; }
+.adm-rf-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: 0; padding: 0; list-style: none; }
+.adm-rf-steps li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  padding: 8px 9px;
+  border-radius: 6px;
+  background: #0f1b24;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #56637a;
+  white-space: nowrap;
+}
+.adm-rf-step-n { display: inline-grid; flex: none; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: #1c2c37; font-size: 11px; }
+.adm-rf-steps li.is-done { color: #8fa3b5; }
+.adm-rf-steps li.is-done .adm-rf-step-n { background: rgb(77 184 255 / 0.16); color: #4db8ff; }
+.adm-rf-steps li.is-now { background: #16293a; box-shadow: inset 0 0 0 1px #2a91d5; color: #ebebeb; }
+.adm-rf-steps li.is-now .adm-rf-step-n { background: #2a91d5; color: #fff; }
+.adm-rf-next { margin-top: 14px; font-size: 13.5px; line-height: 1.5; color: #aab6c6; }
+.adm-rf-fair { margin-top: 16px; padding-top: 12px; border-top: 1px solid #1c2c37; }
+.adm-rf-fair summary { cursor: pointer; font-size: 13px; font-weight: 700; color: #8fa3b5; }
+.adm-rf-fair summary:hover { color: #dadada; }
+.adm-rf-fair .adm-rf-seed { margin-top: 10px; }
+.adm-rf-danger { display: flex; justify-content: flex-end; margin-top: auto; padding-top: 16px; }
+.adm-rf-subtabs { display: flex; overflow-x: auto; }
+
+/* machine preview + status side by side */
+.adm-rf-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
+.adm-rf-machine-card { padding: 8px; }
+.adm-rf-stage { position: relative; height: 400px; overflow: hidden; border-radius: 6px; background: #0c171f; }
+.adm-rf-stage .raffle-machine { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; background: #0c171f; }
+.adm-rf-stage .raffle-machine__stage { position: absolute; inset: 0; }
+.adm-rf-stage .raffle-machine__stage canvas { display: block; width: 100%; height: 100%; }
+.adm-rf-stage .raffle-machine__loading {
+  position: absolute;
+  inset: 0;
+  width: 30px;
+  height: 30px;
+  margin: auto;
+  border: 3px solid rgb(255 255 255 / 0.12);
+  border-top-color: #4db8ff;
+  border-radius: 50%;
+  animation: adm-rf-spin 0.8s linear infinite;
+}
+.adm-rf-stage .raffle-machine__fallback { position: absolute; inset: 0; display: grid; place-items: center; font-size: 13px; font-weight: 600; color: #6a8191; }
+@keyframes adm-rf-spin { to { transform: rotate(360deg); } }
+
+/* the gold winner plate over the preview */
+.adm-rf-plate {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 12px; /* above the machine: the winner's ball sits in the pod at the bottom */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 9px 12px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgb(48 36 10 / 0.92), rgb(24 18 6 / 0.94));
+  box-shadow: inset 0 1px 0 rgb(255 215 122 / 0.45), 0 0 0 1px rgb(242 180 44 / 0.55), 0 0 22px rgb(242 180 44 / 0.25);
+  animation: adm-rf-rise 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+.adm-rf-plate-kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #d9b45c; }
+.adm-rf-plate-name {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 19px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: linear-gradient(180deg, #fff1c4, #f2b42c 60%, #c98a12);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@keyframes adm-rf-rise { from { opacity: 0; transform: translateY(10px) scale(0.96); } }
+
+.adm-rf-meta { font-size: 13px; color: #8fa3b5; }
+.adm-rf-warn { color: #f08b87; }
+.adm-rf-actions { margin-top: 14px; }
+.adm-rf-note { margin-top: 10px; font-size: 13px; color: #f2b42c; }
+.adm-rf-seed { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 12px; margin: 16px 0 0; font-size: 12.5px; }
+.adm-rf-seed dt { font-weight: 700; color: #6a8191; }
+.adm-rf-seed dd { margin: 0; overflow-wrap: anywhere; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: #aab6c6; }
+
+.adm-rf-text { margin-bottom: 12px; font-size: 13.5px; line-height: 1.5; color: #8fa3b5; }
+.adm-rf-form { margin: 0; padding: 0; border: 0; min-width: 0; }
+.adm-rf-form:disabled { opacity: 0.6; }
+.adm-rf-dim { color: #6a8191; }
+.adm-rf-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 700; color: #f2b42c !important; }
+.adm-table tr.is-rerolled td { color: #56637a; text-decoration: line-through; }
+.adm-table tr.is-rerolled td:last-child { text-decoration: none; }
+.adm-rf-cell-actions { display: inline-flex; justify-content: flex-end; gap: 6px; }
+.adm-rf-search { min-width: 220px; }
+.adm-rf-more { display: flex; justify-content: center; margin-top: 12px; }
+.adm-rf-foot { margin-top: 10px; font-size: 12.5px; }
+.adm-rf-snap { margin-top: 14px; padding-top: 10px; border-top: 1px solid #1c2c37; }
+.adm-rf-snap > p { margin-bottom: 6px; font-size: 12.5px; }
+
+@media (max-width: 980px) {
+  .adm-rf-top { grid-template-columns: minmax(0, 1fr); }
+  .adm-rf-head .adm-rf-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .adm-rf-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .adm-rf-stage { height: 340px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .adm-rf-plate { animation: none; }
+}
+
+/* the list of raffles (pick one to run it) */
+.rf-list tbody tr { cursor: pointer; }
+.rf-list tbody tr:hover td { background: #15242f; }
+.rf-list tr.is-selected td { background: #16293a; }
+.rf-list tr.is-selected td:first-child { box-shadow: inset 2px 0 0 #4db8ff; }
+.rf-list td { white-space: nowrap; }
+.rf-list-name { display: inline-flex; align-items: center; gap: 8px; max-width: 360px; overflow: hidden; font-weight: 700; text-align: left; text-overflow: ellipsis; color: #ebebeb; }
+.rf-list-name:focus-visible { outline: 2px solid #4db8ff; outline-offset: 2px; border-radius: 4px; }
+.rf-list-kind { flex: none; padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+.rf-list-kind.is-wager { background: rgb(242 180 44 / 0.14); color: #f2b42c; }
+.rf-list-kind.is-watch { background: rgb(83 252 24 / 0.12); color: #7ee25a; }
+
+/* the setup form (RaffleSetup.jsx): the fields, and what players will see beside them */
+.rs-grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+.rs-form { display: flex; flex-direction: column; gap: 18px; min-width: 0; margin: 0; padding: 0; border: 0; }
+.rs-form:disabled { opacity: 0.6; }
+.rs-block { display: flex; flex-direction: column; gap: 10px; }
+.rs-block + .rs-block { padding-top: 16px; border-top: 1px solid #1c2c37; }
+.rs-h { font-size: 13px; font-weight: 700; color: #8fa3b5; }
+.rs-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.rs-periods { align-self: flex-start; max-width: 100%; flex-wrap: wrap; }
+.rs-kinds { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.rs-kind { display: flex; flex-direction: column; gap: 5px; padding: 14px; border-radius: 8px; background: #0f1b24; box-shadow: inset 0 0 0 1px #1c2c37; text-align: left; transition: box-shadow 0.15s, background-color 0.15s; }
+.rs-kind:hover { background: #12212c; }
+.rs-kind.is-on { background: #13263a; box-shadow: inset 0 0 0 1px #4db8ff; }
+.rs-kind:focus-visible { outline: 2px solid #4db8ff; outline-offset: 2px; }
+.rs-kind-name { font-size: 14.5px; font-weight: 700; color: #ebebeb; }
+.rs-kind-text { font-size: 12.5px; line-height: 1.45; color: #8fa3b5; }
+.rs-kind-warn { font-size: 12px; font-weight: 600; color: #f2b42c; }
+.rs-more summary { cursor: pointer; font-size: 13px; font-weight: 700; color: #8fa3b5; }
+.rs-more summary:hover { color: #dadada; }
+.rs-more[open] summary { margin-bottom: 10px; }
+.rs-preview { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 8px; background: #0f1b24; box-shadow: inset 0 0 0 1px #1c2c37; }
+.rs-preview-kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6a8191; }
+.rs-preview-title { margin: 0; font-size: 16px; font-weight: 700; line-height: 1.3; color: #ebebeb; overflow-wrap: anywhere; }
+.rs-preview-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.rs-preview-facts > div { padding: 9px 10px; border-radius: 6px; background: #13212b; }
+.rs-preview-facts dt { font-size: 11px; font-weight: 700; color: #6a8191; }
+.rs-preview-facts dd { margin: 3px 0 0; font-size: 14px; font-weight: 700; color: #dadada; }
+.rs-preview-facts dd.is-gold { color: #f2b42c; }
+.rs-preview-line { margin: 0; font-size: 13px; line-height: 1.5; color: #aab6c6; }
+.rs-preview-line.is-dim { color: #6a8191; }
+.rs-preview-line.is-warn { color: #f2b42c; }
+.rs-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+@media (max-width: 1100px) {
+  .rs-grid { grid-template-columns: minmax(0, 1fr); }
+  .rs-preview { position: static; }
+}
+@media (max-width: 560px) {
+  .rs-kinds { grid-template-columns: minmax(0, 1fr); }
+}

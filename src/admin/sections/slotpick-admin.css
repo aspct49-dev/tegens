@@ -1,0 +1,92 @@
+/* Slot picker admin (src/admin/sections/SlotPick.jsx). Builds on admin.css. */
+
+.sp-seg { display: inline-flex; height: 38px; padding: 3px; border-radius: 7px; background: #0c171f; box-shadow: inset 0 0 0 1px #2a3f4d; }
+.sp-seg-item { padding: 0 14px; border-radius: 5px; font-size: 13px; font-weight: 700; color: #7e96a7; transition: background 0.15s, color 0.15s; }
+.sp-seg-item:hover { color: #dadada; }
+.sp-seg-item.is-on { background: #2a91d5; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14); color: #fff; }
+
+/* ---------------------------------------------------------------- providers */
+.sp-prov { margin-top: 16px; }
+.sp-prov-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+.sp-prov-count { font-size: 12.5px; color: #7e96a7; }
+.sp-link { font-size: 12.5px; font-weight: 600; color: #4db8ff; }
+.sp-link:hover { text-decoration: underline; }
+.sp-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.sp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: #1c2c37;
+  box-shadow: inset 0 1px 0 #314653;
+  font-size: 13px;
+  font-weight: 600;
+  color: #b9c6d0;
+  transition: background 0.15s, color 0.15s;
+}
+.sp-chip:hover { color: #fff; }
+.sp-chip.is-on { background: #2a91d5; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14); color: #fff; }
+.sp-chip-n { font-size: 11.5px; font-weight: 600; color: #6a8191; }
+.sp-chip.is-on .sp-chip-n { color: rgb(255 255 255 / 0.7); }
+.sp-prov-search { position: relative; max-width: 320px; margin-top: 10px; }
+.sp-prov-list {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  padding: 4px;
+  border-radius: 8px;
+  background: #11232f;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.4), inset 0 0 0 1px #2a3f4d;
+}
+.sp-prov-list button { display: flex; justify-content: space-between; width: 100%; padding: 7px 9px; border-radius: 5px; font-size: 13.5px; font-weight: 600; color: #dadada; text-align: left; }
+.sp-prov-list button:hover { background: #1c2c37; }
+
+/* ---------------------------------------------------------------- roll */
+.sp-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; padding-top: 14px; border-top: 1px solid #1c2c37; }
+.sp-toggles { display: flex; flex-wrap: wrap; gap: 18px; }
+.sp-note { margin-top: 10px; font-size: 13px; color: #7e96a7; }
+
+.sp-art { flex: none; border-radius: 5px; object-fit: cover; background: #0c171f; }
+.sp-art.is-empty { display: inline-block; box-shadow: inset 0 0 0 1px #2a3f4d; }
+
+.sp-stage { margin-top: 16px; }
+.sp-result {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #0c171f;
+  box-shadow: inset 0 0 0 1px rgb(242 180 44 / 0.35);
+  animation: sp-in 0.35s ease-out;
+}
+.sp-result-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.sp-result-kicker { font-size: 12px; font-weight: 600; color: #f2b42c; }
+.sp-result-name { overflow: hidden; font-size: 22px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; color: #fff; }
+.sp-result-prov { font-size: 13.5px; color: #7e96a7; }
+@keyframes sp-in { from { opacity: 0; transform: translateY(4px); } }
+
+/* ---------------------------------------------------------------- my list */
+.sp-add { max-width: 420px; margin-bottom: 14px; }
+.sp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.sp-tile { display: flex; align-items: center; gap: 10px; padding: 6px 8px 6px 6px; border-radius: 7px; background: #1c2c37; box-shadow: inset 0 1px 0 #314653; }
+.sp-tile-text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.sp-tile-name { overflow: hidden; font-size: 13.5px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; color: #dadada; }
+.sp-tile-prov { overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; color: #7e96a7; }
+.sp-x { flex: none; width: 24px; height: 24px; border-radius: 5px; font-size: 17px; line-height: 1; color: #7e96a7; }
+.sp-x:hover:not(:disabled) { background: rgb(229 115 111 / 0.12); color: #f08b87; }
+
+/* ---------------------------------------------------------------- recent */
+.sp-recent li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 12px; padding: 6px 4px; border-top: 1px solid #1c2c37; }
+.sp-recent li:first-child { border-top: 0; }
+.sp-when { font-size: 12px; color: #6a8191; white-space: nowrap; }
+
+@media (max-width: 560px) {
+  .sp-recent li { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .sp-recent .sp-tile-prov { display: none; }
+}

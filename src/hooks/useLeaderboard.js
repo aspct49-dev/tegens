@@ -19,10 +19,12 @@ function rank(players) {
  */
 export function useLeaderboard() {
   const [state, setState] = useState({ loading: true, error: null, players: [], updatedAt: null })
+  // Re-read every render so an open page follows the reset to the next period.
+  const { startAt, endAt } = getPeriod()
 
   useEffect(() => {
     let cancelled = false
-    const { startAt, endAt } = getPeriod()
+    setState({ loading: true, error: null, players: [], updatedAt: null })
     const url = `/api/affiliates?start_at=${startAt}&end_at=${endAt}`
 
     const load = () =>
@@ -51,7 +53,7 @@ export function useLeaderboard() {
       cancelled = true
       clearInterval(id)
     }
-  }, [])
+  }, [startAt, endAt])
 
   return state
 }
