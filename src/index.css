@@ -1247,8 +1247,9 @@ button:focus-visible {
   padding: 0;
   margin: 24px 0 0;
   display: grid;
-  /* fills the 844px column edge to edge, lined up with the search bar */
-  grid-template-columns: repeat(auto-fill, minmax(242px, 1fr));
+  /* four to a row, filling the 844px column edge to edge, lined up with the search bar
+     (the phone layout below goes back to as many 242px cards as fit) */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 .store-card {
@@ -1303,7 +1304,7 @@ button:focus-visible {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 212px;
+  width: min(212px, calc(100% - 24px));
   height: 33px;
   margin-top: 12px;
   padding: 0 15px 0 16px;
@@ -1316,7 +1317,7 @@ button:focus-visible {
   font-variant-numeric: tabular-nums;
 }
 .store-buy {
-  width: 212px;
+  width: min(212px, calc(100% - 24px));
   height: 33px;
   margin-top: 8px;
   border-radius: var(--r);
@@ -1857,6 +1858,8 @@ a.refer-card:hover { transform: translateY(-3px); }
 
 @media (max-width: 960px) {
   .page-deco { display: none; }
+  /* narrower column: as many cards as fit at 200px+, not four squeezed ones */
+  .store-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
 }
 
 @media (max-width: 900px) {
