@@ -88,8 +88,11 @@ const seed = () =>
     name: it.name,
     cost: it.cost,
     stock: it.stock ?? null,
+    store: STORES.includes(it.store) ? it.store : 'watch',
     art: ARTS.includes(it.art) ? it.art : 'product',
     image: it.image ?? null,
+    ...(it.artTop ? { artTop: it.artTop } : {}),
+    ...(it.artBottom ? { artBottom: it.artBottom } : {}),
     hidden: false,
     order: i,
   })).map(upgrade)
@@ -103,11 +106,28 @@ const upgrade = (i) => {
   return out
 }
 
+// The first release seeded these five placeholder prizes. A store still holding exactly them
+// (never edited) is swapped for the current config.storeItems once; edited stores are kept.
+const OLD_SEED = {
+  'iphone-17': ['iPhone 17 Pro Max', 250000, 2],
+  'bonus-fs': ['$10,000 Bonus Buy', 250000, 5],
+  'bonus-buy-1': ['$10,000 Bonus Buy', 250000, 5],
+  'bonus-buy-2': ['$10,000 Bonus Buy', 250000, 2],
+  'bonus-buy-3': ['$10,000 Bonus Buy', 250000, 2],
+}
+const isOldSeed = (list) =>
+  Array.isArray(list) &&
+  list.length === Object.keys(OLD_SEED).length &&
+  list.every((i) => {
+    const o = OLD_SEED[i.id]
+    return o && i.name === o[0] && i.cost === o[1] && i.stock === o[2] && !i.hidden
+  })
+
 /** Every item (hidden ones too), in shop order; the first read writes the config's items */
 async function allItems() {
   const list = await read(ITEMS, null)
-  if (Array.isArray(list) && !list.some((i) => upgrade(i) !== i)) return list
-  return update(ITEMS, (cur) => (Array.isArray(cur) ? cur.map(upgrade) : seed()), null)
+  if (Array.isArray(list) && !isOldSeed(list) && !list.some((i) => upgrade(i) !== i)) return list
+  return update(ITEMS, (cur) => (Array.isArray(cur) && !isOldSeed(cur) ? cur.map(upgrade) : seed()), null)
 }
 
 const publicItem = (i) => ({ id: i.id, store: i.store, name: i.name, cost: i.cost, stock: i.stock, art: i.art, image: i.image, artTop: i.artTop ?? '', artBottom: i.artBottom ?? '' })

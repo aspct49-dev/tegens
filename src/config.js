@@ -76,15 +76,19 @@ export const config = {
     ],
   },
 
-  // Item store. `cost` is in TEGEN points; `stock` 0 shows as sold out.
-  // `art`: 'product' (centred cut-out), 'cover' (fills the image panel) or
-  // 'fs' (the free-spins badge, shown three times).
+  // Item stores: the items a fresh install starts with (server/features/shop.js copies them into
+  // the shopItems table the first time it's read; after that the admin panel is the source).
+  // `store`: 'wager' (Wager Store, paid in wager points) or 'watch' (Watch Store, Botrix points).
+  // `cost` in points; `stock` 0 shows as sold out. `art` 'bonus': the picture under two lines of
+  // text drawn by the page (artTop gold, artBottom white).
   storeItems: [
-    { id: 'iphone-17', name: 'iPhone 17 Pro Max', cost: 250000, stock: 2, art: 'product', image: '/assets/td/item-iphone.png' },
-    { id: 'bonus-fs', name: '$10,000 Bonus Buy', cost: 250000, stock: 5, art: 'fs', image: '/assets/td/item-fs.png' },
-    { id: 'bonus-buy-1', name: '$10,000 Bonus Buy', cost: 250000, stock: 5, art: 'cover', image: '/assets/td/item-bonusbuy.png' },
-    { id: 'bonus-buy-2', name: '$10,000 Bonus Buy', cost: 250000, stock: 2, art: 'cover', image: '/assets/td/item-bonusbuy.png' },
-    { id: 'bonus-buy-3', name: '$10,000 Bonus Buy', cost: 250000, stock: 2, art: 'cover', image: '/assets/td/item-bonusbuy.png' },
+    { id: '50-usdc', store: 'wager', name: '50 USDC', cost: 50000, stock: 10, art: 'bonus', artTop: '$50', artBottom: 'USDC', image: '/assets/td/item-usdc-coin-v2.png' },
+    { id: '250-usdc', store: 'wager', name: '250 USDC', cost: 250000, stock: 5, art: 'bonus', artTop: '$250', artBottom: 'USDC', image: '/assets/td/item-usdc-coin-v2.png' },
+    { id: '1000-usdc', store: 'wager', name: '1,000 USDC', cost: 1000000, stock: 2, art: 'bonus', artTop: '$1,000', artBottom: 'USDC', image: '/assets/td/item-usdc-coin-v2.png' },
+    { id: '100-bonus-buy', store: 'watch', name: '$100 Bonus Buy', cost: 10000, stock: 4, art: 'bonus', artTop: '$100', artBottom: 'BONUS BUY', image: '/assets/td/item-fith2-v5.png' },
+    { id: '250-bonus-buy', store: 'watch', name: '$250 Bonus Buy', cost: 25000, stock: 5, art: 'bonus', artTop: '$250', artBottom: 'BONUS BUY', image: '/assets/td/item-fith2-v5.png' },
+    { id: '500-bonus-buy', store: 'watch', name: '$500 Bonus Buy', cost: 50000, stock: 3, art: 'bonus', artTop: '$500', artBottom: 'BONUS BUY', image: '/assets/td/item-fith2-v5.png' },
+    { id: '1000-bonus-buy', store: 'watch', name: '$1,000 Bonus Buy', cost: 100000, stock: 1, art: 'bonus', artTop: '$1,000', artBottom: 'BONUS BUY', image: '/assets/td/item-fith2-v5.png' },
   ],
 
   // Refer to Earn: the high-roller referral reward and its qualifying wager.

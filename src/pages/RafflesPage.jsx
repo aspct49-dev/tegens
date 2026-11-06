@@ -3,7 +3,7 @@ import { config } from '../config'
 import { useAuth } from '../hooks/useAuth'
 import { useCountdown } from '../hooks/useCountdown'
 import { usePlayer } from '../hooks/usePlayer'
-import { fairFloats, keptDraws, loadRaffle, sha256 } from '../raffle'
+import { fairFloats, keptDraws, sha256 } from '../raffle'
 import { useUI } from '../ui'
 import { fmtMoney, maskName, pad } from '../utils'
 import { CodeButton, RulesButton, VisitButton } from '../components/Buttons'
@@ -22,7 +22,8 @@ import EmptyState from '../components/EmptyState'
 // Data: the raffle the admin runs on the server (/api/raffles, server/features/raffles.js)
 // when there is one: entries with player numbers, draws, the committed seed. The drums
 // show the latest winner's player number and the ticket prints their (masked) name.
-// With no server raffle, the wager raffle falls back to config.raffle (src/raffle.js).
+// Raffles exist only when an admin creates one (no built-in raffle): with none, the page
+// says so.
 // A watch-time raffle, when there is one, sits behind the Wager / Watch-time toggle.
 
 const code = config.referralCode.toUpperCase()
@@ -170,26 +171,6 @@ const tabFromUrl = () => (new URLSearchParams(window.location.search).get('tab')
 /** A server raffle in the shape the page's pieces use */
 const fromServer = (r) => ({ ...r, server: true, period: { start: r.start, end: r.end } })
 
-/** The config-driven wager raffle (no server raffle): loaded only when `enabled` */
-function useConfigRaffle(enabled) {
-  const [state, setState] = useState({ status: 'loading', raffle: null })
-  const [tick, setTick] = useState(0)
-  useEffect(() => {
-    if (!enabled) return undefined
-    let cancelled = false
-    loadRaffle().then(
-      (raffle) => !cancelled && setState({ status: 'ready', raffle }),
-      () => !cancelled && setState((s) => ({ status: s.raffle ? 'ready' : 'error', raffle: s.raffle })),
-    )
-    const t = setInterval(() => setTick((n) => n + 1), 5 * 60_000) // tickets keep counting while open
-    return () => {
-      cancelled = true
-      clearInterval(t)
-    }
-  }, [tick, enabled])
-  return { ...state, retry: () => setTick((n) => n + 1) }
-}
-
 export default function RafflesPage() {
   // start the 3D machine's download now, in parallel with the raffle data
   useEffect(() => {
@@ -198,7 +179,6 @@ export default function RafflesPage() {
   const player = usePlayer()
   const [picks, setPicks] = useState({ wager: null, watch: null })
   const server = useServerRaffles(player.username, picks)
-  const fallback = useConfigRaffle(server.loaded && !server.wager)
   const [kind, setKindState] = useState(tabFromUrl)
   const [rulesOpen, setRulesOpen] = useState(false)
   const setKind = (k) => {
@@ -208,9 +188,9 @@ export default function RafflesPage() {
     else url.searchParams.set('tab', k)
     window.history.replaceState(window.history.state, '', url.pathname + url.search)
   }
-  const wager = server.wager ?? fallback.raffle
+  const wager = server.wager
   const raffle = kind === 'watch' ? server.watch : wager
-  const status = !server.loaded ? 'loading' : kind === 'watch' ? 'ready' : server.wager ? 'ready' : fallback.status
+  const status = server.loaded ? 'ready' : 'loading'
   const shownKind = kind
   const list = server.lists[kind] ?? []
 
@@ -268,10 +248,10 @@ export default function RafflesPage() {
       />
 
       {status === 'loading' && <div className="spinner" role="status" aria-label="Loading" />}
-      {status === 'error' && !raffle && (
-        <p className="ms-hint">
-          The raffle is temporarily unavailable. <button className="link-btn" onClick={fallback.retry}>Retry</button>
-        </p>
+      {status === 'ready' && kind === 'wager' && !raffle && (
+        <EmptyState title="No raffle running right now" icon>
+          When the next one opens, wagering under code {code} on Rainbet earns tickets. Check back soon.
+        </EmptyState>
       )}
       {status === 'ready' && kind === 'watch' && !raffle && (
         <EmptyState

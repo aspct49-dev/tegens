@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { apiPost } from '../api'
-import { Button, Card, ConfirmButton, Empty, ErrorLine, Field, Input, Pill, SectionIntro, Select, Stat, num } from '../ui'
+import { Button, Card, ConfirmButton, Empty, ErrorLine, Field, Input, Pill, SectionIntro, Select, Stat, Toggle, num } from '../ui'
 import { usePolled } from '../../hooks/usePolled'
 import { currencySymbol, huntMoney } from '../../../server/features/huntStats.js'
 import './guess-admin.css'
@@ -44,8 +44,16 @@ export default function GuessAdmin({ open }) {
       <SectionIntro actions={<Button onClick={() => open('overlays')}>Overlay links</Button>}>
         Viewers guess in Kick chat with <code className="gs-code">!guess 12,500</code> (also <code className="gs-code">12.5k</code>,{' '}
         <code className="gs-code">$12,500</code>). One guess per Kick account and a new one replaces the old. Signed-in viewers can also
-        guess on the site. The bot announces the round opening, locking and the winner.
+        guess on the site. With the bot switch on, the bot announces the round opening, locking and the winner in chat.
       </SectionIntro>
+
+      <Card title="Kick bot">
+        <Toggle
+          checked={Boolean(data.announce)}
+          onChange={(v) => act('/api/admin/guess/settings', { announce: v })}
+          label="Bot announces the round opening, locking and the winner"
+        />
+      </Card>
 
       <NewRound hunts={hunts} onCreate={async (body) => (await act('/api/admin/guess', body)) && setPicked(null)} />
       <ErrorLine>{actionError}</ErrorLine>

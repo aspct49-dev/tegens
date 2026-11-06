@@ -5,7 +5,8 @@
 //
 // One guess per Kick account (keyed by Kick user id, so a signed-in site user
 // with Kick linked shares the same slot); a new guess replaces the old one. The
-// bot announces the round opening, locking and the winner, never each guess.
+// bot announces the round opening, locking and the winner (when the admin's bot switch is on,
+// off by default), never each guess.
 // Rounds are stored newest first in the guesses table; only one is open at a time.
 //
 //   GET  /api/events/guess                 { round }   the current round (guesses hidden until the draw)
@@ -16,6 +17,7 @@
 //   POST /api/admin/guess/<id>/draw        { finalBalance }
 //   POST /api/admin/guess/<id>/remove      { key }
 //   POST /api/admin/guess/<id>/delete
+//   POST /api/admin/guess/settings         { announce }   the bot switch (off by default)
 
 import { randomBytes } from 'node:crypto'
 import { onChat, parseCommand } from '../chatbus.js'
@@ -192,17 +194,26 @@ onChat('guess', async (msg) => {
 
 const chatMoney = (hunt, v) => huntMoney(v, hunt?.currency ?? 'USD').replace(/\.00$/, '')
 
-function announceOpen(round) {
+// The admin's bot switch (table guessSettings): off until turned on, so a fresh install stays quiet
+const SETTINGS = 'guessSettings'
+const DEFAULT_SETTINGS = { announce: false }
+const readSettings = async () => ({ ...DEFAULT_SETTINGS, ...(await read(SETTINGS, DEFAULT_SETTINGS)) })
+const announcing = async () => (await readSettings()).announce === true
+
+async function announceOpen(round) {
+  if (!(await announcing())) return
   const prize = round.prize ? ` for ${round.prize}` : ''
   void sendChat(`Guess the Balance is OPEN${prize}! Type !guess <amount> in chat, e.g. !guess 12,500. One guess each: your latest one counts.`)
 }
 
-function announceLocked(round) {
+async function announceLocked(round) {
+  if (!(await announcing())) return
   const n = round.guesses.length
   void sendChat(`Guesses are LOCKED: ${n.toLocaleString('en-US')} ${n === 1 ? 'guess' : 'guesses'} in. Good luck!`)
 }
 
 async function announceWinner(round) {
+  if (!(await announcing())) return
   const hunt = await huntSummary(round.huntId)
   const final = chatMoney(hunt, round.finalBalance)
   const [winner] = rankGuesses(round.guesses, round.finalBalance)
@@ -276,7 +287,7 @@ async function adminView() {
     const s = huntStats(h)
     return { id: h.id, number: h.number ?? null, name: h.name, status: h.status, currency: h.currency ?? 'USD', startBalance: h.startBalance, count: s.count, opened: s.opened, totalWon: s.totalWon }
   })
-  return { rounds: rounds.map(adminRound), hunts }
+  return { rounds: rounds.map(adminRound), hunts, announce: (await readSettings()).announce }
 }
 
 export async function handle(req, ctx) {
@@ -306,6 +317,13 @@ export async function handle(req, ctx) {
     // ---- admin
     if (path === '/api/admin/guess' && method === 'GET') return json(200, await adminView())
     if (method !== 'POST') return json(405, { error: 'Use POST.' })
+
+    // the bot switch: { announce }
+    if (path === '/api/admin/guess/settings') {
+      const announce = Boolean(body.announce)
+      await update(SETTINGS, (cur) => ({ ...DEFAULT_SETTINGS, ...cur, announce }), DEFAULT_SETTINGS)
+      return json(200, await adminView())
+    }
 
     if (path === '/api/admin/guess') {
       await openRound({ name: text(body.name, 'Name', 60), prize: text(body.prize, 'Prize', 40, false), huntId: await huntIdFrom(body.huntId) })

@@ -3,7 +3,6 @@ import { config } from '../config'
 import { useAuth } from '../hooks/useAuth'
 import { usePolled } from '../hooks/usePolled'
 import { TIERS, getProgress } from '../milestones'
-import { loadRaffle } from '../raffle'
 import { Link } from '../router'
 import { useUI } from '../ui'
 import { fmtMoney } from '../utils'
@@ -408,23 +407,16 @@ function CancelRequest({ onDone }) {
 // ---------------------------------------------------------------- the three panels
 
 /**
- * This month's wager raffle. The server's (/api/raffles, names masked, `mine` for
- * ?me=) when it answers; the site's own calculation (src/raffle.js) when it can't.
- * null: the server has no wager raffle running.
+ * This month's wager raffle: the one an admin runs on the server (/api/raffles, names
+ * masked, `mine` for ?me=). null: no raffle running. Raffles only exist when an admin
+ * creates one, so there is no built-in fallback.
  */
 async function loadWagerRaffle(username) {
-  try {
-    const res = await fetch(`/api/raffles?kind=wager&me=${encodeURIComponent(username)}`, { credentials: 'same-origin' })
-    if (res.ok) {
-      const d = await res.json()
-      const r = d?.raffle ?? (Array.isArray(d?.raffles) ? d.raffles[0] : null)
-      if (r && Array.isArray(r.entries)) return r
-      if ('raffle' in (d ?? {})) return null
-    }
-  } catch {
-    /* no server raffle: fall back */
-  }
-  return loadRaffle()
+  const res = await fetch(`/api/raffles?kind=wager&me=${encodeURIComponent(username)}`, { credentials: 'same-origin' })
+  if (!res.ok) throw new Error('The raffle is unavailable.')
+  const d = await res.json()
+  const r = d?.raffle ?? (Array.isArray(d?.raffles) ? d.raffles[0] : null)
+  return r && Array.isArray(r.entries) ? r : null
 }
 
 function RafflePanel({ username, pending, onLink }) {

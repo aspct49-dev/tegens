@@ -34,7 +34,7 @@ class InputError extends Error {}
 
 const MAX_CALLS = 500
 const MAX_MONEY = 100_000_000
-const EMPTY = { open: true, announce: true, vipOnly: false, currentId: null, calls: [] }
+const EMPTY = { open: true, announce: false, vipOnly: false, currentId: null, calls: [] } // bot switch off until turned on
 
 const newId = () => randomBytes(6).toString('base64url')
 const table = async () => ({ ...EMPTY, ...(await read('slotCalls', null)) })
