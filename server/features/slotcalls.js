@@ -17,7 +17,8 @@
 //   POST /api/admin/calls/<id>/result        { bet?, win }
 //   POST /api/admin/calls/<id>/skip | reopen | delete
 //
-// Table `slotCalls`: { open, announce, vipOnly, currentId, calls: call[] }   calls in arrival order, at most 500
+// Table `slotCalls`: { open, openedByAdmin, announce, announceByAdmin, vipOnly, currentId, calls: call[] }
+//   open / announce start false and only an admin turns them on (the *ByAdmin flags)   calls in arrival order, at most 500
 //   call: { id, key, username, query, slot: { key, name, slug, provider, image }, matched,
 //           at, status: 'waiting' | 'done' | 'skipped', bet, win, doneAt }   times unix seconds
 
@@ -34,11 +35,21 @@ class InputError extends Error {}
 
 const MAX_CALLS = 500
 const MAX_MONEY = 100_000_000
-const EMPTY = { open: true, announce: false, vipOnly: false, currentId: null, calls: [] } // bot switch off until turned on
+// Closed and quiet until an admin turns them on: taking calls and the bot are both off.
+const EMPTY = { open: false, openedByAdmin: false, announce: false, announceByAdmin: false, vipOnly: false, currentId: null, calls: [] }
+
+/** Calls are open, and the bot talks, only when an admin switched them on (the older defaults of
+ *  open: true / announce: true saved before this don't count) */
+const settled = (cur) => {
+  const t = { ...EMPTY, ...cur }
+  if (!t.openedByAdmin) t.open = false
+  if (!t.announceByAdmin) t.announce = false
+  return t
+}
 
 const newId = () => randomBytes(6).toString('base64url')
-const table = async () => ({ ...EMPTY, ...(await read('slotCalls', null)) })
-const save = (fn) => update('slotCalls', (cur) => fn({ ...EMPTY, ...cur }), null)
+const table = async () => settled(await read('slotCalls', null))
+const save = (fn) => update('slotCalls', (cur) => fn(settled(cur)), null)
 const usd = (n) => `$${n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`
 
 /** The slot a typed name means: the catalog's, else the name as typed (no art) */
@@ -143,8 +154,12 @@ export async function handle(req, ctx) {
         if ('open' in body) {
           opened = !t.open && Boolean(body.open)
           t.open = Boolean(body.open)
+          t.openedByAdmin = t.open
         }
-        if ('announce' in body) t.announce = Boolean(body.announce)
+        if ('announce' in body) {
+          t.announce = Boolean(body.announce)
+          t.announceByAdmin = t.announce
+        }
         if ('vipOnly' in body) t.vipOnly = Boolean(body.vipOnly)
         return t
       })
