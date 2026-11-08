@@ -2,7 +2,7 @@
 // /giveaways page. Separate from the chat giveaway (./giveaway.js), which still runs
 // the Kick-chat draw and the stream overlay; nothing here touches that.
 //
-//   GET  /api/events/giveaway-wins                 { wins, totals: { count, winners, paid, challenges, givenAway } }   newest first
+//   GET  /api/events/giveaway-wins                 { wins, totals: { count, winners, paid, challenges, milestones, store, givenAway } }   newest first
 //   GET  /api/admin/giveaway-wins/totals           { settings: { start, carried }, totals }
 //   POST /api/admin/giveaway-wins/totals           { start }  the amount given away before this list → same
 //
@@ -102,31 +102,63 @@ const cents = (n) => Math.round(n * 100) / 100
 
 // The "Total given away" figure on /giveaways: a starting amount the admin sets (everything
 // given away before this list existed) + the value of every win posted here + the reward of
-// every completed slot challenge (table `challenges`, ./challenges.js: status 'completed').
+// every completed slot challenge (table `challenges`, ./challenges.js: status 'completed')
+// + every milestone reward paid (table `milestoneClaims`, written when a claim is paid or an
+// admin marks a milestone claimed) + every approved store order (table `shopOrders`, its
+// value read from the item's name: "50 USDC" → $50, "$250 Bonus Buy" → $250).
 // Wins that fall off the end of the list (over MAX) are added to `carried` so the total never
-// goes down.
+// goes down. Undoing a paid milestone or an order takes it back off.
 //   table `giveawayTotals`: { start, carried }
 const TOTALS = 'giveawayTotals'
 const DEFAULT_TOTALS = { start: 25_000, carried: 0 }
 const readTotals = async () => ({ ...DEFAULT_TOTALS, ...(await read(TOTALS, DEFAULT_TOTALS)) })
 
-/** The rewards of completed slot challenges, in $ */
-const challengesPaid = (list) =>
-  (Array.isArray(list) ? list : []).reduce((n, c) => n + (c.status === 'completed' && Number.isFinite(c.reward) ? c.reward : 0), 0)
+const arr = (v) => (Array.isArray(v) ? v : [])
 
-export function totalsFor(wins, settings = DEFAULT_TOTALS, challenges = []) {
+/** The rewards of completed slot challenges, in $ */
+const challengesPaid = (list) => arr(list).reduce((n, c) => n + (c.status === 'completed' && Number.isFinite(c.reward) ? c.reward : 0), 0)
+
+/** "$50", "$1,000 Bonus Buy", "$10K", "50 USDC", "1.5k USDC" → dollars; no amount in it → 0 */
+export function dollarsIn(name) {
+  const s = String(name ?? '')
+  const m = /\$\s?([\d,]+(?:\.\d+)?)\s*(k)?\b/i.exec(s) ?? /([\d,]+(?:\.\d+)?)\s*(k)?\s*(?:usdc|usdt|usd)\b/i.exec(s)
+  if (!m) return 0
+  const n = Number(m[1].replace(/,/g, '')) * (m[2] ? 1000 : 1)
+  return Number.isFinite(n) && n > 0 ? n : 0
+}
+
+/** Milestone rewards paid out, in $ */
+const milestonesPaid = (rows) => arr(rows).reduce((n, r) => n + (Number.isFinite(r.prize) ? r.prize : 0), 0)
+
+/** Approved store orders (both stores), in $ */
+const storePaid = (orders) => arr(orders).reduce((n, o) => n + (o.status === 'approved' ? dollarsIn(o.itemName) : 0), 0)
+
+export function totalsFor(wins, settings = DEFAULT_TOTALS, challenges = [], more = {}) {
   const paid = sumAmounts(wins)
   const fromChallenges = challengesPaid(challenges)
+  const fromMilestones = milestonesPaid(more.milestoneClaims)
+  const fromStore = storePaid(more.shopOrders)
   return {
     count: wins.length,
     winners: new Set(wins.map((w) => w.winner.toLowerCase())).size,
     paid: cents(paid),
     challenges: cents(fromChallenges),
-    givenAway: cents((settings.start ?? 0) + (settings.carried ?? 0) + paid + fromChallenges),
+    milestones: cents(fromMilestones),
+    store: cents(fromStore),
+    givenAway: cents((settings.start ?? 0) + (settings.carried ?? 0) + paid + fromChallenges + fromMilestones + fromStore),
   }
 }
 
 const readChallenges = () => read('challenges', [])
+/** Everything the total needs besides the posted wins and the settings */
+const readSources = async () => {
+  const [challenges, milestoneClaims, shopOrders] = await Promise.all([readChallenges(), read('milestoneClaims', []), read('shopOrders', [])])
+  return { challenges, more: { milestoneClaims, shopOrders } }
+}
+const totalsNow = async (wins, settings) => {
+  const { challenges, more } = await readSources()
+  return totalsFor(wins, settings, challenges, more)
+}
 
 // ---------------------------------------------------------------- writes
 
@@ -189,21 +221,21 @@ export async function handle(req, ctx) {
   try {
     if (path === '/api/events/giveaway-wins') {
       if (method !== 'GET') return json(405, { error: 'Use GET.' })
-      const [wins, settings, challenges] = await Promise.all([list(), readTotals(), readChallenges()])
-      return json(200, { wins: wins.map(publicWin), totals: totalsFor(wins, settings, challenges) })
+      const [wins, settings] = await Promise.all([list(), readTotals()])
+      return json(200, { wins: wins.map(publicWin), totals: await totalsNow(wins, settings) })
     }
 
     // the starting amount of "Total given away"
     if (path === '/api/admin/giveaway-wins/totals') {
       if (method === 'GET') {
-        const [wins, settings, challenges] = await Promise.all([list(), readTotals(), readChallenges()])
-        return json(200, { settings, totals: totalsFor(wins, settings, challenges) })
+        const [wins, settings] = await Promise.all([list(), readTotals()])
+        return json(200, { settings, totals: await totalsNow(wins, settings) })
       }
       if (method !== 'POST') return json(405, { error: 'Use GET or POST.' })
       const start = cleanAmount(body?.start)
       if (start == null) throw new InputError('Enter the starting amount in dollars.')
       const settings = await update(TOTALS, (s) => ({ ...DEFAULT_TOTALS, ...s, start }), DEFAULT_TOTALS)
-      return json(200, { settings, totals: totalsFor(await list(), settings, await readChallenges()) })
+      return json(200, { settings, totals: await totalsNow(await list(), settings) })
     }
 
     const m = /^\/api\/admin\/giveaway-wins(?:\/([\w-]{1,40})(?:\/(remove))?)?$/.exec(path)

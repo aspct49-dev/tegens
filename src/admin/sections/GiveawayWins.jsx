@@ -76,7 +76,9 @@ function TotalCard({ wins }) {
   }
 
   const fromChallenges = data?.totals.challenges ?? 0
-  const fromWins = data ? data.totals.givenAway - data.settings.start - fromChallenges : 0
+  const fromMilestones = data?.totals.milestones ?? 0
+  const fromStore = data?.totals.store ?? 0
+  const fromWins = data ? data.totals.givenAway - data.settings.start - fromChallenges - fromMilestones - fromStore : 0
   return (
     <Card title="Total given away">
       <div className="gwa-total">
@@ -84,8 +86,9 @@ function TotalCard({ wins }) {
         <p className="gwa-total-sum">
           {data ? (
             <>
-              {usd(data.settings.start)} starting amount + {usd(fromWins)} from posted wins + {usd(fromChallenges)} from completed challenges. Every win you
-              add with a value, and every challenge marked completed, adds to it.
+              {usd(data.settings.start)} starting amount + {usd(fromWins)} from posted wins + {usd(fromChallenges)} from completed challenges +{' '}
+              {usd(fromMilestones)} from paid milestones + {usd(fromStore)} from approved store orders. Every win you add with a value, every challenge
+              marked completed, every milestone paid and every store order approved adds to it.
             </>
           ) : (
             'Loading…'

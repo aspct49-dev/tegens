@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { apiGet, apiPost } from '../api'
 import { Button, Card, ConfirmButton, Empty, ErrorLine, Field, Input, Pill, SectionIntro, Select, Toggle } from '../ui'
+import SlotPicker from '../SlotPicker'
 import './site.css'
 import './claims-admin.css'
+import './Tournaments.css' // the slot chip (tg-slot-chip)
 
 // Biggest Wins: wins players submitted on /biggest-wins (server/features/bigWins.js). Open the
 // bet link, check the slot, bet and multiplier match, then ✓ approves it onto the public board.
@@ -94,6 +96,13 @@ export default function BigWinsAdmin() {
         Players submit their big wins on the Biggest Wins page. Open the bet link and check the slot, bet and multiplier match, then ✓ puts it on the public
         board. ✗ turns it down with a note the player sees. Fix a typo with Edit before approving. Set the monthly prizes and see who to pay below.
       </SectionIntro>
+
+      <AddWinCard
+        onAdded={() => {
+          setFilter('approved')
+          setReload((n) => n + 1)
+        }}
+      />
 
       <Card title="Biggest wins" actions={list && <span className="pl-count">{list.length} shown</span>}>
         <div className="pl-tools cl-tools">
@@ -273,6 +282,90 @@ const RANK_BY = [
 const toForm = (st) => ({ prizes: st.prizes.map((p) => (p ? String(p) : '')), rankBy: st.rankBy, onePerPlayer: st.onePerPlayer })
 
 /** Prize per place, how places are ranked, one place per player */
+/** An admin adds a Rainbet player's win straight onto the board: no waiting, no approval */
+const NO_WIN = { rainbet: '', slot: null, bet: '', multiplier: '', proof: '', at: '' }
+function AddWinCard({ onAdded }) {
+  const [f, setF] = useState(NO_WIN)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const [done, setDone] = useState('')
+  const set = (k) => (v) => setF((cur) => ({ ...cur, [k]: v }))
+  const payout = Number(f.bet) * Number(f.multiplier)
+
+  const add = async (e) => {
+    e.preventDefault()
+    setError('')
+    setDone('')
+    if (!f.slot) return setError('Pick the slot.')
+    setBusy(true)
+    try {
+      const d = await apiPost('/api/admin/big-wins/add', {
+        rainbet: f.rainbet.trim(),
+        slot: { slug: f.slot.slug, name: f.slot.name },
+        bet: f.bet,
+        multiplier: f.multiplier,
+        proof: f.proof.trim(),
+        at: f.at,
+      })
+      setDone(`Added ${d.win.slot.name} ${x(d.win.multiplier)} (${usd(d.win.payout)}) for ${f.rainbet.trim()}. It's on the board.`)
+      setF(NO_WIN)
+      onAdded()
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <Card title="Add a win">
+      <form onSubmit={add} noValidate>
+        <div className="adm-row">
+          <Field label="Rainbet username">
+            <Input value={f.rainbet} onChange={set('rainbet')} placeholder="e.g. Mysticsmum" maxLength={40} />
+          </Field>
+          <Field label="Slot">
+            {f.slot ? (
+              <span className="tg-slot-chip">
+                {f.slot.image && <img src={f.slot.image} width="18" height="24" alt="" />}
+                <span className="tg-slot-chip-name">{f.slot.name}</span>
+                <button type="button" onClick={() => set('slot')(null)}>Change</button>
+              </span>
+            ) : (
+              <SlotPicker placeholder="Pick the slot…" onPick={(g) => set('slot')(g)} />
+            )}
+          </Field>
+        </div>
+        <div className="adm-row">
+          <Field label="Bet">
+            <Input value={f.bet} onChange={set('bet')} unit="$" inputMode="decimal" placeholder="1.00" />
+          </Field>
+          <Field label="Multiplier">
+            <Input value={f.multiplier} onChange={set('multiplier')} unit="×" inputMode="decimal" placeholder="5000" />
+          </Field>
+          <Field label="Bet link" hint="Optional">
+            <Input value={f.proof} onChange={set('proof')} placeholder="https://rainbet.com/…" maxLength={200} />
+          </Field>
+          <Field label="Date won" hint="Optional: today if empty">
+            <Input value={f.at} onChange={set('at')} type="date" />
+          </Field>
+        </div>
+        <div className="adm-row" style={{ alignItems: 'center' }}>
+          <Button kind="primary" type="submit" busy={busy}>
+            Add to the board
+          </Button>
+          <span className="lk-sub">
+            {payout > 0 ? `Payout ${usd(payout)}. ` : ''}Goes straight on the board, no approval. A site player with this approved Rainbet link gets it on
+            their account; otherwise it shows under the Rainbet name, masked.
+          </span>
+        </div>
+        <ErrorLine>{error}</ErrorLine>
+        {done && <p className="lk-sub">{done}</p>}
+      </form>
+    </Card>
+  )
+}
+
 function PrizesCard({ onSaved }) {
   const [form, setForm] = useState(null)
   const [saved, setSaved] = useState(null)

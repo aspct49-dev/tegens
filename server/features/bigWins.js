@@ -16,6 +16,9 @@
 //   POST /api/admin/big-wins/<id>/undo                approved or rejected → waiting again
 //   POST /api/admin/big-wins/<id>/edit     { bet?, multiplier?, slot? }   fix a typo before approving
 //   POST /api/admin/big-wins/<id>/remove              gone for good (spam)
+//   POST /api/admin/big-wins/add  { rainbet, slot, bet, multiplier, proof?, at? }   an admin adds a
+//        Rainbet player's win: approved at once (no waiting); on the player's account when a site
+//        player has that approved Rainbet link, else kept under the Rainbet name (masked publicly)
 //
 // Only a signed-in player with an approved Rainbet link (server/auth.js approvedRainbet) can
 // submit, at most MAX_WAITING at a time, and a bet link can't be submitted twice.
@@ -31,6 +34,7 @@ import { json, nowSeconds } from '../http.js'
 import { COLORS, notifyAdmins } from '../notify.js'
 import { loadCatalog, matchSlot, normName, slotOf } from '../slotCatalog.js'
 import { read, update } from '../store.js'
+import { maskName } from '../../src/utils.js'
 
 const TABLE = 'bigWins'
 const MAX_ROWS = 20_000
@@ -65,10 +69,11 @@ function publicLink(proof) {
   }
 }
 
-/** What anyone sees of an approved win */
+/** What anyone sees of an approved win. A win an admin added for a Rainbet name with no site
+ *  account shows that name masked, as Rainbet names are everywhere else on the site. */
 const shown = (w) => ({
   id: w.id,
-  player: w.kick ?? w.player,
+  player: w.kick ?? (w.userId ? w.player : maskName(w.player)),
   slot: w.slot,
   bet: w.bet,
   multiplier: w.multiplier,
@@ -167,6 +172,59 @@ async function submit(user, body) {
   })
   logActivity({ actor: who.player, kind: 'wins', text: `Submitted a win: ${slot.name} ${x(multiplier)} (${usd(win.payout)})` })
   return win
+}
+
+const RAINBET_NAME = /^[A-Za-z0-9_.-]{2,40}$/
+const EARLIEST = Math.floor(Date.UTC(2020, 0, 1) / 1000)
+
+/** "", null → now; "2026-11-05" / unix seconds → unix seconds (not before 2020, not in the future) */
+function dateOf(v) {
+  const now = nowSeconds()
+  if (v == null || String(v).trim() === '') return now
+  const s = /^\d+$/.test(String(v)) ? Number(v) : Math.floor(Date.parse(String(v)) / 1000)
+  if (!Number.isFinite(s) || s < EARLIEST) throw new InputError('That date isn’t valid.')
+  if (s > now + 86400) throw new InputError('That date is in the future.')
+  return Math.min(s, now)
+}
+
+/**
+ * An admin adds a Rainbet player's win straight onto the board (approved, no waiting). A site
+ * player whose approved Rainbet link is that name gets the win on their account (so "one win
+ * per player" and their profile see it); otherwise it's kept under the Rainbet name.
+ */
+async function addByAdmin(body, admin) {
+  const name = String(body?.rainbet ?? '').trim()
+  if (!RAINBET_NAME.test(name)) throw new InputError('Enter the player’s Rainbet username.')
+  const slot = await slotFrom(body?.slot)
+  const bet = numberIn(body?.bet, BET, 'bet size')
+  const multiplier = numberIn(body?.multiplier, MULTI, 'multiplier')
+  const proof = String(body?.proof ?? '').trim() ? proofOf(body.proof) : ''
+  const at = dateOf(body?.at)
+  const row = (await read('players', [])).find((p) => approvedRainbet(p)?.toLowerCase() === name.toLowerCase()) ?? null
+  const win = {
+    id: newId(),
+    userId: row?.id ?? null,
+    player: row ? displayName(row) : name,
+    kick: row?.kick?.username ?? null,
+    rainbet: row ? approvedRainbet(row) : name,
+    slot,
+    bet,
+    multiplier,
+    payout: round2(bet * multiplier),
+    proof,
+    note: '',
+    status: 'approved',
+    at,
+    decidedAt: nowSeconds(),
+    decidedBy: admin,
+    adminNote: '',
+    addedBy: admin,
+  }
+  await save((l) => {
+    if (proof && l.some((w) => LIVE.has(w.status) && proofKey(w.proof) === proofKey(proof))) throw new InputError('That bet is already on the list.', 409)
+    return [win, ...l].slice(0, MAX_ROWS)
+  })
+  return { win, text: `Added ${row ? win.kick ?? win.player : name}’s win ${slot.name} ${x(multiplier)} (${usd(win.payout)})` }
 }
 
 // ---------------------------------------------------------------- the board
@@ -415,6 +473,13 @@ export async function handle(req, ctx) {
         standings: rows.slice(0, Math.max(settings.prizes.length, 10)),
         total: rows.length,
       })
+    }
+    if (path === '/api/admin/big-wins/add') {
+      if (method !== 'POST') return json(405, { error: 'Use POST.' })
+      const { win, text } = await addByAdmin(body, admin)
+      logActivity({ actor: admin, kind: 'wins', text })
+      const rows = await list()
+      return json(200, { win, counts: countsOf(rows) })
     }
     const m = /^\/api\/admin\/big-wins\/([\w-]{1,20})\/(approve|reject|undo|edit|remove)$/.exec(path)
     if (!m) return json(404, { error: 'Not found.' })
