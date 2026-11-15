@@ -41,6 +41,7 @@ const TYPES = {
   '.glb': 'model/gltf-binary',
   '.wasm': 'application/wasm',
   '.mp4': 'video/mp4',
+  '.webm': 'video/webm',
   '.txt': 'text/plain; charset=utf-8',
 }
 
