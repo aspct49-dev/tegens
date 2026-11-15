@@ -14,6 +14,13 @@ const OVERLAYS = [
   { path: '/overlay/slots', name: 'Slot picker', w: 520, h: 300, note: 'A reel of slot art that spins to the slot you roll in admin → Slot Picker.' },
   { path: '/overlay/raffle', name: 'Wager raffle machine', w: 820, h: 700, note: 'The 3D machine; draws play live as you make them.' },
   { path: '/overlay/raffle?kind=watch', name: 'Watch-time raffle', w: 820, h: 700, note: 'The same machine for the watch-time raffle.' },
+  {
+    path: '/overlay/promo',
+    name: 'Promo cards',
+    w: 440,
+    h: 180,
+    note: 'Rotating promo cards ending on "USE CODE: TEGENS": the leaderboard, milestones, referrals, the wager store and the site, plus the raffle while one runs. ?seconds=7 sets how long each shows; ?only=leaderboard,raffle picks cards.',
+  },
 ]
 
 export default function OverlaysAdmin() {

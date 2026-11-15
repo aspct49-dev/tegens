@@ -14,6 +14,7 @@ const OVERLAYS = {
   raffle: lazy(() => import('./RaffleOverlay')),
   slots: lazy(() => import('./SlotOverlay')),
   calls: lazy(() => import('./CallsOverlay')),
+  promo: lazy(() => import('./PromoOverlay')),
 }
 
 export default function OverlayPage() {
@@ -27,7 +28,7 @@ export default function OverlayPage() {
     document.title = `TEGENS overlay — ${kind}`
   }, [kind])
 
-  if (!Overlay) return <p className="ov-missing">Unknown overlay “{kind}”. Try /overlay/hunt, guess, tournament, giveaway, raffle, slots or calls.</p>
+  if (!Overlay) return <p className="ov-missing">Unknown overlay “{kind}”. Try /overlay/hunt, guess, tournament, giveaway, raffle, slots, calls or promo.</p>
   return (
     <div className="ov-root" style={{ '--ov-scale': scale }}>
       <Suspense fallback={null}>
