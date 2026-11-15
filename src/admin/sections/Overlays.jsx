@@ -17,9 +17,9 @@ const OVERLAYS = [
   {
     path: '/overlay/promo',
     name: 'Promo cards',
-    w: 440,
-    h: 180,
-    note: 'Rotating promo cards ending on "USE CODE: TEGENS": the leaderboard, milestones, referrals, the wager store and the site, plus the raffle while one runs. ?seconds=7 sets how long each shows; ?only=leaderboard,raffle picks cards.',
+    w: 608,
+    h: 260,
+    note: 'Rotating promo cards with the Home 3D scenes breaking out of the card, each ending on "USE CODE: TEGENS": the leaderboard, milestones, referrals, the wager store and the site, plus the raffle while one runs. ?seconds=7 sets how long each shows; ?only=leaderboard,raffle picks cards.',
   },
 ]
 

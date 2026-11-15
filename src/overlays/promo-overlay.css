@@ -1,97 +1,112 @@
-/* /overlay/promo (PromoOverlay.jsx): one card in the site's look (the Home tiles' panel art:
-   navy, faint grid, blue glow at the bottom) whose content rotates. The panel never moves; the
-   old slide lifts and fades out while the new one rises in, its parts staggered. */
+/* /overlay/promo (PromoOverlay.jsx): four 3D promo panels in the site's look. Each panel is its
+   own card (the Home tiles' panel art) carrying a Blender 3D headline and a 3D object, both
+   transparent loops; the panel flips over in 3D (a rolodex turn) into the next, and its parts
+   pop in after it lands. Stage 460 × 220: the card is the bottom 150 px; the 3D rises above it. */
+
+/* margins inside the source so the card shadow and the fighters never touch its edges: OBS 608 × 260 */
+.pr-stage { position: relative; width: 560px; height: 220px; margin: 0 24px 40px; perspective: 600px; perspective-origin: 50% 66%; }
+.pr-panel { position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: 50% 72%; }
 
 .pr-card {
-  position: relative;
-  width: 420px;
-  height: 160px;
-  overflow: hidden;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 150px;
   border: 1px solid #2a3d4a;
-  border-radius: 14px;
+  border-radius: 16px;
   background: #0c171f url('/assets/home/panel-bg-wide.webp') center / cover no-repeat;
-  box-shadow: inset 0 1px 0 #314653, 0 10px 30px rgb(0 0 0 / 0.35);
+  box-shadow: inset 0 1px 0 #314653, 0 12px 32px rgb(0 0 0 / 0.4);
 }
 
-.pr-slide { position: absolute; inset: 0; padding: 12px 18px 14px; }
-.pr-slide.is-stack { display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; }
-.pr-slide.is-split { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
-
-/* ---------------------------------------------------------------- parts */
-.pr-logo { display: block; width: auto; height: 20px; opacity: 0.95; }
-.pr-big {
-  margin-top: 2px;
-  font-size: 54px;
-  line-height: 1;
-  font-weight: 900;
-  letter-spacing: -0.01em;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+/* ---------------------------------------------------------------- the 3D */
+/* the headline owns the left half, the object the right half: they never meet */
+.pr-title { position: absolute; left: 4px; top: 30px; width: 280px; height: auto; aspect-ratio: 720 / 300; pointer-events: none; filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.85)) drop-shadow(0 6px 12px rgb(0 0 0 / 0.5)); }
+.pr-title.is-center { left: 50%; width: 270px; translate: -50% 0; }
+.pr-title.is-big { top: 14px; width: 450px; }
+.pr-art {
+  position: absolute;
+  right: -34px;
+  bottom: -4px;
+  width: 330px;
+  height: auto;
+  aspect-ratio: 760 / 398;
+  pointer-events: none;
+  filter: drop-shadow(0 10px 14px rgb(0 0 0 / 0.45));
 }
-.pr-big.is-gold,
-.pr-lines.is-gold span:first-child { background-image: linear-gradient(180deg, #ffd96e 10%, #f2a41c 90%); }
-.pr-big.is-blue,
-.pr-lines.is-blue span:last-child { background-image: linear-gradient(180deg, #8fd3ff 10%, #2a91d5 95%); }
-.pr-small { margin-top: -2px; font-size: 13px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #dbe3ec; }
+.pr-fighter { position: absolute; bottom: 1px; height: 190px; width: auto; pointer-events: none; filter: drop-shadow(0 8px 14px rgb(0 0 0 / 0.5)); }
+.pr-fighter.is-l { left: 6px; }
+.pr-fighter.is-r { right: 6px; }
 
-.pr-split-main { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; }
-.pr-split-main .pr-logo { height: 18px; width: auto; }
-.pr-lines { display: flex; flex-direction: column; font-size: 40px; line-height: 0.98; font-weight: 900; text-transform: uppercase; letter-spacing: -0.005em; }
-.pr-lines span { color: #ebebeb; }
-.pr-lines.is-gold span:first-child,
-.pr-lines.is-blue span:last-child { -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
-.pr-split-side { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: none; }
-.pr-note { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #9fb0bf; white-space: nowrap; }
-
-/* "USE CODE:" + the gold TEGENS pill (the promo graphics' chip) */
-.pr-code { display: inline-flex; align-items: center; gap: 8px; }
-.pr-slide.is-split .pr-code { flex-direction: column; gap: 6px; }
-.pr-code-label { font-size: 13px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
-.pr-slide.is-split .pr-code-label { font-size: 16px; }
-.pr-code-pill {
+/* ---------------------------------------------------------------- the foot: code + Rainbet */
+.pr-foot { position: absolute; left: 22px; bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.pr-foot.is-center { left: 50%; translate: -50% 0; white-space: nowrap; }
+.pr-foot-label { font-size: 14px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
+.pr-foot-logo { display: block; width: auto; height: 20px; opacity: 0.95; }
+.is-code .pr-foot-label { font-size: 16px; }
+.is-code .pr-foot-logo { height: 24px; }
+.pr-chip {
+  position: relative;
+  overflow: hidden;
   padding: 4px 14px 5px;
   border-radius: 8px;
   background: #f2b42c;
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.45), 0 4px 12px rgb(0 0 0 / 0.35);
-  font-size: 17px;
+  font-size: 21px;
   font-weight: 900;
   letter-spacing: 0.06em;
   color: #0c171f;
 }
-.pr-slide.is-split .pr-code-pill { padding: 6px 18px 7px; font-size: 22px; }
-
-/* ---------------------------------------------------------------- the switch */
-.pr-slide.is-out { animation: pr-out 420ms cubic-bezier(0.4, 0, 1, 1) both; }
-.pr-slide.is-in > *,
-.pr-slide.is-in .pr-split-main > *,
-.pr-slide.is-in .pr-split-side > * { animation: pr-in 560ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-/* stagger: logo, the figure, the line, the code */
-.pr-slide.is-in > :nth-child(1),
-.pr-slide.is-in .pr-split-main > :nth-child(1) { animation-delay: 300ms; }
-.pr-slide.is-in > :nth-child(2),
-.pr-slide.is-in .pr-split-main > :nth-child(2) { animation-delay: 380ms; }
-.pr-slide.is-in > :nth-child(3),
-.pr-slide.is-in .pr-split-side > :nth-child(1) { animation-delay: 460ms; }
-.pr-slide.is-in > :nth-child(4),
-.pr-slide.is-in .pr-split-side > :nth-child(2) { animation-delay: 540ms; }
-/* the split slide's containers themselves just appear (their children animate) */
-.pr-slide.is-in > .pr-split-main,
-.pr-slide.is-in > .pr-split-side { animation: none; }
-
-@keyframes pr-out {
-  to { opacity: 0; transform: translateY(-10px); filter: blur(2px); }
+/* a shine that keeps passing over the code */
+.pr-chip::after {
+  content: '';
+  position: absolute;
+  inset: -2px auto -2px -40%;
+  width: 30%;
+  background: linear-gradient(100deg, transparent, rgb(255 255 255 / 0.65), transparent);
+  transform: skewX(-18deg);
+  animation: pr-shine 2.6s 1.2s ease-in-out infinite;
 }
-@keyframes pr-in {
-  from { opacity: 0; transform: translateY(12px); filter: blur(2px); }
-  to { opacity: 1; transform: none; filter: none; }
+@keyframes pr-shine {
+  0% { left: -40%; }
+  45%, 100% { left: 130%; }
+}
+
+/* ---------------------------------------------------------------- the flip (3D) + the pop-in */
+/* the panel turns over with its content on it (a rolodex flip), shading as it turns away */
+.pr-panel.is-out { animation: pr-flip-out 380ms cubic-bezier(0.55, 0, 0.9, 0.4) both; }
+.pr-panel.is-in { animation: pr-flip-in 560ms cubic-bezier(0.2, 1.25, 0.35, 1) 240ms both; }
+@keyframes pr-flip-out {
+  to { transform: rotateX(-90deg) translateZ(-30px); opacity: 0; filter: brightness(0.55); }
+}
+@keyframes pr-flip-in {
+  from { transform: rotateX(90deg) translateZ(-30px); opacity: 0; filter: brightness(0.55); }
+  40% { opacity: 1; }
+  to { transform: none; opacity: 1; }
+}
+.pr-panel.is-in .pr-title { animation: pr-pop 560ms cubic-bezier(0.2, 0.85, 0.25, 1.2) 520ms both; }
+.pr-panel.is-in .pr-art,
+.pr-panel.is-in .pr-fighter { animation: pr-rise 600ms cubic-bezier(0.2, 0.8, 0.25, 1.1) 580ms both; }
+.pr-panel.is-in .pr-fighter.is-r { animation-delay: 640ms; }
+.pr-panel.is-in .pr-foot { animation: pr-fade-up 360ms cubic-bezier(0.2, 0.7, 0.2, 1) 420ms both; }
+@keyframes pr-pop {
+  from { opacity: 0.3; transform: scale(0.82) translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes pr-rise {
+  from { opacity: 0.3; transform: translateY(26px) scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes pr-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pr-slide.is-out { animation-duration: 1ms; }
-  .pr-slide.is-in > *,
-  .pr-slide.is-in .pr-split-main > *,
-  .pr-slide.is-in .pr-split-side > * { animation: pr-fade 300ms both; animation-delay: 0ms; }
-  @keyframes pr-fade { from { opacity: 0; } }
+  .pr-panel.is-out { animation: pr-fade-out 200ms both; }
+  .pr-panel.is-in,
+  .pr-panel.is-in * { animation: pr-fade-in 300ms both !important; }
+  @keyframes pr-fade-out { to { opacity: 0; } }
+  @keyframes pr-fade-in { from { opacity: 0; } }
+  .pr-chip::after { display: none; }
 }
