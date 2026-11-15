@@ -21,9 +21,13 @@
 
 /* ---------------------------------------------------------------- the 3D */
 /* the headline owns the left half, the object the right half: they never meet */
-.pr-title { position: absolute; left: 4px; top: 30px; width: 280px; height: auto; aspect-ratio: 720 / 300; pointer-events: none; filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.85)) drop-shadow(0 6px 12px rgb(0 0 0 / 0.5)); }
-.pr-title.is-center { left: 50%; width: 270px; translate: -50% 0; }
-.pr-title.is-big { top: 14px; width: 450px; }
+/* placed from the measured lettering box in each 720x300 headline frame (lettering ~11-88% of its
+   height): the lettering sits on the card, rising only ~6px over its top edge, and its left edge
+   lines up with the code row (22px) */
+.pr-title { position: absolute; left: 2px; top: 51px; width: 280px; height: auto; aspect-ratio: 720 / 300; pointer-events: none; filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.85)) drop-shadow(0 6px 12px rgb(0 0 0 / 0.5)); }
+.is-lossback .pr-title { left: -23px; }
+.pr-title.is-center { left: 50%; top: 46px; width: 270px; translate: -50% 0; }
+.pr-title.is-big { top: 42px; width: 380px; }
 .pr-art {
   position: absolute;
   right: -34px;
