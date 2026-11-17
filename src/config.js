@@ -40,9 +40,13 @@ export const config = {
   rankAvatars: ['/assets/avatar-1.png', '/assets/avatar-2.png', '/assets/avatar-3.png'],
   rowAvatar: '/assets/avatar-row.png',
 
-  // Past leaderboards section. Hidden while this list is empty. "View Winners"
-  // loads that period's final top 10 from the API; `prizes` defaults to the
-  // current split above.
+  // Past leaderboards section. Every monthly period that has ended since
+  // `pastLeaderboardsFrom` (a period start) appears on its own the day after it ends,
+  // with its winner read from the Rainbet API (server/features/pastLeaderboards.js).
+  // "View Winners" loads that period's final top 10; `prizes` defaults to the split above.
+  pastLeaderboardsFrom: '2026-10-13',
+  // Optional, by hand: an entry with the same startAt as an automatic month overrides its
+  // fields (e.g. a different prizePool); entries for other periods are added as they are.
   // Example: { prizePool: 10000, winner: 'Tegens***', startAt: '2026-09-13', endAt: '2026-10-12' }
   pastLeaderboards: [],
 

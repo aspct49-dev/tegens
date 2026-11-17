@@ -27,6 +27,7 @@ import * as claims from './features/claims.js'
 import * as bigWins from './features/bigWins.js'
 import * as contact from './features/contact.js'
 import * as socials from './features/socials.js'
+import * as pastLeaderboards from './features/pastLeaderboards.js'
 import * as notify from './notify.js'
 import * as mods from './mods.js'
 import { isMod, modMayUse } from './mods.js'
@@ -79,7 +80,7 @@ async function handleDevChat(req, ctx) {
   return json(200, { sent: list.length })
 }
 
-const FEATURES = [hunts, guess, tournaments, giveaway, giveawayWins, raffles, challenges, players, slotpick, slotcalls, vips, wagerStats, milestoneClaims, claims, bigWins, shop, socials, contact, notify, mods, audit, kick]
+const FEATURES = [hunts, guess, tournaments, giveaway, giveawayWins, raffles, challenges, players, slotpick, slotcalls, vips, wagerStats, milestoneClaims, claims, bigWins, shop, socials, pastLeaderboards, contact, notify, mods, audit, kick]
 
 export async function handleApi(req) {
   const url = new URL(req.url, 'http://localhost')
