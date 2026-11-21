@@ -78,7 +78,8 @@ function TotalCard({ wins }) {
   const fromChallenges = data?.totals.challenges ?? 0
   const fromMilestones = data?.totals.milestones ?? 0
   const fromStore = data?.totals.store ?? 0
-  const fromWins = data ? data.totals.givenAway - data.settings.start - fromChallenges - fromMilestones - fromStore : 0
+  const fromLeaderboards = data?.totals.leaderboards ?? 0
+  const fromWins = data ? data.totals.givenAway - data.settings.start - fromChallenges - fromMilestones - fromStore - fromLeaderboards : 0
   return (
     <Card title="Total given away">
       <div className="gwa-total">
@@ -87,8 +88,9 @@ function TotalCard({ wins }) {
           {data ? (
             <>
               {usd(data.settings.start)} starting amount + {usd(fromWins)} from posted wins + {usd(fromChallenges)} from completed challenges +{' '}
-              {usd(fromMilestones)} from paid milestones + {usd(fromStore)} from approved store orders. Every win you add with a value, every challenge
-              marked completed, every milestone paid and every store order approved adds to it.
+              {usd(fromMilestones)} from paid milestones + {usd(fromStore)} from approved store orders + {usd(fromLeaderboards)} from ended
+              monthly leaderboards. Every win you add with a value, every challenge marked completed, every milestone paid and every store order
+              approved adds to it, and each monthly leaderboard's prize pool is added the day it ends.
             </>
           ) : (
             'Loading…'

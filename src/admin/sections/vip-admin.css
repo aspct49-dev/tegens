@@ -4,7 +4,7 @@
 .vip-dim { color: #6a8191; }
 
 /* ---------------------------------------------------------------- VIPs */
-.vip-add { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto; align-items: end; gap: 12px; }
+.vip-add { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr) auto; align-items: end; gap: 12px; }
 .vip-add .adm-field { min-width: 0; }
 .vip-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 .vip-table-wrap { overflow-x: auto; }

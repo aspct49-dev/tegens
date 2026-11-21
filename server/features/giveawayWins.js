@@ -2,7 +2,7 @@
 // /giveaways page. Separate from the chat giveaway (./giveaway.js), which still runs
 // the Kick-chat draw and the stream overlay; nothing here touches that.
 //
-//   GET  /api/events/giveaway-wins                 { wins, totals: { count, winners, paid, challenges, milestones, store, givenAway } }   newest first
+//   GET  /api/events/giveaway-wins                 { wins, totals: { count, winners, paid, challenges, milestones, store, leaderboards, givenAway } }   newest first
 //   GET  /api/admin/giveaway-wins/totals           { settings: { start, carried }, totals }
 //   POST /api/admin/giveaway-wins/totals           { start }  the amount given away before this list → same
 //
@@ -21,6 +21,7 @@
 import { randomBytes } from 'node:crypto'
 import { json, nowSeconds } from '../http.js'
 import { read, update } from '../store.js'
+import { endedPrizePools } from './pastLeaderboards.js'
 
 const TABLE = 'giveawayManualWins'
 const MAX = 200
@@ -105,7 +106,9 @@ const cents = (n) => Math.round(n * 100) / 100
 // every completed slot challenge (table `challenges`, ./challenges.js: status 'completed')
 // + every milestone reward paid (table `milestoneClaims`, written when a claim is paid or an
 // admin marks a milestone claimed) + every approved store order (table `shopOrders`, its
-// value read from the item's name: "50 USDC" → $50, "$250 Bonus Buy" → $250).
+// value read from the item's name: "50 USDC" → $50, "$250 Bonus Buy" → $250) + the prize pool of
+// every monthly leaderboard that has ended since config.pastLeaderboardsFrom, added the day it
+// ends (./pastLeaderboards.js, the same months the Past Leaderboards section shows).
 // Wins that fall off the end of the list (over MAX) are added to `carried` so the total never
 // goes down. Undoing a paid milestone or an order takes it back off.
 //   table `giveawayTotals`: { start, carried }
@@ -138,6 +141,7 @@ export function totalsFor(wins, settings = DEFAULT_TOTALS, challenges = [], more
   const fromChallenges = challengesPaid(challenges)
   const fromMilestones = milestonesPaid(more.milestoneClaims)
   const fromStore = storePaid(more.shopOrders)
+  const fromLeaderboards = Number.isFinite(more.leaderboards) ? more.leaderboards : 0
   return {
     count: wins.length,
     winners: new Set(wins.map((w) => w.winner.toLowerCase())).size,
@@ -145,7 +149,8 @@ export function totalsFor(wins, settings = DEFAULT_TOTALS, challenges = [], more
     challenges: cents(fromChallenges),
     milestones: cents(fromMilestones),
     store: cents(fromStore),
-    givenAway: cents((settings.start ?? 0) + (settings.carried ?? 0) + paid + fromChallenges + fromMilestones + fromStore),
+    leaderboards: cents(fromLeaderboards),
+    givenAway: cents((settings.start ?? 0) + (settings.carried ?? 0) + paid + fromChallenges + fromMilestones + fromStore + fromLeaderboards),
   }
 }
 
@@ -153,7 +158,7 @@ const readChallenges = () => read('challenges', [])
 /** Everything the total needs besides the posted wins and the settings */
 const readSources = async () => {
   const [challenges, milestoneClaims, shopOrders] = await Promise.all([readChallenges(), read('milestoneClaims', []), read('shopOrders', [])])
-  return { challenges, more: { milestoneClaims, shopOrders } }
+  return { challenges, more: { milestoneClaims, shopOrders, leaderboards: endedPrizePools() } }
 }
 const totalsNow = async (wins, settings) => {
   const { challenges, more } = await readSources()

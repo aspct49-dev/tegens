@@ -33,6 +33,19 @@ export function endedPeriods(today = todayIso()) {
   return out
 }
 
+/**
+ * The prize pools of every ended leaderboard, in $ (config.prizePool, or a config.pastLeaderboards
+ * entry's own prizePool for that month). Counted in "Total given away" on /giveaways
+ * (./giveawayWins.js) from the day each one ends, the same day it joins Past Leaderboards.
+ */
+export function endedPrizePools(today = todayIso()) {
+  const manual = new Map((config.pastLeaderboards ?? []).filter((e) => e.startAt).map((e) => [e.startAt, e]))
+  return endedPeriods(today).reduce((n, p) => {
+    const pool = manual.get(p.startAt)?.prizePool ?? config.prizePool
+    return n + (Number.isFinite(pool) ? pool : 0)
+  }, 0)
+}
+
 async function winnerOf({ startAt, endAt }) {
   const rows = await affiliates(startAt, endAt)
   const top = rows.reduce((best, r) => (r.wagered > (best?.wagered ?? 0) ? r : best), null)

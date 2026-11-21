@@ -5,7 +5,8 @@ import './vip-admin.css'
 import './activity-admin.css'
 
 // VIPs: Kick usernames with the VIP badge on the site; they can call slots in chat (!call) when calls are VIPs-only and enter VIP giveaways.
-// Their stats come from the wins recorded in Slot Calls.
+// Each can also have a Rainbet username (added here or edited in the list), which gets the VIP badge on the
+// leaderboard and wager raffle too. Their stats come from the wins recorded in Slot Calls.
 
 const API = '/api/admin/vips'
 
@@ -52,7 +53,7 @@ export default function VipsAdmin() {
         calls add up here.
       </SectionIntro>
 
-      <AddVip onAdd={(username, note) => act(API, { username, note }, 'add')} busy={busy === 'add'} />
+      <AddVip onAdd={(username, note, rainbet) => act(API, { username, note, rainbet }, 'add')} busy={busy === 'add'} />
       <ErrorLine>{error}</ErrorLine>
 
       {vips.length > 0 && (
@@ -73,6 +74,7 @@ export default function VipsAdmin() {
               <thead>
                 <tr>
                   <th>VIP</th>
+                  <th>Rainbet</th>
                   <th>Note</th>
                   <th className="is-num">Played</th>
                   <th className="is-num">Total won</th>
@@ -96,12 +98,14 @@ export default function VipsAdmin() {
 
 function AddVip({ onAdd, busy }) {
   const [username, setUsername] = useState('')
+  const [rainbet, setRainbet] = useState('')
   const [note, setNote] = useState('')
   const submit = async (e) => {
     e.preventDefault()
     if (!username.trim()) return
-    if (await onAdd(username.trim(), note.trim())) {
+    if (await onAdd(username.trim(), note.trim(), rainbet.trim())) {
       setUsername('')
+      setRainbet('')
       setNote('')
     }
   }
@@ -110,6 +114,9 @@ function AddVip({ onAdd, busy }) {
       <form className="vip-add" onSubmit={submit} noValidate>
         <Field label="Kick channel">
           <Input value={username} onChange={setUsername} placeholder="kick.com/username or username" maxLength={80} />
+        </Field>
+        <Field label="Rainbet username">
+          <Input value={rainbet} onChange={setRainbet} placeholder="Optional, gets the VIP badge" maxLength={33} />
         </Field>
         <Field label="Note">
           <Input value={note} onChange={setNote} placeholder="Optional, e.g. Discord name" maxLength={80} />
@@ -122,12 +129,33 @@ function AddVip({ onAdd, busy }) {
   )
 }
 
-function VipRow({ v, top, act, busy, onOpen }) {
+/** A table cell edited in place: click the value, type, Enter or Save; an empty value clears it */
+function EditCell({ value, field, label, placeholder, maxLength, path, act, busy, tag }) {
   const [editing, setEditing] = useState(false)
-  const [note, setNote] = useState(v.note)
+  const [text, setText] = useState(value ?? '')
   const save = async () => {
-    if (await act(`${API}/${v.key}`, { note }, `note:${v.key}`)) setEditing(false)
+    if (await act(path, { [field]: text.trim() }, tag)) setEditing(false)
   }
+  return (
+    <td className="vip-note">
+      {editing ? (
+        <span className="vip-note-edit">
+          <Input value={text} onChange={setText} maxLength={maxLength} aria-label={label} autoFocus onKeyDown={(e) => e.key === 'Enter' && save()} />
+          <Button kind="primary" busy={busy === tag} onClick={save}>
+            Save
+          </Button>
+        </span>
+      ) : (
+        <button type="button" className="vip-note-btn" onClick={() => (setText(value ?? ''), setEditing(true))} title={`Edit ${field === 'rainbet' ? 'Rainbet username' : 'note'}`}>
+          {value || <span className="vip-dim">{placeholder}</span>}
+        </button>
+      )}
+    </td>
+  )
+}
+
+function VipRow({ v, top, act, busy, onOpen }) {
+  const path = `${API}/${v.key}`
   return (
     <tr>
       <td>
@@ -135,20 +163,8 @@ function VipRow({ v, top, act, busy, onOpen }) {
           {v.username}
         </button>
       </td>
-      <td className="vip-note">
-        {editing ? (
-          <span className="vip-note-edit">
-            <Input value={note} onChange={setNote} maxLength={80} aria-label={`Note for ${v.username}`} autoFocus onKeyDown={(e) => e.key === 'Enter' && save()} />
-            <Button kind="primary" busy={busy === `note:${v.key}`} onClick={save}>
-              Save
-            </Button>
-          </span>
-        ) : (
-          <button type="button" className="vip-note-btn" onClick={() => setEditing(true)} title="Edit note">
-            {v.note || <span className="vip-dim">Add note</span>}
-          </button>
-        )}
-      </td>
+      <EditCell value={v.rainbet} field="rainbet" label={`Rainbet username for ${v.username}`} placeholder="Add Rainbet name" maxLength={33} path={path} act={act} busy={busy} tag={`rb:${v.key}`} />
+      <EditCell value={v.note} field="note" label={`Note for ${v.username}`} placeholder="Add note" maxLength={80} path={path} act={act} busy={busy} tag={`note:${v.key}`} />
       <td className="is-num">{v.played}</td>
       <td className={`is-num${v.totalWon ? ' vip-gold' : ''}`}>{usd(v.totalWon)}</td>
       <td>
@@ -207,6 +223,7 @@ function VipProfile({ vipKey, onBack }) {
             <p className="vipp-meta">
               Added {day(vip.addedAt)}
               {vip.addedBy ? ` by ${vip.addedBy}` : ''}
+              {vip.rainbet ? ` · Rainbet: ${vip.rainbet}` : ''}
               {vip.note ? ` · ${vip.note}` : ''}
             </p>
           </div>

@@ -5,14 +5,16 @@
 //
 //   GET  /api/events/vips                 { vips, totals }   the public VIP page (/vips): call records, best first
 //   GET  /api/events/vip-names            { kick, rainbet }  lower-case names that get the VIP badge on the site:
-//                                         the VIPs' Kick names, and the Rainbet usernames linked (approved) to them
+//                                         the VIPs' Kick names, their Rainbet usernames (set here by the admin)
+//                                         and the Rainbet usernames linked (approved) to their accounts
 //   GET  /api/admin/vips                  { vips }   each with { calls, played, totalWon, biggestWin, best, lastCallAt }
 //   GET  /api/admin/vips/<key>            { vip, wins, queued, activity }   one VIP's profile
-//   POST /api/admin/vips                  { username, note? }   username or a kick.com/<name> link
-//   POST /api/admin/vips/<key>            { note }
+//   POST /api/admin/vips                  { username, note?, rainbet? }   username or a kick.com/<name> link
+//   POST /api/admin/vips/<key>            { note?, rainbet? }   only the fields sent change; rainbet '' clears it
 //   POST /api/admin/vips/<key>/remove
 //
-// Table `vips`: [{ key, username, note, addedAt, addedBy }]   key = lower-case username; times unix seconds
+// Table `vips`: [{ key, username, note, rainbet, addedAt, addedBy }]   key = lower-case username; times unix seconds;
+//   rainbet: the VIP's Rainbet username as typed (2-32 of letters, numbers, _ . -) or null
 // Table `vipWins`: [{ id, key, username, slot, bet, win, at }]   newest first, at most 5,000
 
 import { approvedRainbet } from '../auth.js'
@@ -69,6 +71,24 @@ export function cleanUsername(v) {
   s = s.replace(/^https?:\/\//i, '').replace(/^(www\.)?kick\.com\//i, '').replace(/^@/, '').split(/[/?#]/)[0]
   if (!/^[A-Za-z0-9_]{2,25}$/.test(s)) throw new InputError('Enter a Kick username or channel link, e.g. kick.com/someone.')
   return s
+}
+
+// the same rule as a player's Rainbet link (./players.js)
+const RAINBET_NAME = /^[A-Za-z0-9_.-]{2,32}$/
+
+/** "" or missing → null; "@Name " → "Name"; anything else must be a Rainbet username */
+export function cleanRainbet(v) {
+  const s = String(v ?? '').trim().replace(/^@/, '')
+  if (!s) return null
+  if (!RAINBET_NAME.test(s)) throw new InputError('Enter a Rainbet username (2-32 letters, numbers, _ . or -).')
+  return s
+}
+
+/** The VIP list must not give one Rainbet username to two VIPs */
+function rainbetTaken(list, rainbet, exceptKey) {
+  if (!rainbet) return null
+  const r = rainbet.toLowerCase()
+  return list.find((v) => v.key !== exceptKey && v.rainbet?.toLowerCase() === r) ?? null
 }
 
 // ---------------------------------------------------------------- stats
@@ -158,10 +178,11 @@ async function publicVips() {
   }
 }
 
-/** Who gets the VIP badge: Kick names, plus each VIP's approved Rainbet username (leaderboard, wager raffle) */
+/** Who gets the VIP badge: Kick names, plus each VIP's Rainbet username: the one set here, and the
+ *  one approved on their account (leaderboard, wager raffle) */
 export async function badgeNames() {
-  const [set, players] = await Promise.all([vipKeys(), read('players', [])])
-  const rainbet = new Set()
+  const [set, players, vips] = await Promise.all([vipKeys(), read('players', []), read('vips', [])])
+  const rainbet = new Set(vips.filter((v) => v.rainbet).map((v) => v.rainbet.toLowerCase()))
   for (const p of players) {
     const kick = p.kick?.username?.toLowerCase()
     const rb = kick && set.has(kick) ? approvedRainbet(p) : null
@@ -187,24 +208,34 @@ export async function handle(req, ctx) {
     if (path === '/api/admin/vips') {
       const username = cleanUsername(body.username)
       const key = username.toLowerCase()
+      const rainbet = cleanRainbet(body.rainbet)
       await saveVips((list) => {
         const had = list.find((v) => v.key === key)
         if (had) throw new InputError(`${had.username} is already a VIP.`)
         if (list.length >= MAX_VIPS) throw new InputError(`The list holds ${MAX_VIPS} VIPs at most.`)
+        const taken = rainbetTaken(list, rainbet)
+        if (taken) throw new InputError(`${rainbet} is already the Rainbet username of ${taken.username}.`)
         const note = String(body.note ?? '').trim().slice(0, 80)
-        return [...list, { key, username, note, addedAt: nowSeconds(), addedBy: user?.kick?.username ?? null }]
+        return [...list, { key, username, note, rainbet, addedAt: nowSeconds(), addedBy: user?.kick?.username ?? null }]
       })
       return json(200, await view())
     }
 
     const [, key, action] = /^\/api\/admin\/vips\/([\w]+)(?:\/(\w+))?$/.exec(path) ?? []
     if (!key) return json(404, { error: 'Not found.' })
+    // only the fields sent change (the note and the Rainbet username are edited separately)
+    const rainbet = 'rainbet' in (body ?? {}) ? cleanRainbet(body.rainbet) : undefined
     await saveVips((list) => {
       const v = list.find((x) => x.key === key)
       if (!v) throw new InputError('That VIP is no longer on the list.')
       if (action === 'remove') return list.filter((x) => x.key !== key)
       if (action) throw new InputError('Unknown action.')
-      v.note = String(body.note ?? '').trim().slice(0, 80)
+      if ('note' in (body ?? {})) v.note = String(body.note ?? '').trim().slice(0, 80)
+      if (rainbet !== undefined) {
+        const taken = rainbetTaken(list, rainbet, key)
+        if (taken) throw new InputError(`${rainbet} is already the Rainbet username of ${taken.username}.`)
+        v.rainbet = rainbet
+      }
       return list
     })
     return json(200, await view())
